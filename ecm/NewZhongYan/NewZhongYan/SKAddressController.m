@@ -576,19 +576,18 @@
             self.navigationItem.leftBarButtonItem = backItem;
 
         }else{
-            
+            [self.navigationController.navigationBar setTranslucent:YES];   //解决tableview下移（出现空白）的问题
             [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
             [self setNeedsStatusBarAppearanceUpdate];
             navbgImage = [UIImage imageNamed:@"navbar64"] ;
             self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
             
-            self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:Image(@"SearchIcon") style:UIBarButtonItemStyleDone target:self action:@selector(chatSearch)];
+            self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:Image(@"SearchIcon") style:UIBarButtonItemStylePlain target:self action:@selector(chatSearch)];
             
             UIBarButtonItem* backItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(dismissForChat)];
-            
             self.navigationItem.leftBarButtonItem = backItem;
         }
-        [self.navigationController.navigationBar setBackgroundImage:navbgImage  forBarMetrics:UIBarMetricsDefault];
+        [self.navigationController.navigationBar setBackgroundImage:navbgImage forBarMetrics:UIBarMetricsDefault];
         self.navigationController.navigationBar.titleTextAttributes = @{UITextAttributeTextColor: [UIColor whiteColor]};
         
         selectedEmployees=[[NSMutableArray alloc] init];
@@ -996,12 +995,10 @@
 }
 
 - (void)didConfirmWithMultiSelectedPanel:(SKToolBarMultiSelectPanel*)multiSelectedPanel {
-    NSLog(@"didConfirm");
 
-    [self dismissViewControllerAnimated:YES completion:^{
-        SKChatMessageTableViewController *chatMsgController = [[SKChatMessageTableViewController alloc] init];
-        [self.fromViewController.navigationController pushViewController:chatMsgController animated:YES];
-    }];
+    [self dismissViewControllerAnimated:YES completion:nil];
+    SKChatMessageTableViewController *chatMsgController = [[SKChatMessageTableViewController alloc] init];
+    [self.fromViewController.navigationController pushViewController:chatMsgController animated:YES];
 }
 
 - (SKToolBarMultiSelectPanel *)selectedPanel
