@@ -14,6 +14,7 @@
 #import "SKToolBarMultiSelectPanel.h"
 #import "SKMultiSelectItem.h"
 #import "SKChatMessageTableViewController.h"
+#import "SKChater.h"
 #define USE_ACTIVITY    1	// use a xib file defining the cell
 #define USE_REMENU      0
 
@@ -997,7 +998,28 @@
 - (void)didConfirmWithMultiSelectedPanel:(SKToolBarMultiSelectPanel*)multiSelectedPanel {
 
     [self dismissViewControllerAnimated:YES completion:nil];
+    NSMutableArray *chaters = [NSMutableArray array];
+    for (SKMultiSelectItem *item in multiSelectedPanel.selectedItems) {
+        BOOL isExist = NO;
+        for (SKChater *chater in chaters) {
+            if ([chater.uid isEqualToString:item.uid]) {
+                isExist = YES;
+                break;
+            }
+        }
+        if (!isExist) {
+            SKChater *newChater = [[SKChater alloc] init];
+            newChater.uid = item.uid;
+            newChater.cname = item.cname;
+            newChater.pdpid = item.pdpid;
+            newChater.pname = item.pname;
+            newChater.selected = YES;
+
+            [chaters addObject:newChater];
+        }
+    }
     SKChatMessageTableViewController *chatMsgController = [[SKChatMessageTableViewController alloc] init];
+    chatMsgController.chaters = chaters;
     [self.fromViewController.navigationController pushViewController:chatMsgController animated:YES];
 }
 

@@ -10,4 +10,6 @@
 
 @interface SKChatMessageTableViewController : XHMessageTableViewController
 
+@property(nonatomic, strong) NSMutableArray *chaters;
+
 @end

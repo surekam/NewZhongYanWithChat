@@ -247,6 +247,7 @@
 		3B05EAD3196FD11B00866FA5 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3B05EAD2196FD11B00866FA5 /* MediaPlayer.framework */; };
 		A399E3131977770000B9FAC8 /* cancel@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A399E3121977770000B9FAC8 /* cancel@2x.png */; };
 		A399E3151977789400B9FAC8 /* SearchIcon_white@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A399E3141977789400B9FAC8 /* SearchIcon_white@2x.png */; };
+		A39AB2C419792CE20027BAE5 /* SKChater.m in Sources */ = {isa = PBXBuildFile; fileRef = A39AB2C319792CE20027BAE5 /* SKChater.m */; };
 		A3A0AF671976106D00497936 /* SKChatMessageTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A3A0AF661976106D00497936 /* SKChatMessageTableViewController.m */; };
 		A3EA69251975224200730437 /* SKMultiSelectItem.m in Sources */ = {isa = PBXBuildFile; fileRef = A3EA69221975224200730437 /* SKMultiSelectItem.m */; };
 		A3EA69261975224200730437 /* SKToolBarMultiSelectPanel.m in Sources */ = {isa = PBXBuildFile; fileRef = A3EA69241975224200730437 /* SKToolBarMultiSelectPanel.m */; };
@@ -1084,6 +1085,8 @@
 		3B05EAD2196FD11B00866FA5 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
 		A399E3121977770000B9FAC8 /* cancel@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "cancel@2x.png"; sourceTree = "<group>"; };
 		A399E3141977789400B9FAC8 /* SearchIcon_white@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "SearchIcon_white@2x.png"; sourceTree = "<group>"; };
+		A39AB2C219792CE20027BAE5 /* SKChater.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SKChater.h; sourceTree = "<group>"; };
+		A39AB2C319792CE20027BAE5 /* SKChater.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SKChater.m; sourceTree = "<group>"; };
 		A3A0AF651976106D00497936 /* SKChatMessageTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SKChatMessageTableViewController.h; sourceTree = "<group>"; };
 		A3A0AF661976106D00497936 /* SKChatMessageTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SKChatMessageTableViewController.m; sourceTree = "<group>"; };
 		A3EA69211975224200730437 /* SKMultiSelectItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SKMultiSelectItem.h; sourceTree = "<group>"; };
@@ -2724,6 +2727,8 @@
 		A3EA6920197520F700730437 /* chat */ = {
 			isa = PBXGroup;
 			children = (
+				A39AB2C219792CE20027BAE5 /* SKChater.h */,
+				A39AB2C319792CE20027BAE5 /* SKChater.m */,
 				A3EA69211975224200730437 /* SKMultiSelectItem.h */,
 				A3EA69221975224200730437 /* SKMultiSelectItem.m */,
 				A3EA69231975224200730437 /* SKToolBarMultiSelectPanel.h */,
@@ -4571,6 +4576,7 @@
 				3B05E9EE196FCA8600866FA5 /* XHFoundationCommon.m in Sources */,
 				3B05E9FF196FCA8600866FA5 /* XHLocationServiceTableViewController.m in Sources */,
 				F200C88818272F3700161747 /* SKToken.m in Sources */,
+				A39AB2C419792CE20027BAE5 /* SKChater.m in Sources */,
 				F23CE44D182B23680066F214 /* SKCommonLanguageCell.m in Sources */,
 				F291E221180CDABE0027F0C9 /* FMDatabase+InMemoryOnDiskIO.m in Sources */,
 				F2B494D3180FE1E100246822 /* OpenUDID.m in Sources */,

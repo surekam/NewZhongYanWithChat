@@ -12,6 +12,7 @@
 #import "XHDisplayLocationViewController.h"
 #import "XHContactDetailTableViewController.h"
 #import "XHAudioPlayerHelper.h"
+#import "SKChater.h"
 
 @interface SKChatMessageTableViewController () <XHAudioPlayerHelperDelegate>
 
@@ -21,6 +22,7 @@
 @end
 
 @implementation SKChatMessageTableViewController
+@synthesize chaters = _chaters;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -40,6 +42,34 @@
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    
+    if (System_Version_Small_Than_(7)) {
+        UIButton* backbtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        [backbtn setFrame:CGRectMake(0, 0, 50, 30)];
+        [backbtn setBackgroundImage:Image(@"back") forState:UIControlStateNormal];
+        [backbtn addTarget:self action:@selector(back:) forControlEvents:UIControlEventTouchUpInside];
+        UIBarButtonItem* backItem = [[UIBarButtonItem alloc] initWithCustomView:backbtn];
+        self.navigationItem.leftBarButtonItem = backItem;
+    }else{
+        UIBarButtonItem *barBtn = [[UIBarButtonItem alloc] init];
+        barBtn.title = @"返回";
+        self.navigationItem.backBarButtonItem = barBtn;
+    }
+    
+    NSString *title = @"";
+    if (_chaters) {
+        if ([_chaters count] == 1) {
+            title = ((SKChater *)_chaters[0]).cname;
+        } else if ([_chaters count] > 1) {
+            NSString *names = @"";
+            for (SKChater *chater in _chaters) {
+               names = [[names stringByAppendingString:chater.cname] stringByAppendingString:@"、"];
+            }
+            names = [names length] > 8 ? [[names substringToIndex:5] stringByAppendingString:@"..."] :[names substringToIndex:[names length] - 1];
+            title = [NSString stringWithFormat:@"%@(%i)人", names, [_chaters count]];
+        }
+    }
+    self.title = title;
     
     // 设置自身用户名
     self.messageSender = [APPUtils loggedUser].name;
@@ -77,7 +107,9 @@
     [self.shareMenuView reloadData];
     
     [self loadDemoDataSource];
-    NSLog(@"frame=%f,%f,%f,%f", self.messageTableView.frame.origin.x, self.messageTableView.frame.origin.y, self.messageTableView.frame.size.width, self.messageTableView.frame.size.height);
+    self.messageTableView.backgroundColor = [UIColor yellowColor];
+    NSLog(@"messageTableView=%f,%f,%f,%f", self.messageTableView.frame.origin.x, self.messageTableView.frame.origin.y, self.messageTableView.frame.size.width, self.messageTableView.frame.size.height);
+    //NSLog(@"frame=%f,%f,%f,%f", self.messageTableView.frame.origin.x, self.messageTableView.frame.origin.y, self.messageTableView.frame.size.width, self.messageTableView.frame.size.height);
 }
 
 - (void)didReceiveMemoryWarning
@@ -91,6 +123,10 @@
     [[XHAudioPlayerHelper shareInstance] setDelegate:nil];
 }
 
+-(void)back:(id)sender
+{
+    [self.navigationController popViewControllerAnimated:YES];
+}
 
 - (XHMessage *)getTextMessageWithBubbleMessageType:(XHBubbleMessageType)bubbleMessageType {
     XHMessage *textMessage = [[XHMessage alloc] initWithText:@"拷打佛的飞" sender:@"testmobile" timestamp:[NSDate distantPast]];

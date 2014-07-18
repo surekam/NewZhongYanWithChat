@@ -32,6 +32,19 @@
 {
     [super viewDidLoad];
     
+    if (System_Version_Small_Than_(7)) {
+        UIButton* backbtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        [backbtn setFrame:CGRectMake(0, 0, 50, 30)];
+        [backbtn setBackgroundImage:Image(@"back") forState:UIControlStateNormal];
+        [backbtn addTarget:self action:@selector(back:) forControlEvents:UIControlEventTouchUpInside];
+        UIBarButtonItem* backItem = [[UIBarButtonItem alloc] initWithCustomView:backbtn];
+        self.navigationItem.leftBarButtonItem = backItem;
+    }else{
+        UIBarButtonItem *barBtn = [[UIBarButtonItem alloc] init];
+        barBtn.title = @"返回";
+        self.navigationItem.backBarButtonItem = barBtn;
+    }
+    
     [self.view addSubview:self.tableView];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(showMenuOnView:)];
     self.tableView.frame = CGRectMake(0.0f, 0.0f,self.view.bounds.size.width, self.view.bounds.size.height-49.0f);

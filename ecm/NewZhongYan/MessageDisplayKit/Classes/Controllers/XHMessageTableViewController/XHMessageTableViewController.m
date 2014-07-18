@@ -835,7 +835,11 @@ static CGPoint  delayOffset = {0.0};
 - (void)didSendMessageWithVoice:(NSString *)voicePath voiceDuration:(NSString*)voiceDuration {
     DLog(@"send voicePath : %@", voicePath);
     if ([self.delegate respondsToSelector:@selector(didSendVoice:voiceDuration:fromSender:onDate:)]) {
-        [self.delegate didSendVoice:voicePath voiceDuration:voiceDuration fromSender:self.messageSender onDate:[NSDate date]];
+        if ([voiceDuration isEqualToString:@"0.0"]) {
+            [self cancelRecord];
+        } else {
+            [self.delegate didSendVoice:voicePath voiceDuration:voiceDuration fromSender:self.messageSender onDate:[NSDate date]];
+        }
     }
 }
 
