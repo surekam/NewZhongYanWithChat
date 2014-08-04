@@ -11,6 +11,7 @@
 
 @interface SKPersonInfoController : UIViewController<HPGrowingTextViewDelegate>
 {
+      UIImageView *headView;
       UILabel *nameLabel;
       UILabel *departmentLabel;
       UILabel *mailLabel;

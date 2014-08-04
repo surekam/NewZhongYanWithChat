@@ -12,6 +12,8 @@
 #import "SKSToolBar.h"
 #import "SKAddressController.h"
 #import "SKChatMessageTableViewController.h"
+#import "UIView+XHBadgeView.h"
+#import "SKChatConversationCellTableViewCell.h"
 
 @interface SKMessageRootViewController ()
 @property (nonatomic, strong) XHPopMenu *popMenu;
@@ -44,11 +46,11 @@
         barBtn.title = @"返回";
         self.navigationItem.backBarButtonItem = barBtn;
     }
-    
     [self.view addSubview:self.tableView];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(showMenuOnView:)];
     self.tableView.frame = CGRectMake(0.0f, 0.0f,self.view.bounds.size.width, self.view.bounds.size.height-49.0f);
     [self createToolBar];
+    [self loadDataSource];
 }
 
 - (void)didReceiveMemoryWarning
@@ -56,17 +58,6 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-{
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 - (void)showMenuOnView:(UIBarButtonItem *)buttonItem {
     [self.popMenu showMenuOnView:self.view atPoint:CGPointZero];
@@ -114,6 +105,7 @@
     [self.navigationController presentViewController:nav animated:YES completion:nil];
 }
 
+
 #pragma mark - ToolBar
 -(void)createToolBar
 {
@@ -124,6 +116,55 @@
     [myToolBar setSecondItem:@"btn_refresh_ecm" Title:@"刷新"];
     
     [self.view addSubview:myToolBar];
+}
+
+#pragma mark - DataSource
+- (void)loadDataSource {
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        NSMutableArray *dataSource = [NSMutableArray array];
+        NSDictionary *u1 = @{@"name": @"海神", @"headImg": @"avator", @"msg": @"Hello!", @"msgTime": @"17:00"};
+        NSDictionary *u2 = @{@"name": @"剑圣", @"headImg": @"avator", @"msg": @"Hello!", @"msgTime": @"8:38"};
+        NSDictionary *u3 = @{@"name": @"敌法", @"headImg": @"avator", @"msg": @"Hello!", @"msgTime": @"星期日"};
+        NSDictionary *u4 = @{@"name": @"屠夫", @"headImg": @"avator", @"msg": @"Hello!", @"msgTime": @"星期五"};
+        NSDictionary *u5 = @{@"name": @"巫妖", @"headImg": @"avator", @"msg": @"Hello!", @"msgTime": @"8月21日"};
+        NSDictionary *u6 = @{@"name": @"神牛", @"headImg": @"avator", @"msg": @"Hello!", @"msgTime": @"7月21日"};
+        NSDictionary *u7 = @{@"name": @"幻影刺客", @"headImg": @"avator", @"msg": @"让我来解脱你的痛苦 --恩赐解脱", @"msgTime": @"7月21日"};
+        NSDictionary *u8 = @{@"name": @"炸弹人", @"headImg": @"avator", @"msg": @"注意！不要被炸死了哟。", @"msgTime": @"7月11日"};
+        
+        [dataSource addObject:u1];
+        [dataSource addObject:u2];
+        [dataSource addObject:u3];
+        [dataSource addObject:u4];
+        [dataSource addObject:u5];
+        [dataSource addObject:u6];
+        [dataSource addObject:u7];
+        [dataSource addObject:u8];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            self.dataSource = dataSource;
+            [self.tableView reloadData];
+        });
+    });
+}
+
+#pragma mark - UITableView DataSource
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    static NSString *cellIdentifier = @"chatCellIdentifier";
+    SKChatConversationCellTableViewCell *cell = (SKChatConversationCellTableViewCell *)[tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+    if (!cell) {
+        cell = [[SKChatConversationCellTableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellIdentifier];
+    }
+    
+    if (indexPath.row < self.dataSource.count) {
+        cell.nameLabel.text = [self.dataSource[indexPath.row] objectForKey:@"name"];
+        cell.msgLabel.text = [self.dataSource[indexPath.row] objectForKey:@"msg"];
+        cell.headImg.image = [UIImage imageNamed:[self.dataSource[indexPath.row] objectForKey:@"headImg"]];
+        cell.timeLabel.text = [self.dataSource[indexPath.row] objectForKey:@"msgTime"];
+    }
+    
+    [cell.headImg setupCircleBadge];
+    
+    return cell;
 }
 
 #pragma mark - UITableView Delegate

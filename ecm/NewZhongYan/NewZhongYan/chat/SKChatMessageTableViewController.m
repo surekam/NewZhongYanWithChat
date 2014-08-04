@@ -107,7 +107,7 @@
     [self.shareMenuView reloadData];
     
     [self loadDemoDataSource];
-    self.messageTableView.backgroundColor = [UIColor yellowColor];
+    //self.messageTableView.backgroundColor = [UIColor yellowColor];
     NSLog(@"messageTableView=%f,%f,%f,%f", self.messageTableView.frame.origin.x, self.messageTableView.frame.origin.y, self.messageTableView.frame.size.width, self.messageTableView.frame.size.height);
     //NSLog(@"frame=%f,%f,%f,%f", self.messageTableView.frame.origin.x, self.messageTableView.frame.origin.y, self.messageTableView.frame.size.width, self.messageTableView.frame.size.height);
 }
@@ -215,6 +215,10 @@
 */
 
 #pragma mark - TableView delegate
+
+- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
+    [[[UIApplication sharedApplication] keyWindow] endEditing:YES];
+}
 
 #pragma mark - XHMessageTableViewCell delegate
 
@@ -342,7 +346,7 @@
 - (void)didSendText:(NSString *)text fromSender:(NSString *)sender onDate:(NSDate *)date {
     XHMessage *textMessage = [[XHMessage alloc] initWithText:text sender:sender timestamp:date];
     textMessage.avator = [UIImage imageNamed:@"avator"];
-    textMessage.avatorUrl = @"http://www.pailixiu.com/jack/meIcon@2x.png";
+    textMessage.avatorUrl = @"http://imgsrc.baidu.com/forum/pic/item/fb55964cd459b35e5343c1b3.jpg";
     [self addMessage:textMessage];
     [self finishSendMessageWithBubbleMessageType:XHBubbleMessageMediaTypeText];
 }

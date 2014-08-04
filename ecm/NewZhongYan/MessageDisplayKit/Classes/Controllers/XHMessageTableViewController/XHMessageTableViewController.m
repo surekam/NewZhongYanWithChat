@@ -651,6 +651,8 @@ static CGPoint  delayOffset = {0.0};
     // 初始化消息页面布局
     [self initilzer];
     [[XHMessageBubbleView appearance] setFont:[UIFont systemFontOfSize:16.0f]];
+    //[_messageTableView setSeparatorStyle:UITableViewCellSeparatorStyleSingleLine];
+    //[_messageTableView setSeparatorColor:[UIColor blackColor]];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -1189,7 +1191,7 @@ static CGPoint  delayOffset = {0.0};
     
     messageTableViewCell.indexPath = indexPath;
     [messageTableViewCell configureCellWithMessage:message displaysTimestamp:displayTimestamp];
-    [messageTableViewCell setBackgroundColor:tableView.backgroundColor];
+    //[messageTableViewCell setBackgroundColor:[UIColor greenColor]];
     
     if ([self.delegate respondsToSelector:@selector(configureCell:atIndexPath:)]) {
         [self.delegate configureCell:messageTableViewCell atIndexPath:indexPath];

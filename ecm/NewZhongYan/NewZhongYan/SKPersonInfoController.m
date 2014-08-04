@@ -9,7 +9,11 @@
 #import "SKPersonInfoController.h"
 #import "SKSToolBar.h"
 #import "SKMessageEntity.h"
-@interface SKPersonInfoController ()
+#import "UIImage+ImageWithColour.h"
+#import "SKSignatureViewController.h"
+#import <MobileCoreServices/MobileCoreServices.h>
+#import "AGSimpleImageEditorView.h"
+@interface SKPersonInfoController () <UIActionSheetDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate>
 {
     UIBarButtonItem *previousBtn;
     UIBarButtonItem *nextBtn;
@@ -90,19 +94,52 @@
     [self.navigationController popViewControllerAnimated:YES];
 }
 
+-(void)signatureBtnTapped:(id)sender{
+    
+    if ([sender isKindOfClass:[UIButton class]]) {
+        UIButton* signatureButton = (UIButton*)sender;
+
+        UILabel *contentLabel = (UILabel *)[signatureButton viewWithTag:999];
+        SKSignatureViewController *signatureVC = [[SKSignatureViewController alloc] init];
+        signatureVC.signatureContent = contentLabel.text;
+        
+        [self.navigationController pushViewController:signatureVC animated:YES];
+    }
+
+}
+
+- (void)editAvatar {
+    UIActionSheet *choiceSheet = [[UIActionSheet alloc] initWithTitle:@"设置头像"
+                                                             delegate:self
+                                                    cancelButtonTitle:@"取消"
+                                               destructiveButtonTitle:nil
+                                                    otherButtonTitles:@"拍照", @"从相册中选取", nil];
+    [choiceSheet showInView:self.view];
+}
+
+- (void)saveAvatarImage:(UIImage*)img {
+    NSLog(@"TODO:save Img, should determine which place to put, because we should consider the other chater's avatar.");
+}
+
 -(void)createPersonInfoView
 {
     CGRect titleRect = CGRectMake(0, 20, 320, 100);
     UIView* titleView = [[UIView alloc] initWithFrame:titleRect];
     titleView.layer.borderColor = COLOR(220, 220, 223).CGColor;
     titleView.layer.borderWidth = 1;
-    [titleView setBackgroundColor:[UIColor whiteColor]];    [mainScrollView addSubview:titleView];
+    [titleView setBackgroundColor:[UIColor whiteColor]];
+    [mainScrollView addSubview:titleView];
     
-    CGRect headrect =  CGRectMake(20,10, 80, 80);
-    UIButton* headBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [headBtn setFrame:headrect];
-    [headBtn setImage:Image(@"avatar") forState:UIControlStateNormal];
-    [titleView addSubview:headBtn];
+    //头像
+    CGRect headrect =  CGRectMake(10,10, 80, 80);
+    headView = [[UIImageView alloc] initWithFrame:headrect];
+    [headView setImage:Image(@"avatar")];
+    
+    //为头像添加点击事件
+    headView.userInteractionEnabled = YES;
+    UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(editAvatar)];
+    [headView addGestureRecognizer:singleTap];
+    [titleView addSubview:headView];
     
     UIView* verView = [[UIView alloc] initWithFrame:CGRectMake(CGRectGetMaxX(headrect) + 10, 10, 1, 80)];
     [verView setBackgroundColor:[UIColor lightGrayColor]];
@@ -118,7 +155,42 @@
     [titleView addSubview:departmentLabel];
     
     
-    CGRect emailRect = CGRectMake(0, CGRectGetMaxY(titleView.frame) + 20, 320, 60);
+    //个性签名
+    CGRect signature = CGRectMake(0, CGRectGetMaxY(titleView.frame), 320, 60);
+    UIButton* signatureBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    signatureBtn.frame = signature;
+    signatureBtn.layer.borderColor = COLOR(220, 220, 223).CGColor;
+    //signatureBtn.layer.borderWidth = 1;
+    [signatureBtn setBackgroundImage:[UIImage imageWithColor:[UIColor whiteColor]] forState:UIControlStateNormal];
+    [signatureBtn setBackgroundImage:[UIImage imageWithColor:[UIColor blueColor]] forState:UIControlStateHighlighted];
+    
+    UIImageView* signatureIcon = [[UIImageView alloc] initWithFrame:CGRectMake(10, 22, 16, 16)];
+    signatureIcon.image = Image(@"signature.png");
+    [signatureBtn addSubview:signatureIcon];
+    
+    UILabel* signatureLabel = [[UILabel alloc] initWithFrame:CGRectMake(30, 22, 80, 18)];
+    signatureLabel.backgroundColor = [UIColor clearColor];
+    signatureLabel.text = @"个性签名:";
+    [signatureBtn addSubview:signatureLabel];
+    
+    UILabel* signatureContentLabel = [[UILabel alloc] initWithFrame:CGRectMake(110, 0, 180, 60)];
+    signatureContentLabel.backgroundColor = [UIColor clearColor];
+    signatureContentLabel.numberOfLines = 2;
+    signatureContentLabel.font = [UIFont fontWithName:@"Arial" size:15];
+    signatureContentLabel.text = @"这是个性签名测试~~这是个性签名测试~~这是个性签名测试~~这是个性签名测试~~";
+    [signatureContentLabel setTag:999];
+    [signatureBtn addSubview:signatureContentLabel];
+    
+    UIImageView* navIcon = [[UIImageView alloc] initWithFrame:CGRectMake(295, 18, 24, 24)];
+    navIcon.image = Image(@"right_arrow_black.png");
+    [signatureBtn addSubview:navIcon];
+    
+    [signatureBtn addTarget:self action:@selector(signatureBtnTapped:) forControlEvents:UIControlEventTouchUpInside];
+    
+    [mainScrollView addSubview:signatureBtn];
+    
+    //email
+    CGRect emailRect = CGRectMake(0, CGRectGetMaxY(signatureBtn.frame) + 20, 320, 60);
     UIView* emaliView = [[UIView alloc] initWithFrame:emailRect];
     emaliView.layer.borderColor = COLOR(220, 220, 223).CGColor;
     emaliView.layer.borderWidth = 1;
@@ -130,7 +202,7 @@
     [emaliView addSubview:emaliIcon];
     
     UILabel* emailNameLabel = [[UILabel alloc] initWithFrame:CGRectMake(30, 10, 80, 18)];
-    emailNameLabel.text = @"邮      箱:";
+    emailNameLabel.text = @"邮　　箱:";
     [emaliView addSubview:emailNameLabel];
     
     mailLabel = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(emailNameLabel.frame),4, 200, 50)];
@@ -163,7 +235,7 @@
     [contactView addSubview:shortPhoneicon];
     
     UILabel* shortPhoneTitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(30, 50, 80, 18)];
-    shortPhoneTitleLabel.text = @"短       号:";
+    shortPhoneTitleLabel.text = @"短　　号:";
     [contactView addSubview:shortPhoneTitleLabel];
     
     shortPhoneTextField = [[HPGrowingTextView alloc] initWithFrame:CGRectMake(CGRectGetMaxX(mobileTitleLabel.frame), 46, 180, 28)];
@@ -171,7 +243,7 @@
     [contactView addSubview:shortPhoneTextField];
     
     
-    //办公电哈
+    //办公电话
     UIImageView* telephoneicon = [[UIImageView alloc] initWithFrame:CGRectMake(10, 95, 16, 16)];
     telephoneicon.image = Image(@"contact_tel");
     [contactView addSubview:telephoneicon];
@@ -361,6 +433,117 @@
     [UIView commitAnimations];
 }
 
+#pragma mark UIActionSheetDelegate
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
+    if (buttonIndex == 0) {
+        // 拍照
+        if ([self isCameraAvailable] && [self doesCameraSupportTakingPhotos]) {
+            UIImagePickerController *picker = [[UIImagePickerController alloc] init];
+            picker.sourceType = UIImagePickerControllerSourceTypeCamera;
+            picker.allowsEditing = YES;
+            if ([self isFrontCameraAvailable]) {
+                picker.cameraDevice = UIImagePickerControllerCameraDeviceFront;
+            }
+            NSMutableArray *mediaTypes = [[NSMutableArray alloc] init];
+            [mediaTypes addObject:(__bridge NSString *)kUTTypeImage];
+            picker.mediaTypes = mediaTypes;
+            picker.delegate = self;
+            [self presentViewController:picker
+                               animated:YES
+                             completion:^(void){
+                                 NSLog(@"Picker View Controller is presented");
+                             }];
+        }
+        
+    } else if (buttonIndex == 1) {
+        // 从相册中选取
+        if ([self isPhotoLibraryAvailable]) {
+            UIImagePickerController *picker = [[UIImagePickerController alloc] init];
+            picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+            picker.allowsEditing = YES;
+            NSMutableArray *mediaTypes = [[NSMutableArray alloc] init];
+            [mediaTypes addObject:(__bridge NSString *)kUTTypeImage];
+            picker.mediaTypes = mediaTypes;
+            picker.delegate = self;
+            [self presentViewController:picker
+                               animated:YES
+                             completion:^(void){
+                                 NSLog(@"Picker View Controller is presented");
+                             }];
+        }
+    }
+}
+
+#pragma mark UIImagePickerController Delegate
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
+{
+    if ([[info objectForKey:UIImagePickerControllerMediaType] isEqualToString:(__bridge NSString *)kUTTypeImage]) {
+        
+        UIImage *img = [info objectForKey:UIImagePickerControllerEditedImage];
+        
+        if (picker.sourceType == UIImagePickerControllerSourceTypePhotoLibrary) {
+            [headView setImage:img];
+        } else {
+            [headView setImage:[UIImage imageWithCGImage:img.CGImage scale:img.scale orientation:UIImageOrientationUpMirrored]];
+        }
+        
+        [self performSelector:@selector(saveAvatarImage:) withObject:img afterDelay:0.5];
+        
+    }
+    [picker dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker
+{
+    [picker dismissViewControllerAnimated:YES completion:nil];
+}
+
+#pragma mark camera utility
+- (BOOL) isCameraAvailable{
+    return [UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera];
+}
+
+- (BOOL) isRearCameraAvailable{
+    return [UIImagePickerController isCameraDeviceAvailable:UIImagePickerControllerCameraDeviceRear];
+}
+
+- (BOOL) isFrontCameraAvailable {
+    return [UIImagePickerController isCameraDeviceAvailable:UIImagePickerControllerCameraDeviceFront];
+}
+
+- (BOOL) doesCameraSupportTakingPhotos {
+    return [self cameraSupportsMedia:(__bridge NSString *)kUTTypeImage sourceType:UIImagePickerControllerSourceTypeCamera];
+}
+
+- (BOOL) isPhotoLibraryAvailable{
+    return [UIImagePickerController isSourceTypeAvailable:
+            UIImagePickerControllerSourceTypePhotoLibrary];
+}
+- (BOOL) canUserPickVideosFromPhotoLibrary{
+    return [self
+            cameraSupportsMedia:(__bridge NSString *)kUTTypeMovie sourceType:UIImagePickerControllerSourceTypePhotoLibrary];
+}
+- (BOOL) canUserPickPhotosFromPhotoLibrary{
+    return [self
+            cameraSupportsMedia:(__bridge NSString *)kUTTypeImage sourceType:UIImagePickerControllerSourceTypePhotoLibrary];
+}
+
+- (BOOL) cameraSupportsMedia:(NSString *)paramMediaType sourceType:(UIImagePickerControllerSourceType)paramSourceType{
+    __block BOOL result = NO;
+    if ([paramMediaType length] == 0) {
+        return NO;
+    }
+    NSArray *availableMediaTypes = [UIImagePickerController availableMediaTypesForSourceType:paramSourceType];
+    [availableMediaTypes enumerateObjectsUsingBlock: ^(id obj, NSUInteger idx, BOOL *stop) {
+        NSString *mediaType = (NSString *)obj;
+        if ([mediaType isEqualToString:paramMediaType]){
+            result = YES;
+            *stop= YES;
+        }
+    }];
+    return result;
+}
+
 #pragma mark -textDelegate
 
 -(void)doneTextEditing
@@ -426,24 +609,24 @@
     if (IS_IPHONE_5){
         if(growingTextView==officeAddressTextField)
         {
-            [mainScrollView setContentOffset:CGPointMake(0,175) animated:YES];
+            [mainScrollView setContentOffset:CGPointMake(0,175+60) animated:YES];
         }else if(growingTextView==telephoneTextField){
-            [mainScrollView setContentOffset:CGPointMake(0,110) animated:YES];
+            [mainScrollView setContentOffset:CGPointMake(0,110+60) animated:YES];
         }else if(growingTextView==mobileTextField){
-            [mainScrollView setContentOffset:CGPointMake(0,20) animated:YES];
+            [mainScrollView setContentOffset:CGPointMake(0,20+60) animated:YES];
         }else if(growingTextView==shortPhoneTextField){
-            [mainScrollView setContentOffset:CGPointMake(0,64) animated:YES];
+            [mainScrollView setContentOffset:CGPointMake(0,64+60) animated:YES];
         }
     }else{
         if(growingTextView==officeAddressTextField)
         {
-            [mainScrollView setContentOffset:CGPointMake(0,265) animated:YES];
+            [mainScrollView setContentOffset:CGPointMake(0,265+60) animated:YES];
         }else if(growingTextView==mobileTextField){
-            [mainScrollView setContentOffset:CGPointMake(0,110) animated:YES];
+            [mainScrollView setContentOffset:CGPointMake(0,110+60) animated:YES];
         }else if(growingTextView==shortPhoneTextField){
-            [mainScrollView setContentOffset:CGPointMake(0,154) animated:YES];
+            [mainScrollView setContentOffset:CGPointMake(0,154+60) animated:YES];
         } else if(growingTextView==telephoneTextField){
-            [mainScrollView setContentOffset:CGPointMake(0,196) animated:YES];
+            [mainScrollView setContentOffset:CGPointMake(0,196+60) animated:YES];
         }
     }
     

@@ -15,6 +15,7 @@
 #import "SKMultiSelectItem.h"
 #import "SKChatMessageTableViewController.h"
 #import "SKChater.h"
+#import "UIImage+ImageWithColour.h"
 #define USE_ACTIVITY    1	// use a xib file defining the cell
 #define USE_REMENU      0
 
@@ -502,7 +503,7 @@
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
-
+#pragma mark Navigation Button actions
 -(void)chooseDone
 {
     NSDictionary *dic=[NSDictionary dictionaryWithObjectsAndKeys:selectedEmployees,@"employee", nil];
@@ -516,6 +517,18 @@
 -(void)back:(id)sender
 {
     [self.navigationController popViewControllerAnimated:YES];
+}
+
+-(void)viewMsg:(id)sender
+{
+    if ([sender isKindOfClass:[UIButton class]]) {
+        UIButton *msgBtn = (UIButton*)sender;
+        if ([msgBtn.titleLabel.text isEqualToString:@"消息"]) {
+            [msgBtn setTitle:@"消息(99+)" forState:UIControlStateNormal];
+        } else {
+            [msgBtn setTitle:@"消息" forState:UIControlStateNormal];
+        }
+    }
 }
 
 - (void)viewDidLoad
@@ -594,6 +607,21 @@
         selectedEmployees=[[NSMutableArray alloc] init];
         self.navigationItem.titleView = nil;
         self.navigationItem.title = @"请选择联系人";
+    } else {
+        UIButton * msgBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        [msgBtn setFrame:CGRectMake(0, 0, 50, 30)];
+        [msgBtn setImage:[UIImage imageWithColor:COLOR(0, 97, 194)] forState:UIControlStateNormal];
+        [msgBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        [msgBtn setTitleColor:[UIColor lightGrayColor] forState:UIControlStateHighlighted];
+        msgBtn.titleLabel.font = [UIFont systemFontOfSize: 13.0];
+        msgBtn.titleLabel.lineBreakMode = NSLineBreakByClipping;
+        msgBtn.titleLabel.adjustsFontSizeToFitWidth = YES;
+        
+        [msgBtn setTitle:@"消息" forState:UIControlStateNormal];
+        //NSLog(@"%f,%f,%f,%f", msgBtn.titleLabel.frame.origin.x, msgBtn.titleLabel.frame.origin.y, msgBtn.titleLabel.frame.size.width, msgBtn.titleLabel.frame.size.height);
+        
+        [msgBtn addTarget:self action:@selector(viewMsg:) forControlEvents:UIControlEventTouchUpInside];
+        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:msgBtn];
     }
     
     keyboard = [[APPUtils AppStoryBoard] instantiateViewControllerWithIdentifier:@"SKCKeyBoards"];

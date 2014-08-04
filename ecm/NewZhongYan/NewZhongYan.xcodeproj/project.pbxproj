@@ -247,8 +247,15 @@
 		3B05EAD3196FD11B00866FA5 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3B05EAD2196FD11B00866FA5 /* MediaPlayer.framework */; };
 		A399E3131977770000B9FAC8 /* cancel@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A399E3121977770000B9FAC8 /* cancel@2x.png */; };
 		A399E3151977789400B9FAC8 /* SearchIcon_white@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A399E3141977789400B9FAC8 /* SearchIcon_white@2x.png */; };
+		A39A7927198B73230003BC56 /* AGSimpleImageEditorView.m in Sources */ = {isa = PBXBuildFile; fileRef = A39A7926198B73230003BC56 /* AGSimpleImageEditorView.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		A39AB2C419792CE20027BAE5 /* SKChater.m in Sources */ = {isa = PBXBuildFile; fileRef = A39AB2C319792CE20027BAE5 /* SKChater.m */; };
+		A39ADE3B1989F48B008EBEE7 /* signature@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A39ADE3A1989F48B008EBEE7 /* signature@2x.png */; };
+		A39ADE3D1989F95D008EBEE7 /* right_arrow_black@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A39ADE3C1989F95D008EBEE7 /* right_arrow_black@2x.png */; };
+		A39ADE40198A1E97008EBEE7 /* UIImage+ImageWithColour.m in Sources */ = {isa = PBXBuildFile; fileRef = A39ADE3F198A1E97008EBEE7 /* UIImage+ImageWithColour.m */; };
+		A39ADE43198A2961008EBEE7 /* SKSignatureViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A39ADE42198A2961008EBEE7 /* SKSignatureViewController.m */; };
+		A39ADE45198A4C2C008EBEE7 /* btn_done_blue@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A39ADE44198A4C2B008EBEE7 /* btn_done_blue@2x.png */; };
 		A3A0AF671976106D00497936 /* SKChatMessageTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A3A0AF661976106D00497936 /* SKChatMessageTableViewController.m */; };
+		A3E629E7198F7E220056C259 /* SKChatConversationCellTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A3E629E6198F7E220056C259 /* SKChatConversationCellTableViewCell.m */; };
 		A3EA69251975224200730437 /* SKMultiSelectItem.m in Sources */ = {isa = PBXBuildFile; fileRef = A3EA69221975224200730437 /* SKMultiSelectItem.m */; };
 		A3EA69261975224200730437 /* SKToolBarMultiSelectPanel.m in Sources */ = {isa = PBXBuildFile; fileRef = A3EA69241975224200730437 /* SKToolBarMultiSelectPanel.m */; };
 		A3EA6929197522F200730437 /* SKMessageRootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A3EA6928197522F200730437 /* SKMessageRootViewController.m */; };
@@ -1085,10 +1092,21 @@
 		3B05EAD2196FD11B00866FA5 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
 		A399E3121977770000B9FAC8 /* cancel@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "cancel@2x.png"; sourceTree = "<group>"; };
 		A399E3141977789400B9FAC8 /* SearchIcon_white@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "SearchIcon_white@2x.png"; sourceTree = "<group>"; };
+		A39A7925198B73230003BC56 /* AGSimpleImageEditorView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AGSimpleImageEditorView.h; sourceTree = "<group>"; };
+		A39A7926198B73230003BC56 /* AGSimpleImageEditorView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AGSimpleImageEditorView.m; sourceTree = "<group>"; };
 		A39AB2C219792CE20027BAE5 /* SKChater.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SKChater.h; sourceTree = "<group>"; };
 		A39AB2C319792CE20027BAE5 /* SKChater.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SKChater.m; sourceTree = "<group>"; };
+		A39ADE3A1989F48B008EBEE7 /* signature@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "signature@2x.png"; sourceTree = "<group>"; };
+		A39ADE3C1989F95D008EBEE7 /* right_arrow_black@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "right_arrow_black@2x.png"; sourceTree = "<group>"; };
+		A39ADE3E198A1E97008EBEE7 /* UIImage+ImageWithColour.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+ImageWithColour.h"; sourceTree = "<group>"; };
+		A39ADE3F198A1E97008EBEE7 /* UIImage+ImageWithColour.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+ImageWithColour.m"; sourceTree = "<group>"; };
+		A39ADE41198A2961008EBEE7 /* SKSignatureViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SKSignatureViewController.h; sourceTree = "<group>"; };
+		A39ADE42198A2961008EBEE7 /* SKSignatureViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SKSignatureViewController.m; sourceTree = "<group>"; };
+		A39ADE44198A4C2B008EBEE7 /* btn_done_blue@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn_done_blue@2x.png"; sourceTree = "<group>"; };
 		A3A0AF651976106D00497936 /* SKChatMessageTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SKChatMessageTableViewController.h; sourceTree = "<group>"; };
 		A3A0AF661976106D00497936 /* SKChatMessageTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SKChatMessageTableViewController.m; sourceTree = "<group>"; };
+		A3E629E5198F7E220056C259 /* SKChatConversationCellTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SKChatConversationCellTableViewCell.h; sourceTree = "<group>"; };
+		A3E629E6198F7E220056C259 /* SKChatConversationCellTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SKChatConversationCellTableViewCell.m; sourceTree = "<group>"; };
 		A3EA69211975224200730437 /* SKMultiSelectItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SKMultiSelectItem.h; sourceTree = "<group>"; };
 		A3EA69221975224200730437 /* SKMultiSelectItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SKMultiSelectItem.m; sourceTree = "<group>"; };
 		A3EA69231975224200730437 /* SKToolBarMultiSelectPanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SKToolBarMultiSelectPanel.h; sourceTree = "<group>"; };
@@ -2724,6 +2742,15 @@
 			path = Resources;
 			sourceTree = "<group>";
 		};
+		A39A7924198B72DE0003BC56 /* AGSimpleImageEditorView */ = {
+			isa = PBXGroup;
+			children = (
+				A39A7925198B73230003BC56 /* AGSimpleImageEditorView.h */,
+				A39A7926198B73230003BC56 /* AGSimpleImageEditorView.m */,
+			);
+			name = AGSimpleImageEditorView;
+			sourceTree = "<group>";
+		};
 		A3EA6920197520F700730437 /* chat */ = {
 			isa = PBXGroup;
 			children = (
@@ -2737,6 +2764,10 @@
 				A3EA6928197522F200730437 /* SKMessageRootViewController.m */,
 				A3A0AF651976106D00497936 /* SKChatMessageTableViewController.h */,
 				A3A0AF661976106D00497936 /* SKChatMessageTableViewController.m */,
+				A39ADE41198A2961008EBEE7 /* SKSignatureViewController.h */,
+				A39ADE42198A2961008EBEE7 /* SKSignatureViewController.m */,
+				A3E629E5198F7E220056C259 /* SKChatConversationCellTableViewCell.h */,
+				A3E629E6198F7E220056C259 /* SKChatConversationCellTableViewCell.m */,
 			);
 			path = chat;
 			sourceTree = "<group>";
@@ -2872,6 +2903,8 @@
 				F2F79EB4180D30C60004CAFC /* UIDevice-Hardware.m */,
 				F2F79EB6180D30D50004CAFC /* UIDevice+IdentifierAddition.h */,
 				F2F79EB7180D30D50004CAFC /* UIDevice+IdentifierAddition.m */,
+				A39ADE3E198A1E97008EBEE7 /* UIImage+ImageWithColour.h */,
+				A39ADE3F198A1E97008EBEE7 /* UIImage+ImageWithColour.m */,
 			);
 			name = categary;
 			sourceTree = "<group>";
@@ -2997,6 +3030,8 @@
 		F24B0F471859A4DC00E9CE6B /* addressBookpic */ = {
 			isa = PBXGroup;
 			children = (
+				A39ADE3C1989F95D008EBEE7 /* right_arrow_black@2x.png */,
+				A39ADE3A1989F48B008EBEE7 /* signature@2x.png */,
 				BE84606619235A4E00E8BDDD /* contact_email@2x.png */,
 				BE84606719235A4E00E8BDDD /* contact_mobile@2x.png */,
 				BE84606819235A4E00E8BDDD /* contact_place@2x.png */,
@@ -3135,6 +3170,7 @@
 		F28846C21803FA8F006A5D62 /* opensource */ = {
 			isa = PBXGroup;
 			children = (
+				A39A7924198B72DE0003BC56 /* AGSimpleImageEditorView */,
 				3B05E820196FCA8500866FA5 /* MessageDisplayKit */,
 				F2C47D9818BAED5900358645 /* GPPathImage */,
 				F23AA24C184F232E004248DB /* aes */,
@@ -3470,6 +3506,7 @@
 				F2258F2218D2EA3500959601 /* segRight_press.png */,
 				F2BE28E718DD780700AADD13 /* exit@2x.png */,
 				F2F20D5718E3CCA6000D4EDE /* btn_done@2x.png */,
+				A39ADE44198A4C2B008EBEE7 /* btn_done_blue@2x.png */,
 				F2BE28E518DD77F000AADD13 /* btn_help@2x.png */,
 				F289FC4E180654DF00B825DC /* navbar44@2x.png */,
 				F289FC4F180654DF00B825DC /* navbar64@2x.png */,
@@ -4187,6 +4224,7 @@
 				F2B965DE18C56C88001F227C /* btn_download.png in Resources */,
 				BE8460961923671A00E8BDDD /* btn_abandon_ecm_press@2x.png in Resources */,
 				F2DF1E7A18C0359E00A160FA /* picture_unread@2x.png in Resources */,
+				A39ADE3B1989F48B008EBEE7 /* signature@2x.png in Resources */,
 				F2B965CA18C4593B001F227C /* dot_normal@2x.png in Resources */,
 				F2DF1E9418C08A8900A160FA /* Icon-Small-40@2x.png in Resources */,
 				F277033818FB928D00C12F47 /* help5_5.png in Resources */,
@@ -4418,6 +4456,7 @@
 				3B05EAB0196FCA8600866FA5 /* SenderVoiceNodePlaying001@2x.png in Resources */,
 				F291518E18DFED6900A259A3 /* remind@2x.png in Resources */,
 				3B05EA8D196FCA8600866FA5 /* MultiSelectedPanelConfirmBtnbKG@2x.png in Resources */,
+				A39ADE45198A4C2C008EBEE7 /* btn_done_blue@2x.png in Resources */,
 				F234879C1831CD6D00E649AA /* buttonStart.png in Resources */,
 				F25EC64B18277FCA00490F38 /* SKMailEmployeeCell.xib in Resources */,
 				BE8460A71923671A00E8BDDD /* btn_moremail_ecm_press@2x.png in Resources */,
@@ -4438,6 +4477,7 @@
 				3B05EAAC196FCA8600866FA5 /* section0_emotion7@2x.png in Resources */,
 				3B05EAB5196FCA8600866FA5 /* sharemore_location@2x.png in Resources */,
 				F277033618FB928D00C12F47 /* help5_3.png in Resources */,
+				A39ADE3D1989F95D008EBEE7 /* right_arrow_black@2x.png in Resources */,
 				F2DF1E7618C0359E00A160FA /* attach_unread@2x.png in Resources */,
 				3B05EA6F196FCA8600866FA5 /* AddGroupMemberBtn@2x.png in Resources */,
 				F22C95A5180EBD9100BC6D71 /* Readme.mdown in Resources */,
@@ -4556,6 +4596,7 @@
 				F2E5D5A4182A654600BFB48D /* SKSToolBar.m in Sources */,
 				F2B66EFC18154B8500AD6286 /* SKToolBar.m in Sources */,
 				3B05EA6A196FCA8600866FA5 /* XHLoadMoreView.m in Sources */,
+				A39A7927198B73230003BC56 /* AGSimpleImageEditorView.m in Sources */,
 				F2B8322C1829F0BC007E2CC0 /* element.m in Sources */,
 				3B05E9F7196FCA8600866FA5 /* XHBaseTableViewController.m in Sources */,
 				3B05EA1C196FCA8600866FA5 /* XHAnnotation.m in Sources */,
@@ -4565,6 +4606,7 @@
 				F2A4853B182A53B10068A4D7 /* GDataXMLNode.m in Sources */,
 				3B05EA44196FCA8600866FA5 /* XHPathCover.m in Sources */,
 				F2D8149C1835C75300FE0839 /* NotifyHelper.m in Sources */,
+				A39ADE43198A2961008EBEE7 /* SKSignatureViewController.m in Sources */,
 				F28846D51803FAC3006A5D62 /* DDXMLNode.m in Sources */,
 				3B05EA5E196FCA8600866FA5 /* XHEmotionCollectionViewCell.m in Sources */,
 				F2F79EBE180D327F0004CAFC /* SKDataDaemonHelper.m in Sources */,
@@ -4663,9 +4705,11 @@
 				3B05EA5B196FCA8600866FA5 /* XHMessageInputView.m in Sources */,
 				F2D8149D1835C75300FE0839 /* AnnounceHelper.m in Sources */,
 				F2660E71187A476000EAC0C1 /* NSData+GIF.m in Sources */,
+				A3E629E7198F7E220056C259 /* SKChatConversationCellTableViewCell.m in Sources */,
 				3B05E9FD196FCA8600866FA5 /* XHBottleViewController.m in Sources */,
 				F2D814721834D74200FE0839 /* SKEmailConfigurationView.m in Sources */,
 				3B05EA50196FCA8600866FA5 /* XHContactTableViewCell.m in Sources */,
+				A39ADE40198A1E97008EBEE7 /* UIImage+ImageWithColour.m in Sources */,
 				3B05E9F9196FCA8600866FA5 /* XHBaseViewController.m in Sources */,
 				F2660E90187A476D00EAC0C1 /* UIImage+MultiFormat.m in Sources */,
 				F28846D41803FAC3006A5D62 /* DDXMLElement.m in Sources */,
