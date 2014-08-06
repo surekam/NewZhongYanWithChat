@@ -13,4 +13,6 @@
 @property (nonatomic, strong) UILabel *nameLabel;
 @property (nonatomic, strong) UILabel *msgLabel;
 @property (nonatomic, strong) UILabel *timeLabel;
+@property (nonatomic, copy) NSString *unreadNum;
+- (void)setUnreadNum:(NSString *)unreadNum;
 @end

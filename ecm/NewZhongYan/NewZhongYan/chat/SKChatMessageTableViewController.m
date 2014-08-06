@@ -56,20 +56,20 @@
         self.navigationItem.backBarButtonItem = barBtn;
     }
     
-    NSString *title = @"";
-    if (_chaters) {
-        if ([_chaters count] == 1) {
-            title = ((SKChater *)_chaters[0]).cname;
-        } else if ([_chaters count] > 1) {
-            NSString *names = @"";
-            for (SKChater *chater in _chaters) {
-               names = [[names stringByAppendingString:chater.cname] stringByAppendingString:@"、"];
-            }
-            names = [names length] > 8 ? [[names substringToIndex:5] stringByAppendingString:@"..."] :[names substringToIndex:[names length] - 1];
-            title = [NSString stringWithFormat:@"%@(%i)人", names, [_chaters count]];
-        }
-    }
-    self.title = title;
+//    NSString *title = @"";
+//    if (_chaters) {
+//        if ([_chaters count] == 1) {
+//            title = ((SKChater *)_chaters[0]).cname;
+//        } else if ([_chaters count] > 1) {
+//            NSString *names = @"";
+//            for (SKChater *chater in _chaters) {
+//               names = [[names stringByAppendingString:chater.cname] stringByAppendingString:@"、"];
+//            }
+//            names = [names length] > 8 ? [[names substringToIndex:5] stringByAppendingString:@"..."] :[names substringToIndex:[names length] - 1];
+//            title = [NSString stringWithFormat:@"%@(%i)人", names, [_chaters count]];
+//        }
+//    }
+//    self.title = title;
     
     // 设置自身用户名
     self.messageSender = [APPUtils loggedUser].name;

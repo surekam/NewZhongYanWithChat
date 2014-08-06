@@ -12,7 +12,6 @@
 #import "SKSToolBar.h"
 #import "SKAddressController.h"
 #import "SKChatMessageTableViewController.h"
-#import "UIView+XHBadgeView.h"
 #import "SKChatConversationCellTableViewCell.h"
 
 @interface SKMessageRootViewController ()
@@ -57,6 +56,11 @@
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+-(void)back:(id)sender
+{
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (void)showMenuOnView:(UIBarButtonItem *)buttonItem {
@@ -161,9 +165,8 @@
         cell.headImg.image = [UIImage imageNamed:[self.dataSource[indexPath.row] objectForKey:@"headImg"]];
         cell.timeLabel.text = [self.dataSource[indexPath.row] objectForKey:@"msgTime"];
     }
-    
-    [cell.headImg setupCircleBadge];
-    
+    [cell setUnreadNum:@"12"];
+
     return cell;
 }
 
@@ -175,12 +178,17 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    [self enterMessage];
-}
-
-#pragma mark - Action
-- (void)enterMessage {
+    SKChatConversationCellTableViewCell *cell = (SKChatConversationCellTableViewCell *)[self tableView:self.tableView cellForRowAtIndexPath:indexPath];
     SKChatMessageTableViewController *msgTableViewController = [[SKChatMessageTableViewController alloc] init];
+    UILabel *title = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 100, 44)];
+    title.text = @"sdafjkla;dsjfa;jfa;jdfasfasfafadsfadsfas";
+    title.textAlignment = NSTextAlignmentCenter;
+    title.lineBreakMode = NSLineBreakByTruncatingMiddle;
+    //[title sizeToFit];
+    msgTableViewController.navigationItem.titleView = title;
+//    msgTableViewController.title = @"sdafjkla;dsjfa;jfa;jdfasfasfafadsfadsfas";
+
     [self.navigationController pushViewController:msgTableViewController animated:YES];
 }
+
 @end
