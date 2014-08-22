@@ -66,6 +66,9 @@ typedef void (^resultsetBlock)(NSArray *resultset);
 
 #define SAFE_RELEASE(x) [x release];x=nil
 
+//IM数据库名称
+#define IMDataBaseFileName @"im.db"
+
 //构建一个颜色
 #define COLOR(r,g,b) [UIColor colorWithRed:r/255.0 green:g/255.0 blue:b/255.0 alpha:1]
 

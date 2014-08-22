@@ -214,7 +214,7 @@
 }
 */
 
-#pragma mark - TableView delegate
+#pragma mark - UIScrollViewDelegate
 
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
     [[[UIApplication sharedApplication] keyWindow] endEditing:YES];

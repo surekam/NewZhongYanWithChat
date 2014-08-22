@@ -7,7 +7,7 @@
 //
 
 #import "SKEdetailInfoController.h"
-#import "SKLToolBar.h"
+#import "SKFourBtnToolBar.h"
 #import "UIColor+FlatUI.h"
 #import "SKNewMailController.h"
 #import "SKPathButton.h"
@@ -58,6 +58,11 @@
 	}
 }
 
+- (void)startChat
+{
+    
+}
+
 - (void)messageComposeViewController:(MFMessageComposeViewController *)controller didFinishWithResult:(MessageComposeResult)result
 {
     [self dismissViewControllerAnimated:YES completion:nil];
@@ -92,13 +97,15 @@
         self.navigationItem.backBarButtonItem = backItem;
     }
     
-    SKLToolBar* myToolBar = [[SKLToolBar alloc] initWithFrame:CGRectMake(0, 0, 320, 49)];
+    SKFourBtnToolBar *myToolBar = [[SKFourBtnToolBar alloc] initWithFrame:CGRectMake(0, 0, 320, 49)];
     [myToolBar setFirstItem:@"btn_call_ecm" Title:@"电话"];
     [myToolBar setSecondItem:@"btn_sms_ecm" Title:@"短信"];
     [myToolBar setThirdItem:@"btn_mail_ecm" Title:@"邮件"];
+    [myToolBar setFourthItem:@"btn_chat" Title:@"聊天"];
     [myToolBar.firstButton  addTarget:self action:@selector(phoneOnToolBar)  forControlEvents:UIControlEventTouchUpInside];
     [myToolBar.secondButton addTarget:self action:@selector(sendSMS)   forControlEvents:UIControlEventTouchUpInside];
     [myToolBar.thirdButton  addTarget:self action:@selector(email:) forControlEvents:UIControlEventTouchUpInside];
+    [myToolBar.fourthButton  addTarget:self action:@selector(startChat) forControlEvents:UIControlEventTouchUpInside];
     [_toolView addSubview:myToolBar];
     
     if (System_Version_Small_Than_(7)) {

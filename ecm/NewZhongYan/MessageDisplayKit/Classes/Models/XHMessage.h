@@ -12,6 +12,8 @@
 
 @interface XHMessage : NSObject <XHMessageModel, NSCoding, NSCopying>
 
+@property (nonatomic, copy) NSString *rid;
+
 @property (nonatomic, copy) NSString *text;
 
 @property (nonatomic, strong) UIImage *photo;

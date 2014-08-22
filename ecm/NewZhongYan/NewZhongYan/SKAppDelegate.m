@@ -21,6 +21,8 @@
 #import "AESCrypt.h"
 #import "EGOCache.h"
 #import "UncaughtExceptionHandler.h"
+#import "FileManager.h"
+#import "SKIMDBOperate.h"
 #define MAXTIME 1
 static User* currentUser = nil;
 @implementation SKAppDelegate
@@ -79,6 +81,19 @@ NSUInteger DeviceSystemMajorVersion() {
 }
 
 /**
+ *  创建IM数据库
+ */
+-(void)createIMDatabase
+{
+    if (![[NSUserDefaults standardUserDefaults] boolForKey:@"IM_DBVERSION"]) {
+        [FileManager removeFileDB:IMDataBaseFileName];
+        [SKIMDBOperate createTable];
+        [[NSUserDefaults standardUserDefaults] setInteger:1 forKey:@"IM_DBVERSION"];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+    }
+}
+
+/**
  *  创建网络监听
  */
 -(void)createDataManager
@@ -90,6 +105,7 @@ NSUInteger DeviceSystemMajorVersion() {
     [[UIApplication sharedApplication] registerForRemoteNotificationTypes: UIRemoteNotificationTypeAlert|UIRemoteNotificationTypeBadge|
      UIRemoteNotificationTypeSound];
     [self creeateDatabase];
+    [self createIMDatabase];
     if (!self.logonManager) {
         self.logonManager = [APPUtils AppLogonManager];
     }
@@ -257,7 +273,7 @@ NSUInteger DeviceSystemMajorVersion() {
 	NSLog(@"deviceToken: %@\n%@", deviceToken, theDeviceToken);
 }
 
-//注册失败
+//`
 - (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error
 {
     NSLog(@"Error in registration. Error: %@", error);

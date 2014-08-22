@@ -7,12 +7,18 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "SKIMChater.h"
 
-@interface SKIMUser : NSObject
+@interface SKIMUser : NSObject<SKIMChater>
+
 @property (nonatomic, copy) NSString *uid;   //UID
 @property (nonatomic, copy) NSString *cname; //名字
 @property (nonatomic, copy) NSString *pdpid; //部门id
 @property (nonatomic, copy) NSString *pname; //部门名称
 @property (nonatomic, copy) NSString *signature; //个性签名
 @property (nonatomic, copy) NSString *avatarUri; //头像Uri
+
++ (SKIMUser *)currentUser;
+
++ (SKIMUser *)getUserFromUid:(NSString *)uid;
 @end

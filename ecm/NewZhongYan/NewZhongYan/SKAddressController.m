@@ -16,6 +16,7 @@
 #import "SKChatMessageTableViewController.h"
 #import "SKChater.h"
 #import "UIImage+ImageWithColour.h"
+#import "SKIMConversationListViewController.h"
 #define USE_ACTIVITY    1	// use a xib file defining the cell
 #define USE_REMENU      0
 
@@ -522,12 +523,14 @@
 -(void)viewMsg:(id)sender
 {
     if ([sender isKindOfClass:[UIButton class]]) {
-        UIButton *msgBtn = (UIButton*)sender;
-        if ([msgBtn.titleLabel.text isEqualToString:@"消息"]) {
-            [msgBtn setTitle:@"消息(99+)" forState:UIControlStateNormal];
-        } else {
-            [msgBtn setTitle:@"消息" forState:UIControlStateNormal];
-        }
+//        UIButton *msgBtn = (UIButton*)sender;
+//        if ([msgBtn.titleLabel.text isEqualToString:@"消息"]) {
+//            [msgBtn setTitle:@"消息(99+)" forState:UIControlStateNormal];
+//        } else {
+//            [msgBtn setTitle:@"消息" forState:UIControlStateNormal];
+//        }
+        SKIMConversationListViewController *convListVC = [[SKIMConversationListViewController alloc] init];
+        [self.navigationController pushViewController:convListVC animated:YES];
     }
 }
 
@@ -613,7 +616,7 @@
         [msgBtn setImage:[UIImage imageWithColor:COLOR(0, 97, 194)] forState:UIControlStateNormal];
         [msgBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         [msgBtn setTitleColor:[UIColor lightGrayColor] forState:UIControlStateHighlighted];
-        msgBtn.titleLabel.font = [UIFont systemFontOfSize: 13.0];
+        msgBtn.titleLabel.font = [UIFont systemFontOfSize: 15.0];
         msgBtn.titleLabel.lineBreakMode = NSLineBreakByClipping;
         msgBtn.titleLabel.adjustsFontSizeToFitWidth = YES;
         

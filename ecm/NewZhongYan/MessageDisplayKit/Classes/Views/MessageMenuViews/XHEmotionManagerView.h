@@ -64,7 +64,7 @@
 /**
  *  是否显示表情商店的按钮
  */
-@property (nonatomic, assign) BOOL isShowEmotionStoreButton; // default is YES
+@property (nonatomic, assign) BOOL isShowEmotionStoreButton; // default is NO
 
 /**
  *  根据数据源刷新UI布局和数据

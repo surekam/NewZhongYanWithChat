@@ -7,21 +7,28 @@
 //
 
 #import <Foundation/Foundation.h>
-@class SKIMMessage;
+@class XHMessage;
+@protocol SKIMChater;
 
 @interface SKIMConversation : NSObject
 
+//会话id
+@property (nonatomic, copy) NSString *rid;
+
 //会话对方的Id,为个人或群组id
-@property (nonatomic, strong, readonly) NSString *chatterId;
+@property (nonatomic, strong) id<SKIMChater> chatter;
 
 //是否为群组会话
-@property (nonatomic, readonly) BOOL isGroup;
+@property (nonatomic, assign) BOOL isGroup;
 
 //此会话中的消息列表
-@property (nonatomic, strong, readonly) NSArray *messages;
+@property (nonatomic, strong) NSMutableArray *messages;
 
 //是否接收关于此会话的消息
-@property (nonatomic, readwrite) BOOL enableReceiveMessage;
+@property (nonatomic, assign) BOOL isReceiveMsg;
+
+//此会话是否被移除
+@property (nonatomic, assign) BOOL isEnable;
 
 #pragma mark - message
 /*!
@@ -31,7 +38,7 @@
  @param messageId 消息ID
  @result 加载的消息
  */
-- (SKIMMessage *)loadMessage:(NSString *)messageId;
+- (XHMessage *)loadMessage:(NSString *)messageId;
 
 
 /*!
@@ -69,14 +76,14 @@
  @brief 获取conversation最新一条消息
  @result SKIMMessage最新一条消息
  */
-- (SKIMMessage *)latestMessage;
+- (XHMessage *)latestMessage;
 
 /*!
  @method
  @brief 获取conversation从对方发过来的最新一条消息
  @result SKIMMessage最新一条消息
  */
-- (SKIMMessage *)latestMessageFromOthers;
+- (XHMessage *)latestMessageFromOthers;
 
 #pragma mark - mark conversation
 
@@ -108,4 +115,20 @@
  @result 此对话中所有未读消息的条数
  */
 - (NSUInteger)unreadMessagesCount;
+
+//获取聊天对话名
+- (NSString *)conversationName;
+
+//获取聊天对象头像Uri
+- (NSString *)conversationHeadImg;
+
+//获取聊天对象id
+- (NSString *)chatterId;
+
+//加载指定条数的消息
+- (NSArray *)loadNumbersOfMessages:(NSUInteger)count;
+
+//加载所有已经存在的会话
++ (NSArray *)loadAllExistConversation;
+
 @end
