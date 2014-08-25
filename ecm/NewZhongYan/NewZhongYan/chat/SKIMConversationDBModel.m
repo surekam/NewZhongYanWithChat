@@ -54,5 +54,4 @@
     }
     return conversationArray;
 }
-
 @end

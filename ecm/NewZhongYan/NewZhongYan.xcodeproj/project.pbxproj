@@ -2845,6 +2845,8 @@
 			children = (
 				A398294119A2DEA700787F71 /* SKIMConversationListViewController.h */,
 				A398294219A2DEA700787F71 /* SKIMConversationListViewController.m */,
+				A3E629E5198F7E220056C259 /* SKChatConversationCellTableViewCell.h */,
+				A3E629E6198F7E220056C259 /* SKChatConversationCellTableViewCell.m */,
 				A399DDBB199DF5D0006F56F9 /* SKIMConversationDetailViewController.h */,
 				A399DDBC199DF5D0006F56F9 /* SKIMConversationDetailViewController.m */,
 				A39ADE41198A2961008EBEE7 /* SKSignatureViewController.h */,
@@ -2903,8 +2905,6 @@
 				A3E6CBE219989A7D004D0BE4 /* SKChatConversationViewController.m */,
 				A3A0AF651976106D00497936 /* SKChatMessageTableViewController.h */,
 				A3A0AF661976106D00497936 /* SKChatMessageTableViewController.m */,
-				A3E629E5198F7E220056C259 /* SKChatConversationCellTableViewCell.h */,
-				A3E629E6198F7E220056C259 /* SKChatConversationCellTableViewCell.m */,
 			);
 			path = chat;
 			sourceTree = "<group>";

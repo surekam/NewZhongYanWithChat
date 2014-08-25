@@ -23,10 +23,15 @@ JSBadgeView *badgeView;
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
         // Initialization code
-        _headImg = [[UIImageView alloc] initWithFrame:CGRectMake(15, 4, 50, 50)];
-        _nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(80, 5, 200, 20)];
-        _msgLabel = [[UILabel alloc] initWithFrame:CGRectMake(80, 32, 210, 20)];
-        _timeLabel = [[UILabel alloc] initWithFrame:CGRectMake(255, 5, 50, 20)];
+        _headImg = [[UIImageView alloc] initWithFrame:CGRectMake(5, 5, 50, 50)];
+        _nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(65, 5, 155, 20)];
+        _msgLabel = [[UILabel alloc] initWithFrame:CGRectMake(65, 32, 245, 20)];
+        _timeLabel = [[UILabel alloc] initWithFrame:CGRectMake(230, 4, 80, 20)];
+        
+        _headImg.layer.cornerRadius = 5;
+        _headImg.layer.masksToBounds = YES;
+        _headImg.layer.borderWidth = 1.0;
+        _headImg.layer.borderColor = [UIColor blackColor].CGColor;
         
         _nameLabel.font=[UIFont boldSystemFontOfSize:15];
         _nameLabel.textColor = [UIColor blackColor];
@@ -50,10 +55,19 @@ JSBadgeView *badgeView;
     return self;
 }
 
+- (void)setTime:(NSDate *)msgTime
+{
+    if (msgTime) {
+        self.timeLabel.text = [msgTime datetoIMDate];
+    }
+}
+
 - (void)setUnreadNum:(NSString *)unreadNum
 {
-    _unreadNum = unreadNum;
-    badgeView.badgeText = unreadNum;
+    if ([unreadNum intValue] > 0) {
+        self.unreadNum = unreadNum;
+        badgeView.badgeText = unreadNum;
+    }
 }
 
 - (void)awakeFromNib

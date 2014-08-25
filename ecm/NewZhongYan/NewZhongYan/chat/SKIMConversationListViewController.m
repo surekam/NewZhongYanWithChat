@@ -50,6 +50,8 @@
     self.tableView.frame = CGRectMake(0.0f, 0.0f,self.view.bounds.size.width, self.view.bounds.size.height-49.0f);
     [self createToolBar];
     [self loadDataSource];
+    [self configuraTableViewNormalSeparatorInset];
+    [self setExtraCellLineHidden:self.tableView];
 }
 
 - (void)didReceiveMemoryWarning
@@ -107,36 +109,38 @@
         cell.nameLabel.text = [conversation conversationName];
         [cell.headImg setImageWithURL:[NSURL URLWithString:[conversation conversationHeadImg]]
                      placeholderImage:[UIImage imageNamed:[conversation chatterId]]];
-        cell.timeLabel.text = [NSDateFormatter localizedStringFromDate:latestMsg.timestamp
-                                                             dateStyle:NSDateFormatterFullStyle
-                                                             timeStyle:NSDateFormatterFullStyle];
-        switch (latestMsg.messageMediaType) {
-            case XHBubbleMessageMediaTypeText:
-                cell.msgLabel.text = latestMsg.text;
-                break;
-            case XHBubbleMessageMediaTypePhoto:
-                cell.msgLabel.text = @"[图片]";
-                break;
-            case XHBubbleMessageMediaTypeVoice:
-                cell.msgLabel.text = @"[语音]";
-                break;
-            case XHBubbleMessageMediaTypeVideo:
-                cell.msgLabel.text = @"[视频]";
-                break;
-            case XHBubbleMessageMediaTypeLocalPosition:
-                cell.msgLabel.text = @"[位置]";
-                break;
-            case XHBubbleMessageMediaTypeEmotion:
-                cell.msgLabel.text = @"[表情]";
-                break;
-            default:
-                break;
+        [cell setTime:latestMsg.timestamp];
+        NSLog(@"msgTime=%@", [NSDateFormatter localizedStringFromDate:latestMsg.timestamp dateStyle:NSDateFormatterFullStyle timeStyle:NSDateFormatterFullStyle]);
+        
+        if (latestMsg) {
+            switch (latestMsg.messageMediaType) {
+                case XHBubbleMessageMediaTypeText:
+                    cell.msgLabel.text = latestMsg.text;
+                    break;
+                case XHBubbleMessageMediaTypePhoto:
+                    cell.msgLabel.text = @"[图片]";
+                    break;
+                case XHBubbleMessageMediaTypeVoice:
+                    cell.msgLabel.text = @"[语音]";
+                    break;
+                case XHBubbleMessageMediaTypeVideo:
+                    cell.msgLabel.text = @"[视频]";
+                    break;
+                case XHBubbleMessageMediaTypeLocalPosition:
+                    cell.msgLabel.text = @"[位置]";
+                    break;
+                case XHBubbleMessageMediaTypeEmotion:
+                    cell.msgLabel.text = @"[表情]";
+                    break;
+                default:
+                    break;
+            }
+
         }
         [cell setUnreadNum:[NSString stringWithFormat:@"%lu", (unsigned long)[conversation unreadMessagesCount]]];
     }
     return cell;
 }
-
 
 #pragma mark - UITableView Delegate
 
@@ -151,4 +155,10 @@
     [self.navigationController pushViewController:conversationDetailVC animated:YES];
 }
 
+- (void)setExtraCellLineHidden: (UITableView *)tableView
+{
+    UIView *view =[ [UIView alloc]init];
+    view.backgroundColor = [UIColor clearColor];
+    [tableView setTableFooterView:view];
+}
 @end

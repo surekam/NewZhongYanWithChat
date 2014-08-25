@@ -431,6 +431,22 @@
     
 }
 
+- (NSString *)datetoIMDate
+{
+    NSString *dateString = nil;
+    NSDate *now = [NSDate date];
+    NSInteger timeRange = [now daysAfterDate:self];
+    if ([self isToday]) {
+        dateString = [DateUtils dateToString:self DateFormat:@"HH:mm:ss"];
+    } else if ([self isYesterday]) {
+        dateString = @"昨天";
+    } else if ([self isSameWeekAsDate:now] && timeRange > 1 && self.weekday < now.weekday) {
+        dateString = [DateUtils dateToString:self DateFormat:@"EE"];
+    } else {
+        dateString = [DateUtils dateToString:self DateFormat:@"yyyy-MM-dd"];
+    }
+    return dateString;
+}
 
 - (NSInteger) daysBeforeDate: (NSDate *) aDate
 {

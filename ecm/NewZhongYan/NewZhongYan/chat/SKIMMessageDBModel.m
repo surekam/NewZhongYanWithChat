@@ -35,7 +35,10 @@
     for (NSDictionary *dic in modelArray) {
         XHMessage *msg = [[XHMessage alloc] init];
         msg.rid = [dic objectForKey:@"RID"];
-        msg.timestamp = [dic objectForKey:@"SENDTIME"];
+        msg.timestamp = [NSDate dateWithTimeIntervalSince1970:[[dic objectForKey:@"SENDTIME"] doubleValue]/1000];
+        msg.messageMediaType = XHBubbleMessageMediaTypeText;
+        msg.text = [dic objectForKey:@"MSGBODY"];
+        
         //TODO: 完善消息实体赋值
         [msgArray addObject:msg];
     }

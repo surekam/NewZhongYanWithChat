@@ -23,17 +23,23 @@
 @synthesize isGroup = _isGroup;
 @synthesize messages = _messages;
 
+- (instancetype)init
+{
+    self = [super init];
+    if (self) {
+        _messages = [NSMutableArray array];
+    }
+    return self;
+}
+
 - (XHMessage *)latestMessage
 {
-    if (_messages != nil) {
-        return (XHMessage *)[_messages lastObject];
-    }
-    return nil;
+    return [[self messages] lastObject];
 }
 
 - (NSMutableArray *)messages
 {
-    if (_messages == nil && self.rid != nil) {
+    if (_messages.count == 0 && self.rid != nil) {
         SKIMMessageDBModel *msgModel = [[SKIMMessageDBModel alloc] init];
         msgModel.where = [NSString stringWithFormat:@"CONVERSATIONID = %@", self.rid];
         msgModel.orderBy = @"SENDTIME";
@@ -43,6 +49,22 @@
         [_messages addObjectsFromArray:[SKIMMessageDBModel getMessagesFromModelArray:resultDics]];
     }
     return _messages;
+}
+
+//获取聊天对象id
+- (NSString *)chatterId
+{
+    NSString *chatterId = nil;
+    if (_chatter) {
+        if (_isGroup) {
+            SKIMGroup *chatGroup = (SKIMGroup *)_chatter;
+            chatterId = chatGroup.rid;
+        } else {
+            SKIMUser *chatUser = (SKIMUser *)_chatter;
+            chatterId = chatUser.uid;
+        }
+    }
+    return chatterId;
 }
 
 - (NSString *)conversationName
@@ -75,6 +97,11 @@
     return conversationHeadImg;
 }
 
+- (NSUInteger)unreadMessagesCount
+{
+    return 0;
+}
+
 //加载指定条数的消息
 - (NSArray *)loadNumbersOfMessages:(NSUInteger)count
 {
@@ -98,7 +125,6 @@
 
 //加载所有已经存在的会话
 + (NSArray *)loadAllExistConversation
-
 {
     SKIMConversationDBModel *conversationModel = [[SKIMConversationDBModel alloc] init];
     conversationModel.where = @"ISENABLE = 1";
@@ -106,8 +132,7 @@
     NSArray *sortedArray = [[SKIMConversationDBModel getConversationsFromModelArray:resultDics] sortedArrayUsingComparator:^NSComparisonResult(SKIMConversation *c1, SKIMConversation *c2) {
         XHMessage *m1 = [c1 latestMessage];
         XHMessage *m2 = [c2 latestMessage];
-        NSComparisonResult result = [m1.rid compare:m2.rid];
-        return result;
+        return [m2.timestamp compare:m1.timestamp];
     }];
     return sortedArray;
 }
