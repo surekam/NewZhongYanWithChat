@@ -245,6 +245,7 @@
 		3B05EACF196FD0FE00866FA5 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3B05EACE196FD0FE00866FA5 /* MapKit.framework */; };
 		3B05EAD1196FD10F00866FA5 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3B05EAD0196FD10F00866FA5 /* CoreLocation.framework */; };
 		3B05EAD3196FD11B00866FA5 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3B05EAD2196FD11B00866FA5 /* MediaPlayer.framework */; };
+		3B1B756319AC362000855A56 /* im.db in Resources */ = {isa = PBXBuildFile; fileRef = 3B1B756219AC362000855A56 /* im.db */; };
 		A31849D919923054004F2EF7 /* SKIMChatText.m in Sources */ = {isa = PBXBuildFile; fileRef = A31849D819923054004F2EF7 /* SKIMChatText.m */; };
 		A38FB009199223F5002580EC /* SKIMTextMessageBody.m in Sources */ = {isa = PBXBuildFile; fileRef = A38FB008199223F5002580EC /* SKIMTextMessageBody.m */; };
 		A398294319A2DEA700787F71 /* SKIMConversationListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A398294219A2DEA700787F71 /* SKIMConversationListViewController.m */; };
@@ -1111,6 +1112,7 @@
 		3B05EACE196FD0FE00866FA5 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		3B05EAD0196FD10F00866FA5 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		3B05EAD2196FD11B00866FA5 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
+		3B1B756219AC362000855A56 /* im.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = im.db; sourceTree = "<group>"; };
 		A31849D719923054004F2EF7 /* SKIMChatText.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SKIMChatText.h; sourceTree = "<group>"; };
 		A31849D819923054004F2EF7 /* SKIMChatText.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SKIMChatText.m; sourceTree = "<group>"; };
 		A38FB007199223F5002580EC /* SKIMTextMessageBody.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SKIMTextMessageBody.h; sourceTree = "<group>"; };
@@ -3821,6 +3823,7 @@
 		F2C89B8417F6B73D0099A62D = {
 			isa = PBXGroup;
 			children = (
+				3B1B756219AC362000855A56 /* im.db */,
 				F2B67F9917F7D1DE0007CB91 /* readme.h */,
 				F2B67F7917F7BEBE0007CB91 /* resource */,
 				F28846C21803FA8F006A5D62 /* opensource */,
@@ -4555,6 +4558,7 @@
 				BE6614271925A30F00253C43 /* avatar.png in Resources */,
 				F2B965DC18C56C88001F227C /* btn_delete.png in Resources */,
 				3B05EA74196FCA8600866FA5 /* CellNotSelected@2x.png in Resources */,
+				3B1B756319AC362000855A56 /* im.db in Resources */,
 				BEA392321924D3AB00A186C7 /* table_section_down.png in Resources */,
 				F287264A18DAC2F3009CD16A /* appinstall_ecm.png in Resources */,
 				F277033718FB928D00C12F47 /* help5_4.png in Resources */,

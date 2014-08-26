@@ -65,7 +65,7 @@ JSBadgeView *badgeView;
 - (void)setUnreadNum:(NSString *)unreadNum
 {
     if ([unreadNum intValue] > 0) {
-        self.unreadNum = unreadNum;
+        _unreadNum = unreadNum;
         badgeView.badgeText = unreadNum;
     }
 }

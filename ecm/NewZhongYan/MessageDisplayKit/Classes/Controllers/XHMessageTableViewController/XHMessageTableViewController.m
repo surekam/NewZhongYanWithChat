@@ -493,14 +493,21 @@ static CGPoint  delayOffset = {0.0};
 }
 
 - (void)initilzer {
-    if ([self respondsToSelector:@selector(automaticallyAdjustsScrollViewInsets)]) {
-        self.automaticallyAdjustsScrollViewInsets = NO;
+    
+    if( ([[[UIDevice currentDevice] systemVersion] doubleValue] >= 7.0))
+    {
+        if ([self respondsToSelector:@selector(edgesForExtendedLayout)])
+        {
+            self.edgesForExtendedLayout = UIRectEdgeNone;
+        }
+        self.navigationController.navigationBar.translucent = NO;
     }
+    
     // 默认设置用户滚动为NO
     _isUserScrolling = NO;
-    
+    CGRect rect = self.view.bounds;
     // 初始化message tableView
-	XHMessageTableView *messageTableView = [[XHMessageTableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain];
+	XHMessageTableView *messageTableView = [[XHMessageTableView alloc] initWithFrame:rect style:UITableViewStylePlain];
 	messageTableView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 	messageTableView.dataSource = self;
 	messageTableView.delegate = self;
@@ -517,6 +524,7 @@ static CGPoint  delayOffset = {0.0};
     [self.view addSubview:messageTableView];
     [self.view sendSubviewToBack:messageTableView];
 	_messageTableView = messageTableView;
+    
     
     // 设置Message TableView 的bottom edg
     CGFloat inputViewHeight = (self.inputViewStyle == XHMessageInputViewStyleFlat) ? 45.0f : 40.0f;
@@ -651,8 +659,7 @@ static CGPoint  delayOffset = {0.0};
     // 初始化消息页面布局
     [self initilzer];
     [[XHMessageBubbleView appearance] setFont:[UIFont systemFontOfSize:16.0f]];
-    //[_messageTableView setSeparatorStyle:UITableViewCellSeparatorStyleSingleLine];
-    //[_messageTableView setSeparatorColor:[UIColor blackColor]];
+
 }
 
 - (void)didReceiveMemoryWarning {
@@ -786,13 +793,8 @@ static CGPoint  delayOffset = {0.0};
 
 - (UIEdgeInsets)tableViewInsetsWithBottomValue:(CGFloat)bottom {
     UIEdgeInsets insets = UIEdgeInsetsZero;
-    
-    if ([self respondsToSelector:@selector(topLayoutGuide)]) {
-        insets.top = 64;
-    }
-    
+    insets.top = -44;
     insets.bottom = bottom;
-    
     return insets;
 }
 
@@ -1172,7 +1174,6 @@ static CGPoint  delayOffset = {0.0};
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    
     id <XHMessageModel> message = [self.dataSource messageForRowAtIndexPath:indexPath];
     
     BOOL displayTimestamp = YES;

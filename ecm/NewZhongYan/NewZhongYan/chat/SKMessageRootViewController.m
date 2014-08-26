@@ -181,8 +181,10 @@
     SKChatConversationCellTableViewCell *cell = (SKChatConversationCellTableViewCell *)[self tableView:self.tableView cellForRowAtIndexPath:indexPath];
     SKChatMessageTableViewController *msgTableViewController = [[SKChatMessageTableViewController alloc] init];
     UILabel *title = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 100, 44)];
-    title.text = @"sdafjkla;dsjfa;jfa;jdfasfasfafadsfadsfas";
+    title.text = @"海升大傻逼";
     title.textAlignment = NSTextAlignmentCenter;
+    title.backgroundColor = [UIColor clearColor];
+    title.textColor = [UIColor whiteColor];
     title.lineBreakMode = NSLineBreakByTruncatingMiddle;
     //[title sizeToFit];
     msgTableViewController.navigationItem.titleView = title;
