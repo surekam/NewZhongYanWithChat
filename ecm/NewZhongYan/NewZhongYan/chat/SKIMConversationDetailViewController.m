@@ -63,14 +63,12 @@
     }
     
     //设置title
-    NSString *title = @"";
     if (_conversation) {
-        title = [_conversation conversationName];
+        self.title = [_conversation conversationName];
     }
-    self.title = title;
     
     // 设置自身用户名
-    self.messageSender = [APPUtils loggedUser].name;
+    self.messageSender = [SKIMUser currentUser].cname;
     
     // 添加第三方接入数据
     NSMutableArray *shareMenuItems = [NSMutableArray array];
@@ -374,6 +372,5 @@
 - (BOOL)shouldPreventScrollToBottomWhileUserScrolling {
     return YES;
 }
-
 
 @end

@@ -13,6 +13,7 @@
 @interface XHMessage : NSObject <XHMessageModel, NSCoding, NSCopying>
 
 @property (nonatomic, copy) NSString *rid;
+@property (nonatomic, assign) BOOL isGroup;
 
 @property (nonatomic, copy) NSString *text;
 

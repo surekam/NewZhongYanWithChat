@@ -29,7 +29,7 @@ JSBadgeView *badgeView;
         _timeLabel = [[UILabel alloc] initWithFrame:CGRectMake(230, 4, 80, 20)];
         
         _headImg.layer.cornerRadius = 5;
-        _headImg.layer.masksToBounds = YES;
+        _headImg.layer.masksToBounds = NO;
         _headImg.layer.borderWidth = 1.0;
         _headImg.layer.borderColor = [UIColor blackColor].CGColor;
         
@@ -51,6 +51,8 @@ JSBadgeView *badgeView;
         
         badgeView = [[JSBadgeView alloc] initWithParentView:_headImg alignment:JSBadgeViewAlignmentTopRight];
         badgeView.badgePositionAdjustment = CGPointMake(badgeView.frame.origin.x-5, badgeView.frame.origin.y+5);
+        badgeView.clearsContextBeforeDrawing = YES;
+        
     }
     return self;
 }
@@ -65,7 +67,7 @@ JSBadgeView *badgeView;
 - (void)setUnreadNum:(NSString *)unreadNum
 {
     if ([unreadNum intValue] > 0) {
-        self.unreadNum = unreadNum;
+        _unreadNum = unreadNum;
         badgeView.badgeText = unreadNum;
     }
 }
@@ -78,7 +80,5 @@ JSBadgeView *badgeView;
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated
 {
     [super setSelected:selected animated:animated];
-
-    // Configure the view for the selected state
 }
 @end

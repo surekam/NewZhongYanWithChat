@@ -12,6 +12,7 @@
 #import "SKIMConversationDetailViewController.h"
 #import "UIImageView+WebCache.h"
 
+
 @interface SKIMConversationListViewController ()
 
 @end
@@ -100,14 +101,10 @@
     }
     
     if (indexPath.row < self.dataSource.count) {
-//        cell.nameLabel.text = [self.dataSource[indexPath.row] objectForKey:@"name"];
-//        cell.msgLabel.text = [self.dataSource[indexPath.row] objectForKey:@"msg"];
-//        cell.headImg.image = [UIImage imageNamed:[self.dataSource[indexPath.row] objectForKey:@"headImg"]];
-//        cell.timeLabel.text = [self.dataSource[indexPath.row] objectForKey:@"msgTime"];
         SKIMConversation *conversation = (SKIMConversation *)(self.dataSource[indexPath.row]);
         XHMessage *latestMsg = [conversation latestMessage];
         cell.nameLabel.text = [conversation conversationName];
-        [cell.headImg setImageWithURL:[NSURL URLWithString:[conversation conversationHeadImg]]
+        [cell.headImg sd_setImageWithURL:[NSURL URLWithString:[conversation conversationHeadImg]]
                      placeholderImage:[UIImage imageNamed:[conversation chatterId]]];
         [cell setTime:latestMsg.timestamp];
         NSLog(@"msgTime=%@", [NSDateFormatter localizedStringFromDate:latestMsg.timestamp dateStyle:NSDateFormatterFullStyle timeStyle:NSDateFormatterFullStyle]);

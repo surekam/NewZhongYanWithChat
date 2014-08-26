@@ -15,6 +15,8 @@
 @protocol XHMessageModel <NSObject>
 
 @required
+- (NSString *)rid;
+- (BOOL) isGroup;
 - (NSString *)text;
 
 - (UIImage *)photo;
