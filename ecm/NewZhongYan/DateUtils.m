@@ -442,6 +442,8 @@
         dateString = @"昨天";
     } else if ([self isSameWeekAsDate:now] && timeRange > 1 && self.weekday < now.weekday) {
         dateString = [DateUtils dateToString:self DateFormat:@"EE"];
+    } else if ([self isSameYearAsDate:now]) {
+        dateString = [DateUtils dateToString:self DateFormat:@"MM-dd"];
     } else {
         dateString = [DateUtils dateToString:self DateFormat:@"yyyy-MM-dd"];
     }
