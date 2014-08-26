@@ -495,9 +495,9 @@ static CGPoint  delayOffset = {0.0};
 - (void)initilzer {
     if( ([[[UIDevice currentDevice] systemVersion] doubleValue] >= 7.0)) {
         if ([self respondsToSelector:@selector(edgesForExtendedLayout)]) {
-            self.edgesForExtendedLayout = UIRectEdgeNone;
+            self.edgesForExtendedLayout = UIRectEdgeAll;
         }
-        self.navigationController.navigationBar.translucent = NO;
+        self.navigationController.navigationBar.translucent = YES;
     }
     // 默认设置用户滚动为NO
     _isUserScrolling = NO;
@@ -631,9 +631,9 @@ static CGPoint  delayOffset = {0.0};
     
     // KVO 检查contentSize
     [self.messageInputView.inputTextView addObserver:self
-                                     forKeyPath:@"contentSize"
-                                        options:NSKeyValueObservingOptionNew
-                                        context:nil];
+                                          forKeyPath:@"contentSize"
+                                             options:NSKeyValueObservingOptionNew
+                                             context:nil];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -699,7 +699,7 @@ static CGPoint  delayOffset = {0.0};
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     dateFormatter.dateFormat = @"yy-MMMM-dd";
     recorderPath = [[NSString alloc] initWithFormat:@"%@/Documents/", NSHomeDirectory()];
-//    dateFormatter.dateFormat = @"hh-mm-ss";
+    //    dateFormatter.dateFormat = @"hh-mm-ss";
     dateFormatter.dateFormat = @"yyyy-MM-dd-hh-mm-ss";
     recorderPath = [recorderPath stringByAppendingFormat:@"%@-MySound.caf", [dateFormatter stringFromDate:now]];
     return recorderPath;
@@ -792,7 +792,6 @@ static CGPoint  delayOffset = {0.0};
     UIEdgeInsets insets = UIEdgeInsetsZero;
     insets.top = -44;
     insets.bottom = bottom;
-    
     return insets;
 }
 

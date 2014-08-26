@@ -23,10 +23,12 @@ JSBadgeView *badgeView;
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
         // Initialization code
-        _headImg = [[UIImageView alloc] initWithFrame:CGRectMake(5, 5, 50, 50)];
         _nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(65, 5, 155, 20)];
         _msgLabel = [[UILabel alloc] initWithFrame:CGRectMake(65, 32, 245, 20)];
-        _timeLabel = [[UILabel alloc] initWithFrame:CGRectMake(230, 4, 80, 20)];
+        _timeLabel = [[UILabel alloc] initWithFrame:CGRectMake(230, 5, 80, 20)];
+        UIView* imgContentView = [[UIView alloc] initWithFrame:CGRectMake(5, 5, 50, 50)];
+        _headImg = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 50, 50)];
+        [imgContentView addSubview:_headImg];
         
         _headImg.layer.cornerRadius = 5;
         _headImg.layer.masksToBounds = NO;
@@ -44,15 +46,14 @@ JSBadgeView *badgeView;
         _timeLabel.textColor = [UIColor grayColor];
         _timeLabel.textAlignment = NSTextAlignmentRight;
         
-        [self.contentView addSubview:_headImg];
+        [self.contentView addSubview:imgContentView];
         [self.contentView addSubview:_nameLabel];
         [self.contentView addSubview:_msgLabel];
         [self.contentView addSubview:_timeLabel];
         
-        badgeView = [[JSBadgeView alloc] initWithParentView:_headImg alignment:JSBadgeViewAlignmentTopRight];
-        badgeView.badgePositionAdjustment = CGPointMake(badgeView.frame.origin.x-5, badgeView.frame.origin.y+5);
-        badgeView.clearsContextBeforeDrawing = YES;
-        
+        badgeView = [[JSBadgeView alloc] initWithParentView:imgContentView alignment:JSBadgeViewAlignmentTopRight];
+        badgeView.badgePositionAdjustment = CGPointMake(badgeView.frame.origin.x-3, badgeView.frame.origin.y+3);
+         badgeView.clearsContextBeforeDrawing = YES;
     }
     return self;
 }
@@ -68,7 +69,7 @@ JSBadgeView *badgeView;
 {
     if ([unreadNum intValue] > 0) {
         _unreadNum = unreadNum;
-        badgeView.badgeText = unreadNum;
+        badgeView.badgeText = [unreadNum intValue] > 99 ? @"99+" : unreadNum;
     }
 }
 

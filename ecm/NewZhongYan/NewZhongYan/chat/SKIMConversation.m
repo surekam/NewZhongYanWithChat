@@ -99,7 +99,7 @@
 
 - (NSUInteger)unreadMessagesCount
 {
-    return 0;
+    return 100;
 }
 
 //加载指定条数的消息
