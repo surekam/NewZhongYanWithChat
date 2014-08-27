@@ -35,6 +35,8 @@
  */
 @property (nonatomic, copy) NSString *groupAvatarUri;
 
+@property (nonatomic, assign) BOOL isInitialized;
+
 + (SKIMGroup *)getGroupFromRid:(NSString *)rid;
 
 @end

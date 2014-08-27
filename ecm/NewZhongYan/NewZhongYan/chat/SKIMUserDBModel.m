@@ -33,7 +33,7 @@
         return nil;
     }
     SKIMUser *user = [[SKIMUser alloc] init];
-    user.uid = [modelDic objectForKey:@"UID"];
+    user.rid = [modelDic objectForKey:@"UID"];
     user.signature = [modelDic objectForKey:@"SIGNATURE"];
     user.avatarUri = [modelDic objectForKey:@"AVATAR"];
     user = [self getUserInfo:user];
@@ -43,7 +43,7 @@
 
 + (SKIMUser *)getUserInfo:(SKIMUser *)user
 {
-    if (user == nil || user.uid == nil || user.uid.length == 0) {
+    if (user == nil || user.rid == nil || user.rid.length == 0) {
         return nil;
     }
 
@@ -52,7 +52,7 @@
                     FROM T_UNIT U LEFT JOIN T_EMPLOYEE E \
                     ON U.DPID = E.DPID \
                     WHERE E.UID = '%@';",
-                    user.uid];
+                    user.rid];
     NSDictionary *userInfoDic = [[NSDictionary alloc] initWithDictionary:[[[DBQueue sharedbQueue] recordFromTableBySQL:sql] objectAtIndex:0]];
     user.cname = [userInfoDic objectForKey:@"CNAME"];
     user.pdpid = [userInfoDic objectForKey:@"DPID"];

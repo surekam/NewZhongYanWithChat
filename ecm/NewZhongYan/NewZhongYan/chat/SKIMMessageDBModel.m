@@ -40,7 +40,7 @@
         msg.isGroup = [[dic objectForKey:@"ISGROUP"] intValue];
         
         
-        if ([[SKIMUser currentUser].uid isEqualToString:[dic objectForKey:@"SENDERID"]]) {
+        if ([[SKIMUser currentUser].rid isEqualToString:[dic objectForKey:@"SENDERID"]]) {
             msg.bubbleMessageType = XHBubbleMessageTypeSending;
             msg.avatorUrl = [SKIMUser getUserFromUid:[dic objectForKey:@"SENDERID"]].avatarUri;
         } else if (msg.isGroup) {

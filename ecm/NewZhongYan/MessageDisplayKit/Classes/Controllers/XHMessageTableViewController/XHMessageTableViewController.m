@@ -494,8 +494,8 @@ static CGPoint  delayOffset = {0.0};
 
 - (void)initilzer {
     if( ([[[UIDevice currentDevice] systemVersion] doubleValue] >= 7.0)) {
-        if ([self respondsToSelector:@selector(edgesForExtendedLayout)]) {
-            self.edgesForExtendedLayout = UIRectEdgeAll;
+        if ([self respondsToSelector:@selector(automaticallyAdjustsScrollViewInsets)]) {
+            self.automaticallyAdjustsScrollViewInsets = YES;
         }
         self.navigationController.navigationBar.translucent = YES;
     }

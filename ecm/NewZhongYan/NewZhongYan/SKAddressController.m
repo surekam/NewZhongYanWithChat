@@ -13,8 +13,8 @@
 #import "SKEdetailInfoController.h"
 #import "SKToolBarMultiSelectPanel.h"
 #import "SKMultiSelectItem.h"
-#import "SKChatMessageTableViewController.h"
-#import "SKChater.h"
+#import "SKIMConversationDetailViewController.h"
+#import "SKIMUser.h"
 #import "UIImage+ImageWithColour.h"
 #import "SKIMConversationListViewController.h"
 #define USE_ACTIVITY    1	// use a xib file defining the cell
@@ -1029,29 +1029,36 @@
 - (void)didConfirmWithMultiSelectedPanel:(SKToolBarMultiSelectPanel*)multiSelectedPanel {
 
     [self dismissViewControllerAnimated:YES completion:nil];
+    
     NSMutableArray *chaters = [NSMutableArray array];
     for (SKMultiSelectItem *item in multiSelectedPanel.selectedItems) {
         BOOL isExist = NO;
-        for (SKChater *chater in chaters) {
-            if ([chater.uid isEqualToString:item.uid]) {
+        for (SKIMUser *chater in chaters) {
+            if ([chater.rid isEqualToString:item.uid]) {
                 isExist = YES;
                 break;
             }
         }
         if (!isExist) {
-            SKChater *newChater = [[SKChater alloc] init];
-            newChater.uid = item.uid;
+            SKIMUser *newChater = [[SKIMUser alloc] init];
+            newChater.rid = item.uid;
             newChater.cname = item.cname;
             newChater.pdpid = item.pdpid;
             newChater.pname = item.pname;
-            newChater.selected = YES;
 
             [chaters addObject:newChater];
         }
     }
-    SKChatMessageTableViewController *chatMsgController = [[SKChatMessageTableViewController alloc] init];
-    chatMsgController.chaters = chaters;
-    [self.fromViewController.navigationController pushViewController:chatMsgController animated:YES];
+    
+    if (chaters.count == 1) {
+        SKIMUser *user = chaters[0];
+        SKIMConversationDetailViewController *conversationDetailVC = [[SKIMConversationDetailViewController alloc] init];
+        conversationDetailVC.conversation = [SKIMConversation getConversationWithChatterId:user.rid isGroup:NO];
+        [self.fromViewController.navigationController pushViewController:conversationDetailVC animated:YES];
+    } else {
+        //创建讨论组
+        
+    }
 }
 
 - (SKToolBarMultiSelectPanel *)selectedPanel

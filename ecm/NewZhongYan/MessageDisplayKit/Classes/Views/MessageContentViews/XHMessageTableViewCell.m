@@ -8,7 +8,7 @@
 
 #import "XHMessageTableViewCell.h"
 #import "UIImageView+WebCache.h"
-#import "UIButton+WebCache.h"
+#import "UIImageView+WebCache.h"
 
 static const CGFloat kXHLabelPadding = 5.0f;
 static const CGFloat kXHTimeStampLabelHeight = 20.0f;
@@ -172,11 +172,11 @@ static const CGFloat kXHBubbleMessageViewPadding = 8;
     if (message.avator) {
         [self.avatorButton setImage:message.avator forState:UIControlStateNormal];
         if (message.avatorUrl) {
-            self.avatorButton.messageAvatorType = XHMessageAvatorTypeSquare;
-//            UIImageView *imgview = [[UIImageView alloc] init];
-//            [imgview sd_setImageWithURL:[NSURL URLWithString:message.avatorUrl] placeholderImage:[UIImage imageNamed:message.rid]];
-//            [self.avatorButton setImage:imgview.image forState:UIControlStateNormal];
-            [self.avatorButton sd_setImageWithURL:[NSURL URLWithString:message.avatorUrl] forState:UIControlStateNormal placeholderImage:[UIImage imageNamed:message.rid]];
+            UIImageView *avatarView = [[UIImageView alloc] init];
+            [avatarView sd_setImageWithURL:[NSURL URLWithString:message.avatorUrl] placeholderImage:[UIImage imageNamed:message.rid]];
+            [self.avatorButton setImage:[XHMessageAvatorFactory avatarImageNamed:avatarView.image messageAvatorType:XHMessageAvatorTypeSquare] forState:UIControlStateNormal];
+                                       
+            //self.avatorButton.messageAvatorType = XHMessageAvatorTypeSquare;
             //[self.avatorButton setImageWithURL:[NSURL URLWithString:message.avatorUrl] placeholer:[UIImage imageNamed:message.rid]];
         }
     } else {

@@ -131,4 +131,10 @@
 //加载所有已经存在的会话
 + (NSArray *)loadAllExistConversation;
 
+//根据聊天对象id获取conversation，若不存在，则创建一个新的返回,并未存储至数据库。
++ (SKIMConversation *)getConversationWithChatterId:(NSString *)chatterId isGroup:(BOOL)isGroup;
+
+//判断conversation是否存在
++ (BOOL)isConversationExists:(NSString *)chatterId isGroup:(BOOL)isGroup;
+
 @end

@@ -10,4 +10,7 @@
 
 @protocol SKIMChater <NSObject>
 
+@property (nonatomic, copy) NSString *rid;
+@property (nonatomic, assign) BOOL isInitialized;
+
 @end

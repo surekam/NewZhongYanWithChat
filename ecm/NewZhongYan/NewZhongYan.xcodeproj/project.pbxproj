@@ -2902,6 +2902,8 @@
 				A39ADE42198A2961008EBEE7 /* SKSignatureViewController.m */,
 				A3EA69231975224200730437 /* SKToolBarMultiSelectPanel.h */,
 				A3EA69241975224200730437 /* SKToolBarMultiSelectPanel.m */,
+				A3EA69211975224200730437 /* SKMultiSelectItem.h */,
+				A3EA69221975224200730437 /* SKMultiSelectItem.m */,
 			);
 			name = views;
 			sourceTree = "<group>";
@@ -2946,8 +2948,6 @@
 				A3A04D06199CAD9800BF7249 /* views */,
 				A39AB2C219792CE20027BAE5 /* SKChater.h */,
 				A39AB2C319792CE20027BAE5 /* SKChater.m */,
-				A3EA69211975224200730437 /* SKMultiSelectItem.h */,
-				A3EA69221975224200730437 /* SKMultiSelectItem.m */,
 				A3EA6927197522F200730437 /* SKMessageRootViewController.h */,
 				A3EA6928197522F200730437 /* SKMessageRootViewController.m */,
 				A3E6CBE119989A7D004D0BE4 /* SKChatConversationViewController.h */,

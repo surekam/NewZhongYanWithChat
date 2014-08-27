@@ -11,7 +11,7 @@
 #import "SKChatConversationCellTableViewCell.h"
 #import "SKIMConversationDetailViewController.h"
 #import "UIImageView+WebCache.h"
-
+#import "SKAddressController.h"
 
 @interface SKIMConversationListViewController ()
 
@@ -47,7 +47,7 @@
     }
     self.title = @"即时聊天";
     [self.view addSubview:self.tableView];
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(showMenuOnView:)];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(showContactsPicker)];
     self.tableView.frame = CGRectMake(0.0f, 0.0f,self.view.bounds.size.width, self.view.bounds.size.height-49.0f);
     [self createToolBar];
     [self loadDataSource];
@@ -61,10 +61,19 @@
     // Dispose of any resources that can be recreated.
 }
 
-
 -(void)back:(id)sender
 {
     [self.navigationController popViewControllerAnimated:YES];
+}
+
+-(void)showContactsPicker {
+    SKAddressController *addresser = [[APPUtils AppStoryBoard] instantiateViewControllerWithIdentifier:@"SKAddressController"];
+    
+    addresser.isChat = YES;
+    addresser.fromViewController = self;
+    
+    UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:addresser];
+    [self.navigationController presentViewController:nav animated:YES completion:nil];
 }
 
 #pragma mark - ToolBar
@@ -104,10 +113,14 @@
         SKIMConversation *conversation = (SKIMConversation *)(self.dataSource[indexPath.row]);
         XHMessage *latestMsg = [conversation latestMessage];
         cell.nameLabel.text = [conversation conversationName];
-        [cell.headImg sd_setImageWithURL:[NSURL URLWithString:[conversation conversationHeadImg]]
-                     placeholderImage:[UIImage imageNamed:[conversation chatterId]]];
+        NSString *conversationImg = [conversation conversationHeadImg];
+        if (conversationImg == nil || conversationImg.length == 0) {
+            [cell.headImg setImage:[UIImage imageNamed:@"avator"]];
+        } else {
+            [cell.headImg sd_setImageWithURL:[NSURL URLWithString:[conversation conversationHeadImg]] placeholderImage:[UIImage imageNamed:[conversation chatterId]]];
+        }
         [cell setTime:latestMsg.timestamp];
-        NSLog(@"msgTime=%@", [NSDateFormatter localizedStringFromDate:latestMsg.timestamp dateStyle:NSDateFormatterFullStyle timeStyle:NSDateFormatterFullStyle]);
+        //NSLog(@"msgTime=%@", [NSDateFormatter localizedStringFromDate:latestMsg.timestamp dateStyle:NSDateFormatterFullStyle timeStyle:NSDateFormatterFullStyle]);
         
         if (latestMsg) {
             switch (latestMsg.messageMediaType) {

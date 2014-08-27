@@ -43,10 +43,12 @@
         conversation.isEnable = (BOOL)[[dic objectForKey:@"ISENABLE"] integerValue];
         
         if (conversation.isGroup) {
-            SKIMGroup *group = [SKIMGroup getGroupFromRid:[dic objectForKey:@"CHATTERID"]];
+            SKIMGroup *group = [[SKIMGroup alloc] init];
+            group.rid = [dic objectForKey:@"CHATTERID"];
             conversation.chatter = group;
         } else {
-            SKIMUser *user = [SKIMUser getUserFromUid:[dic objectForKey:@"CHATTERID"]];
+            SKIMUser *user = [[SKIMUser alloc] init];
+            user.rid = [dic objectForKey:@"CHATTERID"];
             conversation.chatter = user;
         }
         

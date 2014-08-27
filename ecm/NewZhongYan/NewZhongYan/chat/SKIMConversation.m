@@ -32,6 +32,19 @@
     return self;
 }
 
+- (id<SKIMChater>)chatter
+{
+    if (!_chatter.isInitialized) {
+        if (_isGroup) {
+            _chatter = [SKIMGroup getGroupFromRid:_chatter.rid];
+        } else {
+            _chatter = [SKIMUser getUserFromUid:_chatter.rid];
+        }
+        _chatter.isInitialized = YES;
+    }
+    return _chatter;
+}
+
 - (XHMessage *)latestMessage
 {
     return [[self messages] lastObject];
@@ -54,23 +67,16 @@
 //获取聊天对象id
 - (NSString *)chatterId
 {
-    NSString *chatterId = nil;
     if (_chatter) {
-        if (_isGroup) {
-            SKIMGroup *chatGroup = (SKIMGroup *)_chatter;
-            chatterId = chatGroup.rid;
-        } else {
-            SKIMUser *chatUser = (SKIMUser *)_chatter;
-            chatterId = chatUser.uid;
-        }
+        return _chatter.rid;
     }
-    return chatterId;
+    return nil;
 }
 
 - (NSString *)conversationName
 {
     NSString *conversationName = nil;
-    if (_chatter) {
+    if (self.chatter) {
         if (_isGroup) {
             SKIMGroup *chatGroup = (SKIMGroup *)_chatter;
             conversationName = chatGroup.groupName;
@@ -85,7 +91,7 @@
 - (NSString *)conversationHeadImg
 {
     NSString *conversationHeadImg = nil;
-    if (_chatter) {
+    if (self.chatter) {
         if (_isGroup) {
             SKIMGroup *chatGroup = (SKIMGroup *)_chatter;
             conversationHeadImg = chatGroup.groupAvatarUri;
@@ -135,5 +141,39 @@
         return [m2.timestamp compare:m1.timestamp];
     }];
     return sortedArray;
+}
+
+//根据聊天对象id获取conversation,若不存在，则创建一个新的返回,并未存储至数据库。
++ (SKIMConversation *)getConversationWithChatterId:(NSString *)chatterId isGroup:(BOOL)isGroup
+{
+    if (chatterId == nil || chatterId.length == 0) {
+        return nil;
+    }
+    SKIMConversationDBModel *conversationModel = [[SKIMConversationDBModel alloc] init];
+    if (![SKIMConversation isConversationExists:chatterId isGroup:isGroup]) {
+        NSMutableDictionary *params = [NSMutableDictionary dictionaryWithObjects:@[chatterId, [NSNumber numberWithBool:isGroup], @1, @0] forKeys:@[@"CHATTERID", @"ISGROUP", @"ISRECEIVEMSG", @"ISENABLE"]];
+        [conversationModel insertDB:params];
+    }
+    conversationModel.where = [NSString stringWithFormat:@"CHATTERID = '%@' AND ISGROUP = %i", chatterId, isGroup];
+    NSArray *conversationArray = [SKIMConversationDBModel getConversationsFromModelArray:[conversationModel getList]];
+    if (conversationArray != nil && conversationArray.count > 0) {
+        return conversationArray[0];
+    }
+    return nil;
+}
+
+//判断conversation是否存在
++ (BOOL)isConversationExists:(NSString *)chatterId isGroup:(BOOL)isGroup
+{
+    if (chatterId == nil || chatterId.length == 0) {
+        return NO;
+    }
+    SKIMConversationDBModel *conversationModel = [[SKIMConversationDBModel alloc] init];
+    NSString *sql = [NSString stringWithFormat:@"SELECT 1 FROM IM_CONVERSATION WHERE CHATTERID = '%@' AND ISGROUP = %i", chatterId, isGroup];
+    NSArray* result = [conversationModel querSelectSql:sql];
+    if (result != nil && result.count >= 1) {
+        return YES;
+    }
+    return NO;
 }
 @end
