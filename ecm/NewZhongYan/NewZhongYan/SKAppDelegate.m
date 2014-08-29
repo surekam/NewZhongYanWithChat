@@ -23,6 +23,8 @@
 #import "UncaughtExceptionHandler.h"
 #import "FileManager.h"
 #import "SKIMDBOperate.h"
+#import "SKIMTcpHelper.h"
+#import "SKIMTcpRequestHelper.h"
 #define MAXTIME 1
 static User* currentUser = nil;
 @implementation SKAppDelegate
@@ -94,6 +96,14 @@ NSUInteger DeviceSystemMajorVersion() {
 }
 
 /**
+ *  IM登录
+ */
+-(void)imLogin
+{
+    [[SKIMTcpHelper shareChatTcpHelper] connectToHost];
+}
+
+/**
  *  创建网络监听
  */
 -(void)createDataManager
@@ -109,6 +119,7 @@ NSUInteger DeviceSystemMajorVersion() {
     if (!self.logonManager) {
         self.logonManager = [APPUtils AppLogonManager];
     }
+    [self imLogin];
 }
 
 - (void)updateInterfaceWithReachability:(Reachability *)reachability

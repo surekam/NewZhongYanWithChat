@@ -7,12 +7,26 @@
 //
 
 #import "NewZhongYanTests.h"
+#import "SKIMTcpHelper.h"
+#import "SKIMTcpRequestHelper.h"
+#import "DDXMLNode.h"
+
+@interface NewZhongYanTests () 
+{
+    SKIMTcpHelper *tcpHelper;
+    SKIMTcpRequestHelper *tcpRequestHelper;
+}
+@end
+
 
 @implementation NewZhongYanTests
 
 - (void)setUp
 {
     [super setUp];
+    tcpHelper = [SKIMTcpHelper shareChatTcpHelper];
+    tcpRequestHelper = [SKIMTcpRequestHelper shareTcpRequestHelper];
+    
     
     // Set-up code here.
 }
@@ -27,6 +41,14 @@
 - (void)testExample
 {
     STFail(@"Unit tests are not implemented yet in NewZhongYanTests");
+}
+
+
+- (void)testLogin
+{
+    if ([tcpHelper connectToHost]) {
+        [tcpRequestHelper sendLogingPackageCommandId:0];
+    }
 }
 
 @end
