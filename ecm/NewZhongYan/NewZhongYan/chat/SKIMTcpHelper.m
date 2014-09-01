@@ -9,6 +9,7 @@
 #import "SKIMTcpHelper.h"
 #import "SKIMSocketConfig.h"
 #import "SKIMTcpRequestHelper.h"
+#import "TcpReadPackage.h"
 
 SKIMTcpHelper *TcpHelperSINGLE;
 
@@ -140,7 +141,7 @@ SKIMTcpHelper *TcpHelperSINGLE;
     
     if (packgeArr.count > 0) {
         for (NSData * temp in packgeArr) {
-            //[[TcpOperation shareTcpOperation] addAPackage:nil commandType:tag packageData:temp];
+            [TcpReadPackage readPackgeData:temp];
         }
     }
     // 继续监听
@@ -168,24 +169,23 @@ SKIMTcpHelper *TcpHelperSINGLE;
 {
     const void * byte = (const void *) [allData bytes];
     if (allData.length >= HeadLen) {
-        NSString *zyim = [[NSString alloc] initWithData:[NSData dataWithBytes:byte length:4]
-                                                 encoding:NSASCIIStringEncoding];
+        NSString *zyim = [[NSString alloc] initWithData:[NSData dataWithBytes:byte length:4] encoding:NSASCIIStringEncoding];
         if (![zyim isEqualToString:ZYIM]) {
             return;
         }
-        UInt32* msglen = (UInt32*)&byte[4];
-        int len = ntohl(*msglen);
-        if (allData.length < HeadLen + len) {
+        NSString *msgLenStr = [[NSString alloc] initWithData:[NSData dataWithBytes:&byte[4] length:4] encoding:NSASCIIStringEncoding];
+        NSUInteger msgLen = [[msgLenStr stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]] longLongValue];
+        if (allData.length < HeadLen + msgLen) {
             return;
         }else{
-            NSData* packageData = [NSData dataWithData:[allData subdataWithRange:NSMakeRange(HeadLen, len)]];
+            NSData* packageData = [NSData dataWithData:[allData subdataWithRange:NSMakeRange(HeadLen, msgLen)]];
             [arr addObject:packageData];
             NSLog(@"%d",packageData.length);
-            if (HeadLen + len == allData.length) {
+            if (HeadLen + msgLen == allData.length) {
                 allData = [[NSData data] mutableCopy];
             }else{
                 NSLog(@"%d",allData.length);
-                allData = [[NSData dataWithData:[allData subdataWithRange:NSMakeRange(HeadLen + len, allData.length - HeadLen - len)]] mutableCopy];
+                allData = [[NSData dataWithData:[allData subdataWithRange:NSMakeRange(HeadLen + msgLen, allData.length - HeadLen - msgLen)]] mutableCopy];
                 NSLog(@"%d",allData.length);
                 [self getComplateDataToArray:arr];
             }

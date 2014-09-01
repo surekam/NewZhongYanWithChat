@@ -65,6 +65,13 @@
 
 #define     IM_XML_BODY_SENDGMSG_TOCLUB_ATTR                @"TOCLUE"
 
-#define     IM_XML_BODY_SENDGMSG_CONTENT_ATTR                @"CONTENT"
+#define     IM_XML_BODY_SENDGMSG_CONTENT_ATTR               @"CONTENT"
+
+/******************************** 返回业务码 **********************************/
+//登录业务码
+#define     BUSINESS_MLOGINRET                              @"MLoginRet"
+
+
+/******************************** 返回业务码 **********************************/
 
 #endif

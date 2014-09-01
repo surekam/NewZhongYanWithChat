@@ -63,7 +63,7 @@ static unsigned long long sendIndex = 0;
 + (NSData *)createPackageWithBody:(NSData *)packageBody
 {
     UInt8 buffer[HeadLen];
-    UInt32 bodyLength = 0;
+    NSUInteger bodyLength = 0;
 
     //|UTF8String|返回是包含\0的  |lengthOfBytesUsingEncoding|计算不包括\0
     memcpy(buffer, [ZYIM UTF8String], [ZYIM lengthOfBytesUsingEncoding:NSUTF8StringEncoding]);
@@ -71,49 +71,19 @@ static unsigned long long sendIndex = 0;
     if (packageBody) {
         bodyLength = packageBody.length;
     }
-    UInt32 *pkgLen =(UInt32 *) &buffer[4];
-    *pkgLen = htonl(bodyLength);
+
+    NSString *pkgLen = [NSString stringWithFormat:@"%4lu", (unsigned long)bodyLength];
+    
+    memcpy(&buffer[4], [pkgLen UTF8String], [pkgLen lengthOfBytesUsingEncoding:NSUTF8StringEncoding]);
     
     memcpy(&buffer[8], [EncryptFlag UTF8String], [EncryptFlag lengthOfBytesUsingEncoding:NSUTF8StringEncoding]);
     
     memcpy(&buffer[12], [ReservedField UTF8String], [ReservedField lengthOfBytesUsingEncoding:NSUTF8StringEncoding]);
-    
-    for (int i = 0; i < HeadLen; i ++) {
-        if (buffer[i] == '\0') {
-            buffer[i] = 32;
-        }
-    }
     
     NSData *headData = [NSData dataWithBytes:buffer length:16];
     NSMutableData *pkgData = [NSMutableData data];
     [pkgData appendData:headData];
     [pkgData appendData:packageBody];
     return  pkgData;
-    
-//    void *headBytes = malloc(sizeof(Byte)* HeadLen);
-//    UInt32 bodyLength = 0;
-//    memcpy(headBytes, [ZYIM UTF8String], [ZYIM lengthOfBytesUsingEncoding:NSUTF8StringEncoding]);
-//    
-//    if (packageBody) {
-//        bodyLength = packageBody.length;
-//    }
-//    void *pkgLenBytes = malloc(sizeof(Byte)* 4);
-//    UInt32 *pkgLen =(UInt32 *) &pkgLenBytes[4];
-//    *pkgLen = htonl(bodyLength);
-//    
-//    memcpy(&headBytes[4], pkgLenBytes, 4);
-//    
-//    memcpy(&headBytes[8], [EncryptFlag UTF8String], [EncryptFlag lengthOfBytesUsingEncoding:NSUTF8StringEncoding]);
-//    
-//    memcpy(&headBytes[12], [ReservedField UTF8String], [ReservedField lengthOfBytesUsingEncoding:NSUTF8StringEncoding]);
-//    
-//    NSData *headData = [NSData dataWithBytes:headBytes length:HeadLen];
-//    NSMutableData *pkgData = [NSMutableData data];
-//    [pkgData appendData:headData];
-//    [pkgData appendData:packageBody];
-//    free(pkgLenBytes);
-//    free(headBytes);
-//    return  pkgData;
-
 }
 @end

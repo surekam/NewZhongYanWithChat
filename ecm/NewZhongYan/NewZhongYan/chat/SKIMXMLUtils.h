@@ -50,4 +50,8 @@
 
 //16.解析返回的用户信息的xml
 
+//解析数据包 返回xml
+-(GDataXMLDocument *)parseData:(NSData *)data;
+
+-(NSDictionary *)getHeadInfo:(GDataXMLDocument *)xml;
 @end

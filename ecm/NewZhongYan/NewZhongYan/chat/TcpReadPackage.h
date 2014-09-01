@@ -10,4 +10,5 @@
 
 @interface TcpReadPackage : NSObject
 
++ (void)readPackgeData:(NSData *)packData;
 @end

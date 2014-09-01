@@ -59,6 +59,7 @@ SKIMXMLUtils *SharedInstance;
     
     GDataXMLElement *bodyElement = [GDataXMLNode elementWithName:IM_XML_BODY_NODE_NAME];
     GDataXMLElement *sparamElement = [GDataXMLNode elementWithName:IM_XML_PARAM_SINGLE_NODE_NAME];
+    GDataXMLElement *mparamElement = [GDataXMLNode elementWithName:IM_XML_PARAM_MULTI_NODE_NAME];
     
     GDataXMLElement *versionElement = [GDataXMLNode elementWithName:IM_XML_BASE_NODE_NAME stringValue:IM_XML_BODY_VERSION_VALUE];
     GDataXMLElement *useridElement = [GDataXMLNode elementWithName:IM_XML_BASE_NODE_NAME stringValue:params[IM_XML_BODY_LOGIN_USERID_ATTR]];
@@ -73,6 +74,7 @@ SKIMXMLUtils *SharedInstance;
     [sparamElement addChild:userpswElement];
     
     [bodyElement addChild:sparamElement];
+    [bodyElement addChild:mparamElement];
     
     [rootElement addChild:bodyElement];
     
@@ -143,4 +145,28 @@ SKIMXMLUtils *SharedInstance;
     return sendGMsgXml;
 }
 
+
+-(GDataXMLDocument *)parseData:(NSData *)data
+{
+    if (data == nil) {
+        return nil;
+    }
+    GDataXMLDocument *xml = [[GDataXMLDocument alloc] initWithData:data encoding:CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingGB_18030_2000) error:nil];
+    
+    return xml;
+}
+
+-(NSDictionary *)getHeadInfo:(GDataXMLDocument *)xml
+{
+    NSMutableDictionary *headInfo = [NSMutableDictionary dictionary];
+    if (xml) {
+        GDataXMLElement *rootElement = [xml rootElement];
+        GDataXMLElement *headElement = [rootElement elementsForName:IM_XML_HEAD_NODE_NAME][0];
+        NSArray *headInfos = [headElement elementsForName:IM_XML_BASE_NODE_NAME];
+        for (GDataXMLElement *info in headInfos) {
+            [headInfo setObject:[info stringValue] forKey:[[info attributeForName:IM_XML_BASE_ATTR_NAME] stringValue]];
+        }
+    }
+    return headInfo;
+}
 @end

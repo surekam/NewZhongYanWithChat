@@ -90,11 +90,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "NewZhongYan/chat/SKIMTcpHelper.m"
-            timestampString = "430974670.665003"
+            timestampString = "431237220.064993"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "91"
-            endingLineNumber = "91"
+            startingLineNumber = "92"
+            endingLineNumber = "92"
             landmarkName = "-onSocket:didConnectToHost:port:"
             landmarkType = "5">
          </BreakpointContent>
@@ -106,11 +106,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "NewZhongYan/chat/SKIMTcpHelper.m"
-            timestampString = "430974676.784217"
+            timestampString = "431237220.064993"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "110"
-            endingLineNumber = "110"
+            startingLineNumber = "111"
+            endingLineNumber = "111"
             landmarkName = "-onSocket:didWriteDataWithTag:"
             landmarkType = "5">
          </BreakpointContent>
@@ -134,16 +134,16 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "NewZhongYan/chat/SKIMTcpHelper.m"
-            timestampString = "430988085.448076"
+            timestampString = "431237220.064993"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "31"
-            endingLineNumber = "31"
-            landmarkName = "-connectToHost"
+            startingLineNumber = "170"
+            endingLineNumber = "170"
+            landmarkName = "-getComplateDataToArray:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -153,13 +153,13 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "NewZhongYan/chat/TcpSendPackage.m"
-            timestampString = "431002598.124619"
+            filePath = "NewZhongYan/chat/TcpReadPackage.m"
+            timestampString = "431254987.427266"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "89"
-            endingLineNumber = "89"
-            landmarkName = "+createPackageWithBody:"
+            startingLineNumber = "18"
+            endingLineNumber = "18"
+            landmarkName = "+readPackgeData:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
