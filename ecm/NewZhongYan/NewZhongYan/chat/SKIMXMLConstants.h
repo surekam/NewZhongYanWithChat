@@ -47,16 +47,19 @@
 #define     IM_XML_BODY_VERSION_VALUE                       @"1.0"
 
 
+//MLogin
 #define     IM_XML_HEAD_BUSINESS_LOGIN_VALUE                @"MLogin"
 
 #define     IM_XML_BODY_LOGIN_USERID_ATTR                   @"USERID"
 
 #define     IM_XML_BODY_LOGIN_USERPSW_ATTR                  @"USERPSW"
 
-
+//MSendMsg
 #define     IM_XML_HEAD_BUSINESS_SENDMSG_VALUE              @"MSendMsg"
 
 #define     IM_XML_BODY_SENDMSG_TOUSER_ATTR                 @"TOUSER"
+
+#define     IM_XML_BODY_SENDMSG_MSGTYPE_ATTR                @"MSGTYPE"
 
 #define     IM_XML_BODY_SENDMSG_CONTENT_ATTR                @"CONTENT"
 
@@ -67,10 +70,23 @@
 
 #define     IM_XML_BODY_SENDGMSG_CONTENT_ATTR               @"CONTENT"
 
+
+
+#define     IM_XML_BODY_RESULTCODE_ATTR                     @"RESULTCODE"
+
+#define     IM_XML_BODY_SESSIONID_ATTR                      @"SESSIONID"
+
 /******************************** 返回业务码 **********************************/
 //登录业务码
-#define     BUSINESS_MLOGINRET                              @"MLoginRet"
+#define     BUSINESS_SERVER_MLOGINRET                       @"MLoginRet"
 
+//用户在他处重新登录
+#define     BUSINESS_SERVER_RELOGIN                         @"ReLogin"
+
+//服务端发送消息
+#define     BUSINESS_SERVER_SENDMSG                         @"SendMsg"
+
+#define     LOGIN_SUCCESS                                   @"0"
 
 /******************************** 返回业务码 **********************************/
 

@@ -45,4 +45,5 @@
 //登录
 #define TCP_LOGIN_COMMAND_ID                300
 
+#define TCP_SEND_COMMAND_ID                 301
 #endif

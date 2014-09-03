@@ -92,6 +92,7 @@ SKIMXMLUtils *SharedInstance;
     
     GDataXMLElement *bodyElement = [GDataXMLNode elementWithName:IM_XML_BODY_NODE_NAME];
     GDataXMLElement *sparamElement = [GDataXMLNode elementWithName:IM_XML_PARAM_SINGLE_NODE_NAME];
+    GDataXMLElement *mparamElement = [GDataXMLNode elementWithName:IM_XML_PARAM_MULTI_NODE_NAME];
     
     GDataXMLElement *versionElement = [GDataXMLNode elementWithName:IM_XML_BASE_NODE_NAME stringValue:IM_XML_BODY_VERSION_VALUE];
     GDataXMLElement *touserElement = [GDataXMLNode elementWithName:IM_XML_BASE_NODE_NAME stringValue:params[IM_XML_BODY_SENDMSG_TOUSER_ATTR]];
@@ -106,6 +107,7 @@ SKIMXMLUtils *SharedInstance;
     [sparamElement addChild:contentElement];
     
     [bodyElement addChild:sparamElement];
+    [bodyElement addChild:mparamElement];
     
     [rootElement addChild:bodyElement];
     
@@ -168,5 +170,38 @@ SKIMXMLUtils *SharedInstance;
         }
     }
     return headInfo;
+}
+
+-(NSDictionary *)getLoginBody:(GDataXMLDocument *)xml
+{
+    NSMutableDictionary *bodyDic = [NSMutableDictionary dictionary];
+    if (xml) {
+        [bodyDic setDictionary:[self getBodySParam:xml]];
+    }
+    return bodyDic;
+}
+
+- (NSDictionary *)getServerSendMsgBody:(GDataXMLDocument *)xml
+{
+    NSMutableDictionary *bodyDic = [NSMutableDictionary dictionary];
+    if (xml) {
+        [bodyDic setDictionary:[self getBodySParam:xml]];
+    }
+    return bodyDic;
+}
+
+- (NSDictionary *)getBodySParam:(GDataXMLDocument *)xml
+{
+    NSMutableDictionary *bodySParamDic = [NSMutableDictionary dictionary];
+    if (xml) {
+        GDataXMLElement *rootElement = [xml rootElement];
+        GDataXMLElement *bodyElement = [rootElement elementsForName:IM_XML_BODY_NODE_NAME][0];
+        GDataXMLElement *bodySparamElement = [bodyElement elementsForName:IM_XML_PARAM_SINGLE_NODE_NAME][0];
+        NSArray *bodyInfos = [bodySparamElement elementsForName:IM_XML_BASE_NODE_NAME];
+        for (GDataXMLElement *bodyInfo in bodyInfos) {
+            [bodySParamDic setObject:[bodyInfo stringValue] forKey:[[bodyInfo attributeForName:IM_XML_BASE_ATTR_NAME] stringValue]];
+        }
+    }
+    return bodySParamDic;
 }
 @end

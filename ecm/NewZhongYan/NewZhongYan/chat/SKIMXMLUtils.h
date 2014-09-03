@@ -10,23 +10,23 @@
 #import "GDataXMLNode.h"
 
 @interface SKIMXMLUtils : NSObject
-+(SKIMXMLUtils *)sharedXMLUtils;
++ (SKIMXMLUtils *)sharedXMLUtils;
 
 //构造xml头
--(GDataXMLElement *)buildHeaderElement:(NSMutableDictionary *)params;
+- (GDataXMLElement *)buildHeaderElement:(NSMutableDictionary *)params;
 
 //1.构造登录xml
--(GDataXMLDocument *)buildLoginXML:(NSMutableDictionary *)params;
+- (GDataXMLDocument *)buildLoginXML:(NSMutableDictionary *)params;
 
 //2.解析登录返回xml
 
 //3.构造发送的消息xml
--(GDataXMLDocument *)buildSendMsgXML:(NSMutableDictionary *)params;
+- (GDataXMLDocument *)buildSendMsgXML:(NSMutableDictionary *)params;
 
 //4.解析发送消息之后返回的xml
 
 //5.构造发送群消息的xml
--(GDataXMLDocument *)buildSendGMsgXML:(NSMutableDictionary *)params;
+- (GDataXMLDocument *)buildSendGMsgXML:(NSMutableDictionary *)params;
 
 //6.解析发送群消息之后返回的xml
 
@@ -51,7 +51,11 @@
 //16.解析返回的用户信息的xml
 
 //解析数据包 返回xml
--(GDataXMLDocument *)parseData:(NSData *)data;
+- (GDataXMLDocument *)parseData:(NSData *)data;
 
--(NSDictionary *)getHeadInfo:(GDataXMLDocument *)xml;
+- (NSDictionary *)getHeadInfo:(GDataXMLDocument *)xml;
+
+- (NSDictionary *)getLoginBody:(GDataXMLDocument *)xml;
+
+- (NSDictionary *)getServerSendMsgBody:(GDataXMLDocument *)xml;
 @end

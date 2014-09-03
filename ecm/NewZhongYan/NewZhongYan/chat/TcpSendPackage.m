@@ -10,6 +10,7 @@
 #import "SKIMXMLUtils.h"
 #import "SKIMSocketConfig.h"
 #import "SKIMXMLConstants.h"
+#import "SKIMStatus.h"
 
 static unsigned long long sendIndex = 0;
 
@@ -28,6 +29,7 @@ static unsigned long long sendIndex = 0;
                                   @"",                              IM_XML_HEAD_SESSIONID_ATTR,
                                   @"",                              IM_XML_HEAD_USERID_ATTR,
                                   [self sendIndex],                 IM_XML_HEAD_INDEX_ATTR,
+                                   
                                   [APPUtils loggedUser].uid,        IM_XML_BODY_LOGIN_USERID_ATTR,
                                   [APPUtils loggedUser].password,   IM_XML_BODY_LOGIN_USERPSW_ATTR, nil];
     
@@ -36,6 +38,24 @@ static unsigned long long sendIndex = 0;
 //    NSLog(@"Saving xml data to %@...", filePath);
 //    [[loginXml XMLData] writeToFile:filePath atomically:YES];
     NSData *packageBody = [[[SKIMXMLUtils sharedXMLUtils] buildLoginXML:params] XMLData];
+    NSData *packageData = [self createPackageWithBody:packageBody];
+    return packageData;
+}
+
++ (NSData *)createMessagePackageWithMsg:(NSString *)message toUser:(NSString*)toUser msgType:(NSString *)msgType
+{
+    NSMutableDictionary *params = [NSMutableDictionary dictionaryWithObjectsAndKeys:
+                                   IM_XML_HEAD_SOURCE_MOBILE_VALUE,     IM_XML_HEAD_SOURCE_ATTR,
+                                   IM_XML_HEAD_BUSINESS_SENDMSG_VALUE,  IM_XML_HEAD_BUSINESS_ATTR,
+                                   [SKIMStatus sharedStatus].sessionId, IM_XML_HEAD_SESSIONID_ATTR,
+                                   [self sendIndex],                    IM_XML_HEAD_INDEX_ATTR,
+                                   [APPUtils loggedUser].uid,           IM_XML_BODY_LOGIN_USERID_ATTR,
+                                   
+                                   toUser,                              IM_XML_BODY_SENDMSG_TOUSER_ATTR,
+                                   msgType,                             IM_XML_BODY_SENDMSG_MSGTYPE_ATTR,
+                                   message,                             IM_XML_BODY_SENDMSG_CONTENT_ATTR, nil];
+    
+    NSData *packageBody = [[[SKIMXMLUtils sharedXMLUtils] buildSendMsgXML:params] XMLData];
     NSData *packageData = [self createPackageWithBody:packageBody];
     return packageData;
 }
@@ -84,6 +104,6 @@ static unsigned long long sendIndex = 0;
     NSMutableData *pkgData = [NSMutableData data];
     [pkgData appendData:headData];
     [pkgData appendData:packageBody];
-    return  pkgData;
+    return pkgData;
 }
 @end

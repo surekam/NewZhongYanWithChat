@@ -13,11 +13,13 @@
 #import "XHContactDetailTableViewController.h"
 #import "XHAudioPlayerHelper.h"
 #import "SKIMUser.h"
+#import "SKIMMessageDataManager.h"
 
-@interface SKIMConversationDetailViewController () <XHAudioPlayerHelperDelegate>
+@interface SKIMConversationDetailViewController () <XHAudioPlayerHelperDelegate, SKIMMessageDataManagerDelegate>
 
 @property (nonatomic, strong) NSArray *emotionManagers;
 @property (nonatomic, strong) XHMessageTableViewCell *currentSelectedCell;
+@property (nonatomic, strong) SKIMMessageDataManager *messageDataManager;
 
 @end
 
@@ -103,6 +105,7 @@
     [self.shareMenuView reloadData];
     
     [self loadDataSource];
+    [SKIMMessageDataManager sharedMessageDataManager].delegate = self;
 }
 
 - (void)didReceiveMemoryWarning
@@ -114,6 +117,7 @@
 - (void)dealloc {
     self.emotionManagers = nil;
     [[XHAudioPlayerHelper shareInstance] setDelegate:nil];
+    [SKIMMessageDataManager sharedMessageDataManager].delegate = nil;
 }
 
 
@@ -266,6 +270,7 @@
     textMessage.avatorUrl = [SKIMUser currentUser].avatarUri;
     [self addMessage:textMessage];
     [self finishSendMessageWithBubbleMessageType:XHBubbleMessageMediaTypeText];
+    [[SKIMMessageDataManager sharedMessageDataManager] sendMessage:textMessage withType:XHBubbleMessageMediaTypeText toChatter:self.conversation.chatterId];
 }
 
 /**
@@ -373,4 +378,11 @@
     return YES;
 }
 
+#pragma mark - SKIMMessageDataManagerDelegate Delegate
+- (void)addServerMessage:(XHMessage *)message
+{
+    if (message) {
+        [self addMessage:message];
+    }
+}
 @end

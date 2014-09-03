@@ -248,6 +248,7 @@
 		A31849D919923054004F2EF7 /* SKIMChatText.m in Sources */ = {isa = PBXBuildFile; fileRef = A31849D819923054004F2EF7 /* SKIMChatText.m */; };
 		A38FB009199223F5002580EC /* SKIMTextMessageBody.m in Sources */ = {isa = PBXBuildFile; fileRef = A38FB008199223F5002580EC /* SKIMTextMessageBody.m */; };
 		A398294319A2DEA700787F71 /* SKIMConversationListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A398294219A2DEA700787F71 /* SKIMConversationListViewController.m */; };
+		A398C47C19B5A1D4007952A9 /* SKIMStatus.m in Sources */ = {isa = PBXBuildFile; fileRef = A398C47B19B5A1D4007952A9 /* SKIMStatus.m */; };
 		A398FAF519A6DF8200D081C1 /* SKIMDBOperate.m in Sources */ = {isa = PBXBuildFile; fileRef = A398FAF419A6DF8200D081C1 /* SKIMDBOperate.m */; };
 		A398FAF819A72B2E00D081C1 /* SKIMUserDBModel.m in Sources */ = {isa = PBXBuildFile; fileRef = A398FAF719A72B2E00D081C1 /* SKIMUserDBModel.m */; };
 		A398FAFB19A72B4800D081C1 /* SKIMGroupDBModel.m in Sources */ = {isa = PBXBuildFile; fileRef = A398FAFA19A72B4800D081C1 /* SKIMGroupDBModel.m */; };
@@ -260,6 +261,7 @@
 		A399E3151977789400B9FAC8 /* SearchIcon_white@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A399E3141977789400B9FAC8 /* SearchIcon_white@2x.png */; };
 		A39A7927198B73230003BC56 /* AGSimpleImageEditorView.m in Sources */ = {isa = PBXBuildFile; fileRef = A39A7926198B73230003BC56 /* AGSimpleImageEditorView.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		A39AB2C419792CE20027BAE5 /* SKChater.m in Sources */ = {isa = PBXBuildFile; fileRef = A39AB2C319792CE20027BAE5 /* SKChater.m */; };
+		A39AD0AA19B6F7860026BEC0 /* SKIMMessageDataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A39AD0A919B6F7860026BEC0 /* SKIMMessageDataManager.m */; };
 		A39ADE3B1989F48B008EBEE7 /* signature@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A39ADE3A1989F48B008EBEE7 /* signature@2x.png */; };
 		A39ADE3D1989F95D008EBEE7 /* right_arrow_black@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A39ADE3C1989F95D008EBEE7 /* right_arrow_black@2x.png */; };
 		A39ADE40198A1E97008EBEE7 /* UIImage+ImageWithColour.m in Sources */ = {isa = PBXBuildFile; fileRef = A39ADE3F198A1E97008EBEE7 /* UIImage+ImageWithColour.m */; };
@@ -1127,6 +1129,8 @@
 		A38FB008199223F5002580EC /* SKIMTextMessageBody.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SKIMTextMessageBody.m; sourceTree = "<group>"; };
 		A398294119A2DEA700787F71 /* SKIMConversationListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SKIMConversationListViewController.h; sourceTree = "<group>"; };
 		A398294219A2DEA700787F71 /* SKIMConversationListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SKIMConversationListViewController.m; sourceTree = "<group>"; };
+		A398C47A19B5A1D4007952A9 /* SKIMStatus.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SKIMStatus.h; sourceTree = "<group>"; };
+		A398C47B19B5A1D4007952A9 /* SKIMStatus.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SKIMStatus.m; sourceTree = "<group>"; };
 		A398CF7A19921344005D6F3A /* SKIMServiceDefs.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SKIMServiceDefs.h; sourceTree = "<group>"; };
 		A398CF7E19921A91005D6F3A /* ISKIMChatObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ISKIMChatObject.h; sourceTree = "<group>"; };
 		A398CF7F19921AD6005D6F3A /* ISKIMMessageBody.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ISKIMMessageBody.h; sourceTree = "<group>"; };
@@ -1151,6 +1155,8 @@
 		A39A7E3019A199BB00EF3460 /* SKIMChater.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SKIMChater.h; sourceTree = "<group>"; };
 		A39AB2C219792CE20027BAE5 /* SKChater.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SKChater.h; sourceTree = "<group>"; };
 		A39AB2C319792CE20027BAE5 /* SKChater.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SKChater.m; sourceTree = "<group>"; };
+		A39AD0A819B6F7860026BEC0 /* SKIMMessageDataManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SKIMMessageDataManager.h; sourceTree = "<group>"; };
+		A39AD0A919B6F7860026BEC0 /* SKIMMessageDataManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SKIMMessageDataManager.m; sourceTree = "<group>"; };
 		A39ADE3A1989F48B008EBEE7 /* signature@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "signature@2x.png"; sourceTree = "<group>"; };
 		A39ADE3C1989F95D008EBEE7 /* right_arrow_black@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "right_arrow_black@2x.png"; sourceTree = "<group>"; };
 		A39ADE3E198A1E97008EBEE7 /* UIImage+ImageWithColour.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+ImageWithColour.h"; sourceTree = "<group>"; };
@@ -2851,6 +2857,10 @@
 		A39B592B1990CF2600929560 /* entity */ = {
 			isa = PBXGroup;
 			children = (
+				A39AD0A819B6F7860026BEC0 /* SKIMMessageDataManager.h */,
+				A39AD0A919B6F7860026BEC0 /* SKIMMessageDataManager.m */,
+				A398C47A19B5A1D4007952A9 /* SKIMStatus.h */,
+				A398C47B19B5A1D4007952A9 /* SKIMStatus.m */,
 				A39A7E3019A199BB00EF3460 /* SKIMChater.h */,
 				A39B592F1990D43400929560 /* SKIMUser.h */,
 				A39B59301990D43400929560 /* SKIMUser.m */,
@@ -4780,6 +4790,7 @@
 				3B05EA4F196FCA8600866FA5 /* XHContactPhotosView.m in Sources */,
 				F23CE456182B343B0066F214 /* HPGrowingTextView.m in Sources */,
 				F23AA258184F2338004248DB /* PBKDF2.m in Sources */,
+				A398C47C19B5A1D4007952A9 /* SKIMStatus.m in Sources */,
 				F2C47D9B18BAEDCA00358645 /* GBPathImageView.m in Sources */,
 				F23AA255184F2338004248DB /* AESCrypt.m in Sources */,
 				F2C89BA117F6B73D0099A62D /* SKAppDelegate.m in Sources */,
@@ -4862,6 +4873,7 @@
 				F2D8149B1835C75300FE0839 /* NewsHelper.m in Sources */,
 				F2D814981835C75300FE0839 /* MainHelper.m in Sources */,
 				3B05EA4B196FCA8600866FA5 /* XHBaseCollectionViewCell.m in Sources */,
+				A39AD0AA19B6F7860026BEC0 /* SKIMMessageDataManager.m in Sources */,
 				3B05EA19196FCA8600866FA5 /* XHMessageVoiceFactory.m in Sources */,
 				F291E219180CD9A80027F0C9 /* PullingRefreshTableView.m in Sources */,
 				3B05E9F4196FCA8600866FA5 /* XHBaseNavigationController.m in Sources */,
