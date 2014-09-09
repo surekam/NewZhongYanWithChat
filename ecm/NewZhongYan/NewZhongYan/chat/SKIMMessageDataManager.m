@@ -11,6 +11,7 @@
 #import "TcpSendPackage.h"
 #import "SKIMSocketConfig.h"
 #import "SKIMXMLConstants.h"
+#import "RegExCategories.h"
 
 @implementation SKIMMessageDataManager
 
@@ -52,10 +53,32 @@
 - (void)addMessage:(NSDictionary *)messageDic
 {
     if (_delegate && messageDic) {
+        NSString *emoticonRegexStr = @"/.{2}\\\\n";             // 实际正则应为/.{2}\\n
+        NSString *pictureRegexStr = @"/\\{\\{\\w+/\\}\\}";      // 实际正则应为/\{\{\w+/\}\}
+        NSString *fontRegexStr = @"/\\[\\[.+\\]\\]";            // 实际正则应为/\[\[.+\]\]
+        
+        NSString *msgContent = [messageDic objectForKey:IM_XML_BODY_SENDGMSG_CONTENT_ATTR];
+        msgContent = [msgContent replace:RX(fontRegexStr) with:@""];
+        
+        BOOL isEmoticonMatch = [RX(emoticonRegexStr) isMatch:msgContent];
+        BOOL isPictureMatch = [RX(pictureRegexStr) isMatch:msgContent];
+        NSString *textContent = [[msgContent replace:RX(emoticonRegexStr) with:@""] replace:RX(pictureRegexStr) with:@""];
         
         XHMessage *message = [[XHMessage alloc] init];
-        message.text = [messageDic objectForKey:IM_XML_BODY_SENDGMSG_CONTENT_ATTR];
-        message.messageMediaType = XHBubbleMessageMediaTypeText;
+        if ((isEmoticonMatch || isPictureMatch) && textContent.length) {
+            message.messageMediaType = XHBubbleMessageMediaTypeMix;
+            message.text = msgContent;
+        } else if (isPictureMatch && !isEmoticonMatch && textContent.length == 0) {
+            message.messageMediaType = XHBubbleMessageMediaTypePhoto;
+            //TODO
+        } else if (isEmoticonMatch && !isPictureMatch && textContent.length == 0) {
+            message.messageMediaType = XHBubbleMessageMediaTypeEmotion;
+            //TODO
+        } else if (!isPictureMatch && !isEmoticonMatch && textContent.length) {
+            message.messageMediaType = XHBubbleMessageMediaTypeText;
+            message.text = msgContent;
+        }
+        
         message.bubbleMessageType = XHBubbleMessageTypeReceiving;
         [_delegate addServerMessage:message];
     }

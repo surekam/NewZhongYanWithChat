@@ -87,6 +87,9 @@
  */
 @property (nonatomic, strong) UIFont *font UI_APPEARANCE_SELECTOR;
 
+// 用于显示文本、表情、图片
+@property (nonatomic, weak, readonly) UIView *mixContentView;
+
 /**
  *  初始化消息内容显示控件的方法
  *

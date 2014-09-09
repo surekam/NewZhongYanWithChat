@@ -9,6 +9,7 @@
 #import "XHMessageBubbleView.h"
 
 #import "XHMessageBubbleHelper.h"
+#import "RegExCategories.h"
 
 #define kMarginTop 8.0f
 #define kMarginBottom 2.0f
@@ -36,6 +37,8 @@
 @property (nonatomic, weak, readwrite) UILabel *geolocationsLabel;
 
 @property (nonatomic, strong, readwrite) id <XHMessageModel> message;
+
+@property (nonatomic, weak, readwrite) UIView *mixContentView;
 
 @end
 
@@ -72,6 +75,34 @@
     return voiceSize;
 }
 
++ (CGSize)neededSizeForMixContent:(NSString *)text {
+    CGFloat maxWidth = CGRectGetWidth([[UIScreen mainScreen] bounds]) * (kIsiPad ? 0.8 : 0.55);
+    
+    NSString *pictureRegexStr = @"/\\{\\{\\w+/\\}\\}";     // 实际正则应为/\{\{\w+/\}\}
+    
+    NSString *textWithoutPic = @"";
+    //剔除图片
+    NSArray *textContents = [text split:RX(pictureRegexStr)];
+    for (NSString *textPart in textContents) {
+        textWithoutPic = [textWithoutPic stringByAppendingString:textPart];
+    }
+    //计算不包含图片的文本宽度
+    CGFloat textWidth = [XHMessageBubbleView neededWidthForText:textWithoutPic];
+    
+    //计算图片宽度
+    NSArray *pictureMatchs = [text matches:RX(pictureRegexStr)];
+    CGSize picSize = [XHMessageBubbleView neededSizeForPhoto:nil];
+    CGFloat picWidth = pictureMatchs.count ? picSize.width : 0.0;
+    
+    CGFloat dyWidth = textWidth > picWidth ? textWidth : picWidth;
+    
+    CGSize textSize = [SETextView frameRectWithAttributtedString:[[XHMessageBubbleHelper sharedMessageBubbleHelper] bubbleAttributtedStringWithText:textWithoutPic]
+                                                  constraintSize:CGSizeMake(maxWidth, MAXFLOAT)
+                                                     lineSpacing:kXHTextLineSpacing
+                                                            font:[[XHMessageBubbleView appearance] font]].size;
+    return CGSizeMake((dyWidth > textSize.width ? textSize.width : dyWidth) + kBubblePaddingRight * 2 + kXHArrowMarginWidth, textSize.height + picSize.height * pictureMatchs.count + kMarginTop * 2);
+}
+
 + (CGFloat)calculateCellHeightWithMessage:(id <XHMessageModel>)message {
     CGSize size = [XHMessageBubbleView getBubbleFrameWithMessage:message];
     return size.height + kMarginTop + kMarginBottom;
@@ -104,6 +135,9 @@
         case XHBubbleMessageMediaTypeLocalPosition:
             // 固定大小，必须的
             bubbleSize = CGSizeMake(119, 119);
+            break;
+        case XHBubbleMessageMediaTypeMix:
+            bubbleSize = [XHMessageBubbleView neededSizeForMixContent:message.text];
             break;
         default:
             break;
@@ -320,6 +354,13 @@
             [self addSubview:emotionImageView];
             _emotionImageView = emotionImageView;
         }
+        
+        // 6、初始化显示混合内容的控件
+        if (!_mixContentView) {
+            UIView *mixContentView = [[UIView alloc] initWithFrame:CGRectZero];
+            [self addSubview:mixContentView];
+            _mixContentView = mixContentView;
+        }
     }
     return self;
 }
@@ -345,6 +386,7 @@
     
     _font = nil;
     
+    _mixContentView = nil;
 }
 
 - (void)layoutSubviews {
@@ -393,6 +435,18 @@
             CGRect geolocationsLabelFrame = CGRectMake(11, CGRectGetHeight(photoImageViewFrame) - 47, CGRectGetWidth(photoImageViewFrame) - 20, 40);
             self.geolocationsLabel.frame = geolocationsLabelFrame;
             
+            break;
+        }
+        case XHBubbleMessageMediaTypeMix: {
+            CGFloat mixX = CGRectGetMinX(bubbleFrame) + kBubblePaddingRight;
+            if (self.message.bubbleMessageType == XHBubbleMessageTypeReceiving) {
+                mixX += kXHArrowMarginWidth / 2.0;
+            }
+            CGRect mixFrame = CGRectMake(mixX,
+                                          CGRectGetMinY(bubbleFrame) + kPaddingTop,
+                                          CGRectGetWidth(bubbleFrame) - kBubblePaddingRight * 2,
+                                          bubbleFrame.size.height - kMarginTop - kMarginBottom);
+            self.mixContentView.frame = CGRectIntegral(mixFrame);
             break;
         }
         default:

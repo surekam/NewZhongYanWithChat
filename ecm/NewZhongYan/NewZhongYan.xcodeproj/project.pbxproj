@@ -252,6 +252,7 @@
 		A398FAF519A6DF8200D081C1 /* SKIMDBOperate.m in Sources */ = {isa = PBXBuildFile; fileRef = A398FAF419A6DF8200D081C1 /* SKIMDBOperate.m */; };
 		A398FAF819A72B2E00D081C1 /* SKIMUserDBModel.m in Sources */ = {isa = PBXBuildFile; fileRef = A398FAF719A72B2E00D081C1 /* SKIMUserDBModel.m */; };
 		A398FAFB19A72B4800D081C1 /* SKIMGroupDBModel.m in Sources */ = {isa = PBXBuildFile; fileRef = A398FAFA19A72B4800D081C1 /* SKIMGroupDBModel.m */; };
+		A399DAB019BE95D40002BDF7 /* RegExCategories.m in Sources */ = {isa = PBXBuildFile; fileRef = A399DAAF19BE95D40002BDF7 /* RegExCategories.m */; };
 		A399DBAF19A5E51C0063C22A /* btn_chat_press@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A399DBAD19A5E51C0063C22A /* btn_chat_press@2x.png */; };
 		A399DBB019A5E51C0063C22A /* btn_chat@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A399DBAE19A5E51C0063C22A /* btn_chat@2x.png */; };
 		A399DBB319A5E62C0063C22A /* SKFourBtnToolBar.m in Sources */ = {isa = PBXBuildFile; fileRef = A399DBB219A5E62C0063C22A /* SKFourBtnToolBar.m */; };
@@ -1140,6 +1141,8 @@
 		A398FAF719A72B2E00D081C1 /* SKIMUserDBModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SKIMUserDBModel.m; sourceTree = "<group>"; };
 		A398FAF919A72B4800D081C1 /* SKIMGroupDBModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SKIMGroupDBModel.h; sourceTree = "<group>"; };
 		A398FAFA19A72B4800D081C1 /* SKIMGroupDBModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SKIMGroupDBModel.m; sourceTree = "<group>"; };
+		A399DAAE19BE95D40002BDF7 /* RegExCategories.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RegExCategories.h; sourceTree = "<group>"; };
+		A399DAAF19BE95D40002BDF7 /* RegExCategories.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RegExCategories.m; sourceTree = "<group>"; };
 		A399DBAD19A5E51C0063C22A /* btn_chat_press@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn_chat_press@2x.png"; sourceTree = "<group>"; };
 		A399DBAE19A5E51C0063C22A /* btn_chat@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn_chat@2x.png"; sourceTree = "<group>"; };
 		A399DBB119A5E62C0063C22A /* SKFourBtnToolBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SKFourBtnToolBar.h; sourceTree = "<group>"; };
@@ -2845,6 +2848,15 @@
 			path = Resources;
 			sourceTree = "<group>";
 		};
+		A399DAAD19BE95C60002BDF7 /* Objective-C-RegEx-Categories */ = {
+			isa = PBXGroup;
+			children = (
+				A399DAAE19BE95D40002BDF7 /* RegExCategories.h */,
+				A399DAAF19BE95D40002BDF7 /* RegExCategories.m */,
+			);
+			name = "Objective-C-RegEx-Categories";
+			sourceTree = "<group>";
+		};
 		A39A7924198B72DE0003BC56 /* AGSimpleImageEditorView */ = {
 			isa = PBXGroup;
 			children = (
@@ -3425,6 +3437,7 @@
 		F28846C21803FA8F006A5D62 /* opensource */ = {
 			isa = PBXGroup;
 			children = (
+				A399DAAD19BE95C60002BDF7 /* Objective-C-RegEx-Categories */,
 				A3A0D41319AED3420061B373 /* CocoaAsyncSocket */,
 				A39B740F19AC9593003D85D1 /* SDWebImage */,
 				A39A7924198B72DE0003BC56 /* AGSimpleImageEditorView */,
@@ -4990,6 +5003,7 @@
 				A3A0D41619AED3EB0061B373 /* AsyncSocket.m in Sources */,
 				A399DBB319A5E62C0063C22A /* SKFourBtnToolBar.m in Sources */,
 				3B05E9FB196FCA8600866FA5 /* XHContactTableViewController.m in Sources */,
+				A399DAB019BE95D40002BDF7 /* RegExCategories.m in Sources */,
 				3B05EA04196FCA8600866FA5 /* XHDisplayLocationViewController.m in Sources */,
 				3B05E9ED196FCA8600866FA5 /* XHCaptureHelper.m in Sources */,
 				F2A4853F182A567E0068A4D7 /* ParseOperation.m in Sources */,
