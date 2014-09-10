@@ -54,7 +54,7 @@
 {
     if (_delegate && messageDic) {
         NSString *emoticonRegexStr = @"/.{2}\\\\n";             // 实际正则应为/.{2}\\n
-        NSString *pictureRegexStr = @"/\\{\\{\\w+/\\}\\}";      // 实际正则应为/\{\{\w+/\}\}
+        NSString *pictureRegexStr = @"/\\{\\{.+/\\}\\}";      // 实际正则应为/\{\{.+/\}\}
         NSString *fontRegexStr = @"/\\[\\[.+\\]\\]";            // 实际正则应为/\[\[.+\]\]
         
         NSString *msgContent = [messageDic objectForKey:IM_XML_BODY_SENDGMSG_CONTENT_ATTR];
