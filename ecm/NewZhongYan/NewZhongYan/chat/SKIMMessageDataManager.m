@@ -75,7 +75,7 @@
             message.messageMediaType = XHBubbleMessageMediaTypeEmotion;
             //TODO
         } else if (!isPictureMatch && !isEmoticonMatch && textContent.length) {
-            message.messageMediaType = XHBubbleMessageMediaTypeText;
+            message.messageMediaType = XHBubbleMessageMediaTypeMix;
             message.text = msgContent;
         }
         

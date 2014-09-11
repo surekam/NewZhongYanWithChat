@@ -39,8 +39,6 @@
 
 @property (nonatomic, strong, readwrite) id <XHMessageModel> message;
 
-@property (nonatomic, weak, readwrite) UIView *mixContentView;
-
 @end
 
 @implementation XHMessageBubbleView
@@ -51,7 +49,24 @@
     CGSize stringSize;
     stringSize = [text sizeWithFont:[[XHMessageBubbleView appearance] font]
                      constrainedToSize:CGSizeMake(MAXFLOAT, 19)];
-    return roundf(stringSize.width);
+    //return roundf(stringSize.width);
+    
+    //NSAttributedString *attrStr = [[XHMessageBubbleHelper sharedMessageBubbleHelper] bubbleAttributtedStringWithText:text];
+    //NSRange range = NSMakeRange(0, attrStr.length);
+    //NSDictionary *dic = [attrStr attributesAtIndex:0 effectiveRange:&range];   // 获取该段attributedString的属性字典
+    NSDictionary *dic = [[XHMessageBubbleView appearance] font].fontDescriptor.fontAttributes;
+    NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc]init];
+    paragraphStyle.lineBreakMode = NSLineBreakByWordWrapping;
+    [dic setValue:paragraphStyle forKey:NSParagraphStyleAttributeName];
+    // 计算文本的大小
+    CGFloat maxWidth = CGRectGetWidth([[UIScreen mainScreen] bounds]) * (kIsiPad ? 0.8 : 0.55);
+    CGSize textSize = [text boundingRectWithSize:CGSizeMake(maxWidth, MAXFLOAT) // 用于计算文本绘制时占据的矩形块
+                                                  options:NSStringDrawingTruncatesLastVisibleLine | NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading // 文本绘制时的附加选项
+                                               attributes:dic        // 文字的属性
+                                                  context:nil].size; // context上下文。包括一些信息，例如如何调整字间距以及缩放。该对象包含的信息将用于文本绘制。该参数可为nil
+    NSLog(@"w = %f", textSize.width);
+    NSLog(@"h = %f", textSize.height);
+    return roundf(textSize.width);
 }
 
 + (CGSize)neededSizeForText:(NSString *)text {
@@ -60,7 +75,7 @@
     CGFloat dyWidth = [XHMessageBubbleView neededWidthForText:text];
     
     CGSize textSize = [SETextView frameRectWithAttributtedString:[[XHMessageBubbleHelper sharedMessageBubbleHelper] bubbleAttributtedStringWithText:text] constraintSize:CGSizeMake(maxWidth, MAXFLOAT) lineSpacing:kXHTextLineSpacing font:[[XHMessageBubbleView appearance] font]].size;
-    return CGSizeMake((dyWidth > textSize.width ? textSize.width : dyWidth) + kBubblePaddingRight * 2 + kXHArrowMarginWidth, textSize.height + kMarginTop * 2);
+    return CGSizeMake((dyWidth > textSize.width ? textSize.width : dyWidth) + kBubblePaddingRight * 4 + kXHArrowMarginWidth, textSize.height + kMarginTop * 2);
 }
 
 + (CGSize)neededSizeForPhoto:(UIImage *)photo {
@@ -76,28 +91,13 @@
     return voiceSize;
 }
 
-+ (CGSize)neededSizeForTextPart:(NSString *)text {
-    CGFloat maxWidth = CGRectGetWidth([[UIScreen mainScreen] bounds]) * (kIsiPad ? 0.8 : 0.55);
-    
-    CGFloat dyWidth = [XHMessageBubbleView neededWidthForText:text];
-    
-    CGSize textSize = [SETextView frameRectWithAttributtedString:[[XHMessageBubbleHelper sharedMessageBubbleHelper] bubbleAttributtedStringWithText:text] constraintSize:CGSizeMake(maxWidth, MAXFLOAT) lineSpacing:kXHTextLineSpacing font:[[XHMessageBubbleView appearance] font]].size;
-    return CGSizeMake((dyWidth > textSize.width ? textSize.width : dyWidth) + kBubblePaddingRight * 2 + kXHArrowMarginWidth, textSize.height + kMarginBottom * 2);
-}
-
 + (CGSize)neededSizeForMixContent:(NSString *)text {
     NSString *pictureRegexStr = @"/\\{\\{.+/\\}\\}";     // 实际正则应为/\{\{.+/\}\}
 
-    //剔除图片
-    NSArray *textContents = [text split:RX(pictureRegexStr)];
-    
     //计算不包含图片的文本宽度
     CGSize textSize = CGSizeZero;
-    for (NSString *textPart in textContents) {
-        CGSize textPartSize = [XHMessageBubbleView neededSizeForTextPart:textPart];
-        textSize.width = textSize.width > textPartSize.width ? textSize.width : textPartSize.width;
-        textSize.height += textPartSize.height;
-    }
+    NSString *textWithoutPic = [text replace:RX(pictureRegexStr) with:@"\n"];
+    textSize = [XHMessageBubbleView neededSizeForText:textWithoutPic];
     
     //计算图片宽度
     NSArray *pictureMatchs = [text matches:RX(pictureRegexStr)];
@@ -106,7 +106,7 @@
     
     CGFloat dyWidth = textSize.width > picWidth ? textSize.width : picWidth;
 
-    return CGSizeMake(dyWidth + kBubblePaddingRight * 2 + kXHArrowMarginWidth, textSize.height + picSize.height * pictureMatchs.count + kMarginTop);
+    return CGSizeMake(dyWidth, textSize.height + picSize.height * pictureMatchs.count);
 }
 
 + (CGFloat)calculateCellHeightWithMessage:(id <XHMessageModel>)message {
@@ -148,6 +148,7 @@
         default:
             break;
     }
+    NSLog(@"bubbleSize=%f,%f", bubbleSize.width, bubbleSize.height);
     return bubbleSize;
 }
 
@@ -253,13 +254,11 @@
         case XHBubbleMessageMediaTypeMix: {
             _bubbleImageView.image = [XHMessageBubbleFactory bubbleImageViewForType:message.bubbleMessageType style:XHBubbleImageViewStyleWeChat meidaType:message.messageMediaType];
             _bubbleImageView.hidden = NO;
+            _displayTextView.hidden = NO;
             
             _bubblePhotoImageView.hidden = YES;
-            _displayTextView.hidden = YES;
             _animationVoiceImageView.hidden = YES;
             _emotionImageView.hidden = YES;
-            
-            _mixContentView.hidden = NO;
             
             break;
         }
@@ -296,68 +295,28 @@
             _geolocationsLabel.text = message.geolocations;
             break;
         case XHBubbleMessageMediaTypeMix: {
+            NSString *fixContent = [message.text copy];
             NSString *emoticonRegexStr = @"/.{2}\\\\n";             // 实际正则应为/.{2}\\n
             NSString *pictureRegexStr = @"/\\{\\{.+/\\}\\}";      // 实际正则应为/\{\{.+/\}\}
             
             NSArray *textWithEmoticon = [message.text split:RX(pictureRegexStr)];
             NSArray *picMatchs = [message.text matchesWithDetails:RX(pictureRegexStr)];
-            NSMutableArray *mixContents = [NSMutableArray array];
             
-            if (picMatchs.count) {
-                int index = 0;
-                for (int i  = 0; i < picMatchs.count; i++) {
-                    RxMatch *picMatch = picMatchs[i];
-                    NSString *textWithEmoticonPart = nil;
-                    
-                    if (i == 0) {
-                        if (picMatch.range.location > 0) {
-                            textWithEmoticonPart = [message.text substringWithRange:NSMakeRange(0, picMatch.range.location)];
-                            [mixContents addObject:textWithEmoticonPart];
-                            index += textWithEmoticonPart.length;
-                        }
-                        [mixContents addObject:picMatch.value];
-                        index += picMatch.range.length;
-                    } else {
-                        if(picMatch.range.location > index) {
-                            textWithEmoticonPart = [message.text substringWithRange:NSMakeRange(index, picMatch.range.location - index)];
-                            [mixContents addObject:textWithEmoticonPart];
-                            index += textWithEmoticonPart.length;
-                        }
-                        [mixContents addObject:picMatch.value];
-                        index += picMatch.range.length;
-                    }
-                    
-                    if (i == picMatchs.count - 1 && index < message.text.length) {
-                        textWithEmoticonPart = [message.text substringWithRange:NSMakeRange(index, message.text.length - index)];
-                        [mixContents addObject:textWithEmoticonPart];
-                        index += textWithEmoticonPart.length;
-                    }
+            for (RxMatch *picMatch in picMatchs) {
+                NSRange range = NSMakeRange(picMatch.range.location + (fixContent.length - message.text.length), picMatch.range.length);
+                if (picMatch.range.location == 0) {
+                    fixContent = [fixContent stringByReplacingCharactersInRange:range withString:[picMatch.value stringByAppendingString:@"\n"]];
+                } else if (picMatch.range.location + picMatch.range.length == message.text.length) {
+                    fixContent = [fixContent stringByReplacingCharactersInRange:range withString:[@"\n" stringByAppendingString:picMatch.value]];
+                } else {
+                    fixContent = [fixContent stringByReplacingCharactersInRange:range withString:[@"\n" stringByAppendingString:[picMatch.value stringByAppendingString:@"\n"]]];
                 }
             }
-            
-            CGPoint pointIndex = CGPointZero;
-            for (NSString *content in mixContents) {
-                BOOL isPic = [content isMatch:RX(pictureRegexStr)];
-                
-                if (isPic) {
-                    CGSize picSize = [XHMessageBubbleView neededSizeForPhoto:nil];
-                    UIImageView *picImageView = [[UIImageView alloc] initWithFrame:CGRectMake(pointIndex.x, pointIndex.y, picSize.width, picSize.height)];
-                    [picImageView sd_setImageWithURL:[NSURL URLWithString:@"http://img.hb.aicdn.com/09ca953b69193f36faf5d532e3f8b3071125d259f31f-6BokqJ_fw658"] placeholderImage:[UIImage imageNamed:[content firstMatch:RX(@"\\w+")]]];
-                    [_mixContentView addSubview:picImageView];
-                    pointIndex.y += picImageView.frame.size.height;
-                } else {
-                    CGSize textSize = [XHMessageBubbleView neededSizeForTextPart:content];
-                    SETextView *textView = [[SETextView alloc] initWithFrame:CGRectMake(pointIndex.x, pointIndex.y, textSize.width, textSize.height)];
-                    textView.backgroundColor = [UIColor blueColor];
-                    textView.selectable = NO;
-                    textView.lineSpacing = kXHTextLineSpacing;
-                    textView.font = [[XHMessageBubbleView appearance] font];
-                    textView.showsEditingMenuAutomatically = NO;
-                    textView.highlighted = NO;
-                    textView.attributedText = [[XHMessageBubbleHelper sharedMessageBubbleHelper] bubbleAttributtedStringWithText:content];
-                    [_mixContentView addSubview:textView];
-                    pointIndex.y += textView.frame.size.height;
-                }
+            _displayTextView.attributedText = [[XHMessageBubbleHelper sharedMessageBubbleHelper] bubbleAttributtedStringWithText:fixContent];
+            picMatchs = [fixContent matchesWithDetails:RX(pictureRegexStr)];
+            for (RxMatch *picMatch in picMatchs) {
+                UIImageView *img = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"avator"]];
+                [_displayTextView addObject:img size:[XHMessageBubbleView neededSizeForPhoto:img.image] replaceRange:picMatch.range];
             }
             break;
         }
@@ -440,14 +399,6 @@
             [self addSubview:emotionImageView];
             _emotionImageView = emotionImageView;
         }
-        
-        // 6、初始化显示混合内容的控件
-        if (!_mixContentView) {
-            UIView *mixContentView = [[UIView alloc] initWithFrame:CGRectZero];
-            mixContentView.backgroundColor = [UIColor brownColor];
-            [self addSubview:mixContentView];
-            _mixContentView = mixContentView;
-        }
     }
     return self;
 }
@@ -472,8 +423,6 @@
     _geolocationsLabel = nil;
     
     _font = nil;
-    
-    _mixContentView = nil;
 }
 
 - (void)layoutSubviews {
@@ -535,7 +484,8 @@
                                           CGRectGetMinY(bubbleFrame) + kPaddingTop,
                                           CGRectGetWidth(bubbleFrame) - kBubblePaddingRight * 2,
                                           bubbleFrame.size.height - kMarginTop - kMarginBottom);
-            self.mixContentView.frame = CGRectIntegral(mixFrame);
+            self.displayTextView.frame = CGRectIntegral(mixFrame);
+            self.displayTextView.backgroundColor = [UIColor blueColor];
             
             NSLog(@"-------------------------");
             NSLog(@"bubbleFrame=%f,%f,%f,%f", bubbleFrame.origin.x, bubbleFrame.origin.y, bubbleFrame.size.width, bubbleFrame.size.height);

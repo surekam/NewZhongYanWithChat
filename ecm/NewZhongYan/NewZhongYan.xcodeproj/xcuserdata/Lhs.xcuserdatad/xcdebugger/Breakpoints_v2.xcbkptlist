@@ -200,28 +200,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "MessageDisplayKit/Classes/Views/MessageContentViews/XHMessageBubbleView.m"
-            timestampString = "432039537.97843"
+            timestampString = "432134765.578504"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "542"
-            endingLineNumber = "542"
+            startingLineNumber = "481"
+            endingLineNumber = "481"
             landmarkName = "-layoutSubviews"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "MessageDisplayKit/Classes/Views/MessageContentViews/XHMessageBubbleView.m"
-            timestampString = "432039537.97843"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "447"
-            endingLineNumber = "447"
-            landmarkName = "-initWithFrame:message:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -248,12 +232,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "MessageDisplayKit/Classes/Views/MessageContentViews/XHMessageBubbleView.m"
-            timestampString = "432038101.000475"
+            timestampString = "432134765.578504"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "185"
-            endingLineNumber = "185"
-            landmarkName = "-configureCellWithMessage:"
+            startingLineNumber = "175"
+            endingLineNumber = "175"
+            landmarkName = "-bubbleFrame"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -264,28 +248,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "MessageDisplayKit/Classes/Views/MessageContentViews/XHMessageBubbleView.m"
-            timestampString = "432038101.000475"
+            timestampString = "432134765.578504"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "187"
-            endingLineNumber = "187"
-            landmarkName = "-configureCellWithMessage:"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "MessageDisplayKit/Classes/Views/MessageContentViews/XHMessageBubbleView.m"
-            timestampString = "432039537.97843"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "344"
-            endingLineNumber = "344"
-            landmarkName = "-configureMessageDisplayMediaWithMessage:"
+            startingLineNumber = "177"
+            endingLineNumber = "177"
+            landmarkName = "-bubbleFrame"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -312,12 +280,60 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "MessageDisplayKit/Classes/Views/MessageContentViews/XHMessageBubbleView.m"
-            timestampString = "432039568.607762"
+            timestampString = "432134765.578504"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "306"
-            endingLineNumber = "306"
+            startingLineNumber = "294"
+            endingLineNumber = "294"
             landmarkName = "-configureMessageDisplayMediaWithMessage:"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "MessageDisplayKit/Classes/Views/MessageContentViews/XHMessageBubbleView.m"
+            timestampString = "432134765.578504"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "420"
+            endingLineNumber = "420"
+            landmarkName = "-dealloc"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "MessageDisplayKit/Classes/Views/MessageContentViews/XHMessageBubbleView.m"
+            timestampString = "432134765.578504"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "105"
+            endingLineNumber = "105"
+            landmarkName = "+neededSizeForMixContent:"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "MessageDisplayKit/Classes/Views/MessageContentViews/XHMessageBubbleView.m"
+            timestampString = "432134079.125475"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "63"
+            endingLineNumber = "63"
+            landmarkName = "+neededWidthForText:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

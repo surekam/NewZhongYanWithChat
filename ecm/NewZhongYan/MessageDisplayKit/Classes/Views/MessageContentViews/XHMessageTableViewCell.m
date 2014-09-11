@@ -477,10 +477,6 @@ static const CGFloat kXHBubbleMessageViewPadding = 8;
     self.messageBubbleView.displayTextView.attributedText = nil;
     self.messageBubbleView.bubblePhotoImageView.messagePhoto = nil;
     self.messageBubbleView.emotionImageView.animatedImage = nil;
-    for (UIView *subView in self.messageBubbleView.mixContentView.subviews) {
-        [subView removeFromSuperview];
-    }
-    
     self.timestampLabel.text = nil;
 }
 
