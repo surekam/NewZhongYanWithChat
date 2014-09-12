@@ -10,7 +10,7 @@
 #import "XHEmotionManager.h"
 #import "XHMacro.h"
 
-#define kXHEmotionPerRowItemCount (kIsiPad ? 10 : 4)
+#define kXHEmotionPerRowItemCount (kIsiPad ? 10 : 7)
 #define kXHEmotionPageControlHeight 38
 #define kXHEmotionSectionBarHeight 36
 

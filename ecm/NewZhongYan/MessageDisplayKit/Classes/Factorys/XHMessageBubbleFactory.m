@@ -45,6 +45,7 @@
             break;
         case XHBubbleMessageMediaTypeText:
         case XHBubbleMessageMediaTypeVoice:
+        case XHBubbleMessageMediaTypeEmotion:
         case XHBubbleMessageMediaTypeMix:
             messageTypeString = [messageTypeString stringByAppendingString:@"_Solid"];
             break;

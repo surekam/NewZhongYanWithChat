@@ -11,6 +11,8 @@
 #import "XHMessageBubbleHelper.h"
 #import "RegExCategories.h"
 #import "UIImageView+WebCache.h"
+#import "SEPhotoView.h"
+#import "XHEmotion.h"
 
 #define kMarginTop 8.0f
 #define kMarginBottom 2.0f
@@ -46,14 +48,12 @@
 #pragma mark - Bubble view
 
 + (CGFloat)neededWidthForText:(NSString *)text {
-    CGSize stringSize;
-    stringSize = [text sizeWithFont:[[XHMessageBubbleView appearance] font]
-                     constrainedToSize:CGSizeMake(MAXFLOAT, 19)];
-    //return roundf(stringSize.width);
+//    CGSize stringSize;
+//    stringSize = [text sizeWithFont:[[XHMessageBubbleView appearance] font] constrainedToSize:CGSizeMake(MAXFLOAT, 19)];
+//    NSDictionary *dic = [[XHMessageBubbleView appearance] font].fontDescriptor.fontAttributes;
+//    stringSize = [text sizeWithAttributes:dic];
+//    return roundf(stringSize.width);
     
-    //NSAttributedString *attrStr = [[XHMessageBubbleHelper sharedMessageBubbleHelper] bubbleAttributtedStringWithText:text];
-    //NSRange range = NSMakeRange(0, attrStr.length);
-    //NSDictionary *dic = [attrStr attributesAtIndex:0 effectiveRange:&range];   // 获取该段attributedString的属性字典
     NSDictionary *dic = [[XHMessageBubbleView appearance] font].fontDescriptor.fontAttributes;
     NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc]init];
     paragraphStyle.lineBreakMode = NSLineBreakByWordWrapping;
@@ -82,6 +82,11 @@
     // 这里需要缩放后的size
     CGSize photoSize = CGSizeMake(120, 120);
     return photoSize;
+}
+
++ (CGSize)neededSizeForEmotion {
+    CGSize emotionSize = CGSizeMake(kXHEmotionImageViewSize + kBubblePaddingRight * 2 + kXHArrowMarginWidth, kXHEmotionImageViewSize + kMarginTop * 2);
+    return emotionSize;
 }
 
 + (CGSize)neededSizeForVoicePath:(NSString *)voicePath voiceDuration:(NSString *)voiceDuration {
@@ -136,7 +141,7 @@
         }
         case XHBubbleMessageMediaTypeEmotion:
             // 是否固定大小呢？
-            bubbleSize = CGSizeMake(100, 100);
+            bubbleSize = [XHMessageBubbleView neededSizeForEmotion];
             break;
         case XHBubbleMessageMediaTypeLocalPosition:
             // 固定大小，必须的
@@ -228,7 +233,7 @@
                 } else {
                     _emotionImageView.hidden = NO;
                     
-                    _bubbleImageView.hidden = YES;
+                    _bubbleImageView.hidden = NO;
                     _animationVoiceImageView.hidden = YES;
                 }
             }
@@ -456,8 +461,7 @@
             
             [self resetVoiceDurationLabelFrameWithBubbleFrame:bubbleFrame];
             
-            self.emotionImageView.frame = bubbleFrame;
-            
+            self.emotionImageView.frame = CGRectMake(textX, CGRectGetMinY(bubbleFrame) + kPaddingTop, kXHEmotionImageViewSize, kXHEmotionImageViewSize);
             break;
         }
         case XHBubbleMessageMediaTypePhoto:

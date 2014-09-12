@@ -57,7 +57,7 @@
     
     XHEmotionManager *emotionManager = [self.dataSource emotionManagerForColumn:self.selectedIndex];
     NSInteger numberOfEmotions = emotionManager.emotions.count;
-    self.emotionPageControl.numberOfPages = (numberOfEmotions / (kXHEmotionPerRowItemCount * 2) + (numberOfEmotions % (kXHEmotionPerRowItemCount * 2) ? 1 : 0));
+    self.emotionPageControl.numberOfPages = (numberOfEmotions / (kXHEmotionPerRowItemCount * 3) + (numberOfEmotions % (kXHEmotionPerRowItemCount * 3) ? 1 : 0));
     
     
     [self.emotionCollectionView reloadData];
@@ -81,6 +81,7 @@
         emotionCollectionView.pagingEnabled = YES;
         emotionCollectionView.delegate = self;
         emotionCollectionView.dataSource = self;
+        emotionCollectionView.backgroundColor = [UIColor brownColor];
         [self addSubview:emotionCollectionView];
         self.emotionCollectionView = emotionCollectionView;
     }

@@ -22,4 +22,36 @@
     return self;
 }
 
+
+- (NSArray *) layoutAttributesForElementsInRect:(CGRect)rect {
+    NSArray *answer = [[super layoutAttributesForElementsInRect:rect] mutableCopy];
+    
+    for(int i = 1; i < [answer count]; ++i) {
+        UICollectionViewLayoutAttributes *currentLayoutAttributes = answer[i];
+        UICollectionViewLayoutAttributes *prevLayoutAttributes = answer[i - 1];
+        CGFloat maximumSpacing = kXHEmotionMinimumLineSpacing;
+        CGFloat origin = CGRectGetMaxX(prevLayoutAttributes.frame);
+        if(origin + maximumSpacing + currentLayoutAttributes.frame.size.width < self.collectionViewContentSize.width) {
+            if (i == 1 || i == 8 || i == 15) {
+                CGRect frame = currentLayoutAttributes.frame;
+                frame.origin.x = origin + maximumSpacing;
+                currentLayoutAttributes.frame = frame;
+            }
+        }
+    }
+    return answer;
+}
+
+
+//- (UICollectionViewLayoutAttributes *)layoutAttributesForItemAtIndexPath:(NSIndexPath *)indexPath {
+//    
+//    UICollectionViewLayoutAttributes *attr = [super layoutAttributesForItemAtIndexPath:indexPath];
+//    if (indexPath.row == 22) {
+//        CGRect rect =  attr.frame;
+//        attr.frame = CGRectMake(rect.origin.x + kXHEmotionMinimumLineSpacing, rect.origin.y, rect.size.width, rect.size.height);
+//    }
+//    
+//    return attr;
+//}
+
 @end

@@ -82,21 +82,21 @@
     }
     
     NSMutableArray *emotionManagers = [NSMutableArray array];
-    for (NSInteger i = 0; i < 10; i ++) {
-        XHEmotionManager *emotionManager = [[XHEmotionManager alloc] init];
-        emotionManager.emotionName = [NSString stringWithFormat:@"表情%ld", (long)i];
-        NSMutableArray *emotions = [NSMutableArray array];
-        for (NSInteger j = 0; j < 18; j ++) {
-            XHEmotion *emotion = [[XHEmotion alloc] init];
-            NSString *imageName = [NSString stringWithFormat:@"section%ld_emotion%ld", (long)i , (long)j % 16];
-            emotion.emotionPath = [[NSBundle mainBundle] pathForResource:[NSString stringWithFormat:@"emotion%ld.gif", (long)j] ofType:@""];
-            emotion.emotionConverPhoto = [UIImage imageNamed:imageName];
-            [emotions addObject:emotion];
-        }
-        emotionManager.emotions = emotions;
-        
-        [emotionManagers addObject:emotionManager];
+
+    XHEmotionManager *emotionManager = [[XHEmotionManager alloc] init];
+    emotionManager.emotionName = @"系统表情";
+    NSMutableArray *emotions = [NSMutableArray array];
+    for (NSInteger i = 1; i < 92; i ++) {
+        XHEmotion *emotion = [[XHEmotion alloc] init];
+        NSString *imageName = [NSString stringWithFormat:@"%03ld", (long)i];
+        emotion.emotionPath = [[NSBundle mainBundle] pathForResource:[NSString stringWithFormat:@"%03ld@2x.gif", (long)i] ofType:@""];
+        emotion.emotionConverPhoto = [UIImage imageNamed:imageName];
+        [emotions addObject:emotion];
     }
+    emotionManager.emotions = emotions;
+    
+    [emotionManagers addObject:emotionManager];
+    
     
     self.emotionManagers = emotionManagers;
     [self.emotionManagerView reloadData];

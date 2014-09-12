@@ -35,18 +35,16 @@
 - (void)sendMessage:(XHMessage *)message withType:(XHBubbleMessageMediaType)messageType toChatter:(NSString *)chatterId
 {
     if (message) {
-        [self sendMessageQueue:^{
-            NSData *msgData = nil;
-            switch (messageType) {
-                case XHBubbleMessageMediaTypeText:
-                    msgData = [TcpSendPackage createMessagePackageWithMsg:message.text toUser:chatterId msgType:nil];
-                    [[SKIMTcpHelper shareChatTcpHelper] sendMessage:msgData withTimeout:-1 tag:TCP_SEND_COMMAND_ID];
-                    break;
-                    
-                default:
-                    break;
-            }
-        }];
+        NSData *msgData = nil;
+        switch (messageType) {
+            case XHBubbleMessageMediaTypeText:
+                msgData = [TcpSendPackage createMessagePackageWithMsg:message.text toUser:chatterId msgType:@""];
+                [[SKIMTcpHelper shareChatTcpHelper] sendMessage:msgData withTimeout:-1 tag:TCP_SEND_COMMAND_ID];
+                break;
+                
+            default:
+                break;
+        }
     }
 }
 
@@ -75,7 +73,7 @@
             message.messageMediaType = XHBubbleMessageMediaTypeEmotion;
             //TODO
         } else if (!isPictureMatch && !isEmoticonMatch && textContent.length) {
-            message.messageMediaType = XHBubbleMessageMediaTypeMix;
+            message.messageMediaType = XHBubbleMessageMediaTypeText;
             message.text = msgContent;
         }
         
