@@ -7,8 +7,9 @@
 //
 
 #import "XHEmotionSectionBar.h"
+#import "UIImage+ImageWithColour.h"
 
-#define kXHStoreManagerItemWidth 40
+#define kXHStoreManagerItemWidth 60
 
 @interface XHEmotionSectionBar ()
 
@@ -20,6 +21,7 @@
 
 @property (nonatomic, weak) UIScrollView *sectionBarScrollView;
 @property (nonatomic, weak) UIButton *storeManagerItemButton;
+@property (nonatomic, weak) UIButton *sendButton;
 
 @end
 
@@ -36,7 +38,10 @@
 
 - (UIButton *)cratedButton {
     UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
-    button.frame = CGRectMake(0, 0, kXHStoreManagerItemWidth, CGRectGetHeight(self.bounds));
+    button.frame = CGRectMake(90, 0, kXHStoreManagerItemWidth, CGRectGetHeight(self.bounds));
+    [button setBackgroundImage:[UIImage imageWithColor:[UIColor lightGrayColor]] forState:UIControlStateNormal];
+    [button setBackgroundImage:[UIImage imageWithColor:COLOR(229, 229, 233)] forState:UIControlStateHighlighted];
+    [button setBackgroundImage:[UIImage imageWithColor:COLOR(229, 229, 233)] forState:UIControlStateSelected];
     [button addTarget:self action:@selector(sectionButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
     return button;
 }
@@ -52,8 +57,9 @@
         UIButton *sectionButton = [self cratedButton];
         sectionButton.tag = index;
         [sectionButton setTitle:emotionManager.emotionName forState:UIControlStateNormal];
+        [sectionButton setTitleColor:COLOR(0, 97, 194) forState:UIControlStateNormal];
         sectionButton.titleLabel.font = [UIFont systemFontOfSize:14];
-        
+
         CGRect sectionButtonFrame = sectionButton.frame;
         sectionButtonFrame.origin.x = index * (CGRectGetWidth(sectionButtonFrame));
         sectionButton.frame = sectionButtonFrame;
@@ -93,6 +99,17 @@
         [storeManagerItemButton setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
         [self addSubview:storeManagerItemButton];
         _storeManagerItemButton = storeManagerItemButton;
+    }
+    if (!_sendButton) {
+        UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+        button.frame = CGRectMake(CGRectGetWidth(self.bounds) - kXHStoreManagerItemWidth, 0, kXHStoreManagerItemWidth, CGRectGetHeight(self.bounds));
+        [button setBackgroundImage:[UIImage imageWithColor:COLOR(0, 124, 237)] forState:UIControlStateNormal];
+        [button setBackgroundImage:[UIImage imageWithColor:COLOR(124, 186, 243)] forState:UIControlStateHighlighted];
+        button.titleLabel.font = [UIFont systemFontOfSize:14];
+        [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        [button setTitle:@"发送" forState:UIControlStateNormal];
+        [self addSubview:button];
+        _sendButton = button;
     }
 }
 

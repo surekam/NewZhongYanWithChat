@@ -84,7 +84,7 @@
     NSMutableArray *emotionManagers = [NSMutableArray array];
 
     XHEmotionManager *emotionManager = [[XHEmotionManager alloc] init];
-    emotionManager.emotionName = @"系统表情";
+    emotionManager.emotionName = @"经典";
     NSMutableArray *emotions = [NSMutableArray array];
     for (NSInteger i = 1; i < 92; i ++) {
         XHEmotion *emotion = [[XHEmotion alloc] init];

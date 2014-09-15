@@ -564,6 +564,8 @@
 		A3A0D42019AEDC5E0061B373 /* SKIMXMLUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = A3A0D41E19AEDC5E0061B373 /* SKIMXMLUtils.m */; };
 		A3A0D42419AF08FC0061B373 /* SKIMTcpRequestHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = A3A0D42319AF08FC0061B373 /* SKIMTcpRequestHelper.m */; };
 		A3A0D42719AF0E4C0061B373 /* TcpSendPackage.m in Sources */ = {isa = PBXBuildFile; fileRef = A3A0D42619AF0E4C0061B373 /* TcpSendPackage.m */; };
+		A3A66AF919C683710059428F /* face_delete_pressed@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A3A66AF719C683710059428F /* face_delete_pressed@2x.png */; };
+		A3A66AFA19C683710059428F /* face_delete@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A3A66AF819C683710059428F /* face_delete@2x.png */; };
 		A3E629E7198F7E220056C259 /* SKChatConversationCellTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A3E629E6198F7E220056C259 /* SKChatConversationCellTableViewCell.m */; };
 		A3E6CBE319989A7D004D0BE4 /* SKChatConversationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A3E6CBE219989A7D004D0BE4 /* SKChatConversationViewController.m */; };
 		A3E6CBE71998A717004D0BE4 /* SKIMBaseDBModel.m in Sources */ = {isa = PBXBuildFile; fileRef = A3E6CBE61998A717004D0BE4 /* SKIMBaseDBModel.m */; };
@@ -1760,6 +1762,8 @@
 		A3A0D42319AF08FC0061B373 /* SKIMTcpRequestHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SKIMTcpRequestHelper.m; sourceTree = "<group>"; };
 		A3A0D42519AF0E4C0061B373 /* TcpSendPackage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TcpSendPackage.h; sourceTree = "<group>"; };
 		A3A0D42619AF0E4C0061B373 /* TcpSendPackage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TcpSendPackage.m; sourceTree = "<group>"; };
+		A3A66AF719C683710059428F /* face_delete_pressed@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "face_delete_pressed@2x.png"; sourceTree = "<group>"; };
+		A3A66AF819C683710059428F /* face_delete@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "face_delete@2x.png"; sourceTree = "<group>"; };
 		A3E629E5198F7E220056C259 /* SKChatConversationCellTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SKChatConversationCellTableViewCell.h; sourceTree = "<group>"; };
 		A3E629E6198F7E220056C259 /* SKChatConversationCellTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SKChatConversationCellTableViewCell.m; sourceTree = "<group>"; };
 		A3E6CBE119989A7D004D0BE4 /* SKChatConversationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SKChatConversationViewController.h; sourceTree = "<group>"; };
@@ -3457,6 +3461,8 @@
 		A39DC0A919C2CD8B00892F3D /* resources */ = {
 			isa = PBXGroup;
 			children = (
+				A3A66AF719C683710059428F /* face_delete_pressed@2x.png */,
+				A3A66AF819C683710059428F /* face_delete@2x.png */,
 				A39DC0AA19C2CD8B00892F3D /* Face */,
 				A39DC13819C2CD8B00892F3D /* Face_gif */,
 			);
@@ -5520,6 +5526,7 @@
 				A39DC1DD19C2CD8C00892F3D /* 024@2x.png in Resources */,
 				F2258F1C18D2E26D00959601 /* loading@2x.png in Resources */,
 				A39DC25C19C2CD8C00892F3D /* 010@2x.gif in Resources */,
+				A3A66AF919C683710059428F /* face_delete_pressed@2x.png in Resources */,
 				A39DC2DD19C2CD8C00892F3D /* 139@2x.gif in Resources */,
 				A39DC28D19C2CD8C00892F3D /* 059@2x.gif in Resources */,
 				A39DC20819C2CD8C00892F3D /* 067@2x.png in Resources */,
@@ -5547,6 +5554,7 @@
 				F2A250FB18DD2623001317B5 /* back@2x.png in Resources */,
 				F288469B18039938006A5D62 /* pw_input1.png in Resources */,
 				3B05EA8E196FCA8600866FA5 /* placeholderImage@2x.png in Resources */,
+				A3A66AFA19C683710059428F /* face_delete@2x.png in Resources */,
 				3B05EA77196FCA8600866FA5 /* contacts_add_newmessage@2x.png in Resources */,
 				A39DC25919C2CD8C00892F3D /* 007@2x.gif in Resources */,
 				F2B965C718C42420001F227C /* landbar_noshadow@2x.png in Resources */,

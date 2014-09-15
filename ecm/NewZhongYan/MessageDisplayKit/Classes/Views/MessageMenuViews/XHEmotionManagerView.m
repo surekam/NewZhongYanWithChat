@@ -61,6 +61,7 @@
     
     
     [self.emotionCollectionView reloadData];
+    [self.emotionCollectionView setContentOffset:CGPointZero animated:YES];
 }
 
 #pragma mark - Life cycle
@@ -81,7 +82,6 @@
         emotionCollectionView.pagingEnabled = YES;
         emotionCollectionView.delegate = self;
         emotionCollectionView.dataSource = self;
-        emotionCollectionView.backgroundColor = [UIColor brownColor];
         [self addSubview:emotionCollectionView];
         self.emotionCollectionView = emotionCollectionView;
     }
@@ -150,26 +150,50 @@
     //根据当前的坐标与页宽计算当前页码
     NSInteger currentPage = floor((scrollView.contentOffset.x - pageWidth/2)/pageWidth)+1;
     [self.emotionPageControl setCurrentPage:currentPage];
+    
+    CGFloat contentWidth = self.emotionCollectionView.contentSize.width;
+    if (pageWidth * self.emotionPageControl.numberOfPages - contentWidth > pageWidth/2) {
+        self.emotionCollectionView.contentInset = UIEdgeInsetsMake(0, 0, 0, pageWidth * self.emotionPageControl.numberOfPages - contentWidth);
+    }
+    NSLog(@"contentSize=%f,%f", self.emotionCollectionView.contentSize.width, self.emotionCollectionView.contentSize.height);
+    NSLog(@"contentInset=%f,%f,%f,%f", self.emotionCollectionView.contentInset.top, self.emotionCollectionView.contentInset.left, self.emotionCollectionView.contentInset.bottom, self.emotionCollectionView.contentInset.right);
 }
 
 #pragma UICollectionView DataSource
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
-    return 1;
+    return self.emotionPageControl.numberOfPages;
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    XHEmotionManager *emotionManager = [self.dataSource emotionManagerForColumn:self.selectedIndex];
-    NSInteger count = emotionManager.emotions.count;
-    return count;
+    return kXHEmotionPerRowItemCount * 3;
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     XHEmotionCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:kXHEmotionCollectionViewCellIdentifier forIndexPath:indexPath];
-    
     XHEmotionManager *emotionManager = [self.dataSource emotionManagerForColumn:self.selectedIndex];
-    cell.emotion = emotionManager.emotions[indexPath.row];
     
+    NSInteger currentIndex = indexPath.section * kXHEmotionPerRowItemCount * 3 + indexPath.row;
+    NSArray *contentSubViews = [cell.contentView subviews];
+    for (UIView *subView in contentSubViews) {
+        if ([subView isKindOfClass:[UIButton class]]) {
+            [subView removeFromSuperview];
+        }
+    }
+    
+    if (indexPath.row == kXHEmotionPerRowItemCount * 3 - 1) {
+        UIButton *deleteButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        [deleteButton setFrame:CGRectMake(0, 0, kXHEmotionImageViewSize, kXHEmotionImageViewSize)];
+        [deleteButton setBackgroundImage:Image(@"face_delete") forState:UIControlStateNormal];
+        [deleteButton setBackgroundImage:Image(@"face_delete_pressed") forState:UIControlStateSelected];
+        cell.emotion = nil;
+        [cell.contentView addSubview:deleteButton];
+    } else if (currentIndex - indexPath.section > emotionManager.emotions.count - 1) {
+        cell.emotion = nil;
+    } else {
+        cell.emotion = emotionManager.emotions[currentIndex - indexPath.section];
+    }
+
     return cell;
 }
 
@@ -177,8 +201,11 @@
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     if ([self.delegate respondsToSelector:@selector(didSelecteEmotion:atIndexPath:)]) {
-        XHEmotionManager *emotionManager = [self.dataSource emotionManagerForColumn:indexPath.section];
-        [self.delegate didSelecteEmotion:emotionManager.emotions[indexPath.row] atIndexPath:indexPath];
+        XHEmotionManager *emotionManager = [self.dataSource emotionManagerForColumn:self.selectedIndex];
+        NSInteger currentIndex = indexPath.section * kXHEmotionPerRowItemCount * 3 + indexPath.row - indexPath.section;
+        if (currentIndex < emotionManager.emotions.count) {
+            [self.delegate didSelecteEmotion:emotionManager.emotions[currentIndex] atIndexPath:indexPath];
+        }
     }
 }
 
