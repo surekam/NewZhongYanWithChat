@@ -13,6 +13,7 @@
 #import "UIImageView+WebCache.h"
 #import "SEPhotoView.h"
 #import "XHEmotion.h"
+#import "SKIMServiceDefs.h"
 
 #define kMarginTop 8.0f
 #define kMarginBottom 2.0f
@@ -97,12 +98,22 @@
 }
 
 + (CGSize)neededSizeForMixContent:(NSString *)text {
-    NSString *pictureRegexStr = @"/\\{\\{.+/\\}\\}";     // 实际正则应为/\{\{.+/\}\}
-
-    //计算不包含图片的文本宽度
+    NSString *pictureRegexStr = PICTURE_REGX;
+    NSString *emoticonNameRegexStr = EMOTION_NAME_REGX;
     CGSize textSize = CGSizeZero;
+    
+    //计算不包含图片的文本宽度
     NSString *textWithoutPic = [text replace:RX(pictureRegexStr) with:@"\n"];
     textSize = [XHMessageBubbleView neededSizeForText:textWithoutPic];
+    
+    //计算表情高度
+    NSArray *splitText = [textWithoutPic split:RX(@"\\n")];
+    for (NSString *textPart in splitText) {
+        BOOL isEmoticonMatch = [RX(emoticonNameRegexStr) isMatch:textPart];
+        if (isEmoticonMatch) {
+            textSize.height += 10;
+        }
+    }
     
     //计算图片宽度
     NSArray *pictureMatchs = [text matches:RX(pictureRegexStr)];
@@ -301,10 +312,9 @@
             break;
         case XHBubbleMessageMediaTypeMix: {
             NSString *fixContent = [message.text copy];
-            NSString *emoticonRegexStr = @"/.{2}\\\\n";             // 实际正则应为/.{2}\\n
-            NSString *pictureRegexStr = @"/\\{\\{.+/\\}\\}";      // 实际正则应为/\{\{.+/\}\}
+            NSString *emoticonNameRegexStr = EMOTION_NAME_REGX;
+            NSString *pictureRegexStr = PICTURE_REGX;
             
-            NSArray *textWithEmoticon = [message.text split:RX(pictureRegexStr)];
             NSArray *picMatchs = [message.text matchesWithDetails:RX(pictureRegexStr)];
             
             for (RxMatch *picMatch in picMatchs) {
@@ -323,6 +333,19 @@
                 UIImageView *img = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"avator"]];
                 [_displayTextView addObject:img size:[XHMessageBubbleView neededSizeForPhoto:img.image] replaceRange:picMatch.range];
             }
+            
+            NSArray *emoticonMatchs = [fixContent matchesWithDetails:RX(emoticonNameRegexStr)];
+            for (RxMatch *emoticonMatch in emoticonMatchs) {
+                NSUInteger index = [EMOTION_NAME indexOfObject:emoticonMatch.value];
+                if (index != NSNotFound) {
+                    NSData *animatedData = [NSData dataWithContentsOfFile:[[NSBundle mainBundle] pathForResource:[NSString stringWithFormat:@"%03ld@2x.gif", (long)index] ofType:@""]];
+                    FLAnimatedImage *animatedImage = [[FLAnimatedImage alloc] initWithAnimatedGIFData:animatedData];
+                    FLAnimatedImageView *emotionView = [[FLAnimatedImageView alloc] initWithFrame:CGRectZero];
+                    emotionView.animatedImage = animatedImage;
+                    [_displayTextView addObject:emotionView size:CGSizeMake(28, 28) replaceRange:emoticonMatch.range];
+                }
+            }
+            
             break;
         }
         default:
@@ -489,7 +512,7 @@
                                           CGRectGetWidth(bubbleFrame) - kBubblePaddingRight * 2,
                                           bubbleFrame.size.height - kMarginTop - kMarginBottom);
             self.displayTextView.frame = CGRectIntegral(mixFrame);
-            self.displayTextView.backgroundColor = [UIColor blueColor];
+            //self.displayTextView.backgroundColor = [UIColor blueColor];
             
             NSLog(@"-------------------------");
             NSLog(@"bubbleFrame=%f,%f,%f,%f", bubbleFrame.origin.x, bubbleFrame.origin.y, bubbleFrame.size.width, bubbleFrame.size.height);

@@ -27,6 +27,12 @@
 
 @implementation XHEmotionSectionBar
 
+- (void)sendButtonClicked:(UIButton *)sender {
+    if ([self.delegate respondsToSelector:@selector(didEmotionSendButtonClicked)]) {
+        [self.delegate didEmotionSendButtonClicked];
+    }
+}
+
 - (void)sectionButtonClicked:(UIButton *)sender {
     if ([self.delegate respondsToSelector:@selector(didSelecteEmotionManager:atSection:)]) {
         NSInteger section = sender.tag;
@@ -105,9 +111,11 @@
         button.frame = CGRectMake(CGRectGetWidth(self.bounds) - kXHStoreManagerItemWidth, 0, kXHStoreManagerItemWidth, CGRectGetHeight(self.bounds));
         [button setBackgroundImage:[UIImage imageWithColor:COLOR(0, 124, 237)] forState:UIControlStateNormal];
         [button setBackgroundImage:[UIImage imageWithColor:COLOR(124, 186, 243)] forState:UIControlStateHighlighted];
+        [button setBackgroundImage:[UIImage imageWithColor:COLOR(124, 186, 243)] forState:UIControlStateSelected];
         button.titleLabel.font = [UIFont systemFontOfSize:14];
         [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         [button setTitle:@"发送" forState:UIControlStateNormal];
+        [button addTarget:self action:@selector(sendButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:button];
         _sendButton = button;
     }

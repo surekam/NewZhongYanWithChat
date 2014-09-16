@@ -12,6 +12,7 @@
 #import "SKIMSocketConfig.h"
 #import "SKIMXMLConstants.h"
 #import "RegExCategories.h"
+#import "SKIMServiceDefs.h"
 
 @implementation SKIMMessageDataManager
 
@@ -51,9 +52,9 @@
 - (void)addMessage:(NSDictionary *)messageDic
 {
     if (_delegate && messageDic) {
-        NSString *emoticonRegexStr = @"/.{2}\\\\n";             // 实际正则应为/.{2}\\n
-        NSString *pictureRegexStr = @"/\\{\\{.+/\\}\\}";      // 实际正则应为/\{\{.+/\}\}
-        NSString *fontRegexStr = @"/\\[\\[.+\\]\\]";            // 实际正则应为/\[\[.+\]\]
+        NSString *emoticonRegexStr = EMOTION_REGX;
+        NSString *pictureRegexStr = PICTURE_REGX;
+        NSString *fontRegexStr = FONT_REGX;
         
         NSString *msgContent = [messageDic objectForKey:IM_XML_BODY_SENDGMSG_CONTENT_ATTR];
         msgContent = [msgContent replace:RX(fontRegexStr) with:@""];
@@ -61,6 +62,14 @@
         BOOL isEmoticonMatch = [RX(emoticonRegexStr) isMatch:msgContent];
         BOOL isPictureMatch = [RX(pictureRegexStr) isMatch:msgContent];
         NSString *textContent = [[msgContent replace:RX(emoticonRegexStr) with:@""] replace:RX(pictureRegexStr) with:@""];
+        
+        NSArray *emotionMatchs = [msgContent matchesWithDetails:RX(EMOTION_REGX)];
+        for (RxMatch *emotionMatch in emotionMatchs) {
+            NSUInteger index = [EMOTION_ID indexOfObject:emotionMatch.value];
+            if (index != NSNotFound) {
+                msgContent = [msgContent stringByReplacingOccurrencesOfString:emotionMatch.value withString:EMOTION_NAME[index]];
+            }
+        }
         
         XHMessage *message = [[XHMessage alloc] init];
         if ((isEmoticonMatch || isPictureMatch) && textContent.length) {

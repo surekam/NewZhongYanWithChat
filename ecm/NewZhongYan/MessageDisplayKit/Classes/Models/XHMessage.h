@@ -49,6 +49,10 @@
 @property (nonatomic, assign) XHBubbleMessageType bubbleMessageType;
 
 
+- (instancetype)initWithMixContent:(NSString *)text
+                            sender:(NSString *)sender
+                         timestamp:(NSDate *)timestamp;
+
 /**
  *  初始化文本消息
  *

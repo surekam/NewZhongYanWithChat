@@ -8,6 +8,7 @@
 
 #import "XHMessageTableViewController.h"
 #import <MobileCoreServices/MobileCoreServices.h>
+#import "SKIMServiceDefs.h"
 
 @interface XHMessageTableViewController ()
 
@@ -387,6 +388,7 @@ static CGPoint  delayOffset = {0.0};
 
 - (void)finishSendMessageWithBubbleMessageType:(XHBubbleMessageMediaType)mediaType {
     switch (mediaType) {
+        case XHBubbleMessageMediaTypeMix:
         case XHBubbleMessageMediaTypeText: {
             [self.messageInputView.inputTextView setText:nil];
             if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7.0) {
@@ -989,6 +991,13 @@ static CGPoint  delayOffset = {0.0};
     }
 }
 
+- (void)didSendMixContentAction:(NSString *)text {
+    DLog(@"MixContent : %@", text);
+    if ([self.delegate respondsToSelector:@selector(didSendMixContent:fromSender:onDate:)]) {
+        [self.delegate didSendMixContent:text fromSender:self.messageSender onDate:[NSDate date]];
+    }
+}
+
 - (void)didSendTextAction:(NSString *)text {
     DLog(@"text : %@", text);
     if ([self.delegate respondsToSelector:@selector(didSendText:fromSender:onDate:)]) {
@@ -1096,8 +1105,13 @@ static CGPoint  delayOffset = {0.0};
 
 - (void)didSelecteEmotion:(XHEmotion *)emotion atIndexPath:(NSIndexPath *)indexPath {
     if (emotion.emotionPath) {
+        self.messageInputView.inputTextView.text = [self.messageInputView.inputTextView.text stringByAppendingString:emotion.emotionName];
         [self didSendEmotionMessageWithEmotionPath:emotion.emotionPath];
     }
+}
+
+- (void)didSendEmotion {
+    [self didSendTextAction:self.messageInputView.inputTextView.text];
 }
 
 #pragma mark - XHEmotionManagerView DataSource

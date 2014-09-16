@@ -142,6 +142,12 @@
     [self reloadData];
 }
 
+- (void)didEmotionSendButtonClicked {
+    if ([self.delegate respondsToSelector:@selector(didSendEmotion)]) {
+        [self.delegate didSendEmotion];
+    }
+}
+
 #pragma mark - UIScrollView delegate
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {

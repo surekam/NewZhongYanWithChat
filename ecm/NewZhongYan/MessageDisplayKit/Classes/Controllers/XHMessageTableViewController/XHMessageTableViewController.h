@@ -35,6 +35,9 @@
 @protocol XHMessageTableViewControllerDelegate <NSObject>
 
 @optional
+
+- (void)didSendMixContent:(NSString *)text fromSender:(NSString *)sender onDate:(NSDate *)date;
+
 /**
  *  发送文本消息的回调方法
  *

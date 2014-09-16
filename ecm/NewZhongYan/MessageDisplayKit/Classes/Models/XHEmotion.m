@@ -13,6 +13,8 @@
 - (void)dealloc {
     self.emotionConverPhoto = nil;
     self.emotionPath = nil;
+    self.emotionName = nil;
+    self.emotionId = nil;
 }
 
 @end

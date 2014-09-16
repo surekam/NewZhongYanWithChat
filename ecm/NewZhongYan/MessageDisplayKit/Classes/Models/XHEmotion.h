@@ -23,4 +23,8 @@
  */
 @property (nonatomic, copy) NSString *emotionPath;
 
+@property (nonatomic, copy) NSString *emotionName;
+
+@property (nonatomic, copy) NSString *emotionId;
+
 @end

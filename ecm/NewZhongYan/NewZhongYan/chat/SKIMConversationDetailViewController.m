@@ -14,6 +14,8 @@
 #import "XHAudioPlayerHelper.h"
 #import "SKIMUser.h"
 #import "SKIMMessageDataManager.h"
+#import "SKIMServiceDefs.h"
+#import "RegExCategories.h"
 
 @interface SKIMConversationDetailViewController () <XHAudioPlayerHelperDelegate, SKIMMessageDataManagerDelegate>
 
@@ -86,10 +88,12 @@
     XHEmotionManager *emotionManager = [[XHEmotionManager alloc] init];
     emotionManager.emotionName = @"经典";
     NSMutableArray *emotions = [NSMutableArray array];
-    for (NSInteger i = 1; i < 92; i ++) {
+    for (NSInteger i = 0; i < 91; i ++) {
         XHEmotion *emotion = [[XHEmotion alloc] init];
         NSString *imageName = [NSString stringWithFormat:@"%03ld", (long)i];
         emotion.emotionPath = [[NSBundle mainBundle] pathForResource:[NSString stringWithFormat:@"%03ld@2x.gif", (long)i] ofType:@""];
+        emotion.emotionId = EMOTION_ID[i];
+        emotion.emotionName = EMOTION_NAME[i];
         emotion.emotionConverPhoto = [UIImage imageNamed:imageName];
         [emotions addObject:emotion];
     }
@@ -221,6 +225,16 @@
     self.currentSelectedCell = nil;
 }
 
+#pragma mark - XHEmotionManagerView Delegate
+
+- (void)didSendEmotion {
+    NSString *text = [self.messageInputView.inputTextView.text copy];
+    if (text.length) {
+        [self didSendMixContentAction:text];
+    }
+}
+
+
 #pragma mark - XHEmotionManagerView DataSource
 
 - (NSInteger)numberOfEmotionManagers {
@@ -255,6 +269,15 @@
             });
         });
     }
+}
+
+- (void)didSendMixContent:(NSString *)text fromSender:(NSString *)sender onDate:(NSDate *)date {
+    XHMessage *mixMessage = [[XHMessage alloc] initWithMixContent:text sender:sender timestamp:date];
+    mixMessage.avator = [UIImage imageNamed:@"avator"];
+    mixMessage.avatorUrl = [SKIMUser currentUser].avatarUri;
+    [self addMessage:mixMessage];
+    [self finishSendMessageWithBubbleMessageType:XHBubbleMessageMediaTypeMix];
+    [[SKIMMessageDataManager sharedMessageDataManager] sendMessage:mixMessage withType:XHBubbleMessageMediaTypeText toChatter:self.conversation.chatterId];
 }
 
 /**

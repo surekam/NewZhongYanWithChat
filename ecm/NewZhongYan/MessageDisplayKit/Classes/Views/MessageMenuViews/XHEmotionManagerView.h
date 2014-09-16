@@ -25,6 +25,8 @@
  */
 - (void)didSelecteEmotion:(XHEmotion *)emotion atIndexPath:(NSIndexPath *)indexPath;
 
+- (void)didSendEmotion;
+
 @end
 
 @protocol XHEmotionManagerViewDataSource <NSObject>

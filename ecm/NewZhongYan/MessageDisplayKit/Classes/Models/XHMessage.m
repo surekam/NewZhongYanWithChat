@@ -10,6 +10,21 @@
 
 @implementation XHMessage
 
+- (instancetype)initWithMixContent:(NSString *)text
+                            sender:(NSString *)sender
+                         timestamp:(NSDate *)timestamp {
+    self = [super init];
+    if (self) {
+        self.text = text;
+        
+        self.sender = sender;
+        self.timestamp = timestamp;
+        
+        self.messageMediaType = XHBubbleMessageMediaTypeMix;
+    }
+    return self;
+}
+
 - (instancetype)initWithText:(NSString *)text
                       sender:(NSString *)sender
                         timestamp:(NSDate *)timestamp {
