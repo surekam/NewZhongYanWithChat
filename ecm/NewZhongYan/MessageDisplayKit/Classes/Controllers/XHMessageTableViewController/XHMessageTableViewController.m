@@ -1106,7 +1106,7 @@ static CGPoint  delayOffset = {0.0};
 - (void)didSelecteEmotion:(XHEmotion *)emotion atIndexPath:(NSIndexPath *)indexPath {
     if (emotion.emotionPath) {
         self.messageInputView.inputTextView.text = [self.messageInputView.inputTextView.text stringByAppendingString:emotion.emotionName];
-        [self didSendEmotionMessageWithEmotionPath:emotion.emotionPath];
+        //[self didSendEmotionMessageWithEmotionPath:emotion.emotionPath];
     }
 }
 

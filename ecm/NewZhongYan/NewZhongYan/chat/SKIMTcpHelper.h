@@ -26,6 +26,9 @@
 
 + (SKIMTcpHelper *)shareChatTcpHelper;
 
+//是否连接
+- (BOOL)isConnected;
+
 //连接服务器
 - (BOOL)connectToHost;
 

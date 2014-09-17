@@ -163,6 +163,8 @@
  */
 @property (nonatomic, copy) NSString *messageSender;
 
+@property (nonatomic, copy) NSString *messageSenderName;
+
 /**
  *  用于显示消息的TableView
  */

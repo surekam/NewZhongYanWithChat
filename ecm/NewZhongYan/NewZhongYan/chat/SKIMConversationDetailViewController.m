@@ -72,7 +72,8 @@
     }
     
     // 设置自身用户名
-    self.messageSender = [SKIMUser currentUser].cname;
+    self.messageSender = [SKIMUser currentUser].rid;
+    self.messageSenderName = [SKIMUser currentUser].cname;
     
     // 添加第三方接入数据
     NSMutableArray *shareMenuItems = [NSMutableArray array];
@@ -215,6 +216,32 @@
     NSLog(@"!!!!!!");
 }
 
+#pragma mark - XHMessageInputView Delegate
+
+- (void)didKeybordDeleteButtonClicked {
+    self.messageInputView.inputTextView.text = [self deleteTextAtInputTextViewWithText:self.messageInputView.inputTextView.text];
+}
+
+- (NSString *)deleteTextAtInputTextViewWithText:(NSString *)textOrigin {
+    NSString *text = [textOrigin copy];
+    if (text.length) {
+        NSMutableArray *emotionMatchs = [[text matchesWithDetails:RX(EMOTION_NAME_REGX)] copy];
+        for (RxMatch *emotionMatch in emotionMatchs) {
+            BOOL isInclude = [EMOTION_NAME containsObject:emotionMatch.value];
+            if (!isInclude) {
+                [emotionMatchs removeObject:emotionMatch];
+            }
+        }
+        RxMatch *lastMatch = [emotionMatchs lastObject];
+        if (lastMatch.range.location + lastMatch.range.length == text.length) {
+            text = [text substringToIndex:lastMatch.range.location];
+        } else {
+            text = [text substringToIndex:text.length - 1];
+        }
+    }
+    return text;
+}
+
 #pragma mark - XHAudioPlayerHelper Delegate
 
 - (void)didAudioPlayerStopPlay:(AVAudioPlayer *)audioPlayer {
@@ -228,10 +255,14 @@
 #pragma mark - XHEmotionManagerView Delegate
 
 - (void)didSendEmotion {
-    NSString *text = [self.messageInputView.inputTextView.text copy];
+    NSString *text = self.messageInputView.inputTextView.text;
     if (text.length) {
         [self didSendMixContentAction:text];
     }
+}
+
+- (void)didDeleteEmotionButtonClicked {
+    self.messageInputView.inputTextView.text = [self deleteTextAtInputTextViewWithText:self.messageInputView.inputTextView.text];
 }
 
 
@@ -275,9 +306,12 @@
     XHMessage *mixMessage = [[XHMessage alloc] initWithMixContent:text sender:sender timestamp:date];
     mixMessage.avator = [UIImage imageNamed:@"avator"];
     mixMessage.avatorUrl = [SKIMUser currentUser].avatarUri;
+    mixMessage.receiver = self.conversation.chatterId;
+    mixMessage.isGroup = self.conversation.isGroup;
+    mixMessage.messageMediaType = XHBubbleMessageMediaTypeMix;
     [self addMessage:mixMessage];
     [self finishSendMessageWithBubbleMessageType:XHBubbleMessageMediaTypeMix];
-    [[SKIMMessageDataManager sharedMessageDataManager] sendMessage:mixMessage withType:XHBubbleMessageMediaTypeText toChatter:self.conversation.chatterId];
+    [[SKIMMessageDataManager sharedMessageDataManager] sendAndSaveMessage:mixMessage];
 }
 
 /**
@@ -291,9 +325,12 @@
     XHMessage *textMessage = [[XHMessage alloc] initWithText:text sender:sender timestamp:date];
     textMessage.avator = [UIImage imageNamed:@"avator"];
     textMessage.avatorUrl = [SKIMUser currentUser].avatarUri;
+    textMessage.receiver = self.conversation.chatterId;
+    textMessage.isGroup = self.conversation.isGroup;
+    textMessage.messageMediaType = XHBubbleMessageMediaTypeText;
     [self addMessage:textMessage];
     [self finishSendMessageWithBubbleMessageType:XHBubbleMessageMediaTypeText];
-    [[SKIMMessageDataManager sharedMessageDataManager] sendMessage:textMessage withType:XHBubbleMessageMediaTypeText toChatter:self.conversation.chatterId];
+    [[SKIMMessageDataManager sharedMessageDataManager] sendAndSaveMessage:textMessage];
 }
 
 /**

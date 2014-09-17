@@ -27,6 +27,13 @@ SKIMTcpHelper *TcpHelperSINGLE;
     return TcpHelperSINGLE;
 }
 
+- (BOOL)isConnected {
+    if (_serverSocket == nil) {
+        return NO;
+    }
+    return [_serverSocket isConnected];
+}
+
 - (BOOL)connectToHost {
     if (allData != nil) {
         allData = nil;
@@ -189,8 +196,8 @@ SKIMTcpHelper *TcpHelperSINGLE;
                 NSLog(@"%d",allData.length);
                 [self getComplateDataToArray:arr];
             }
-            NSLog(@"judgeData = %@",packageData);
-            NSLog(@"allData = %@",allData);
+//            NSLog(@"judgeData = %@",packageData);
+//            NSLog(@"allData = %@",allData);
         }
     }else{
         return;

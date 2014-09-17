@@ -27,6 +27,8 @@
 
 - (void)didSendEmotion;
 
+- (void)didDeleteEmotionButtonClicked;
+
 @end
 
 @protocol XHEmotionManagerViewDataSource <NSObject>

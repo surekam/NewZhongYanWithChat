@@ -143,7 +143,7 @@
     return sortedArray;
 }
 
-//根据聊天对象id获取conversation,若不存在，则创建一个新的返回,并未存储至数据库。
+//根据聊天对象id获取conversation,若不存在，则创建一个新的返回,但未启用。
 + (SKIMConversation *)getConversationWithChatterId:(NSString *)chatterId isGroup:(BOOL)isGroup
 {
     if (chatterId == nil || chatterId.length == 0) {

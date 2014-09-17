@@ -64,6 +64,13 @@
     [self.emotionCollectionView setContentOffset:CGPointZero animated:YES];
 }
 
+- (void)deleteEmotionButtonClicked:(UIButton *)sender {
+    if ([self.delegate respondsToSelector:@selector(didDeleteEmotionButtonClicked)]) {
+        [self.delegate didDeleteEmotionButtonClicked];
+    }
+}
+
+
 #pragma mark - Life cycle
 
 - (void)setup {
@@ -192,6 +199,7 @@
         [deleteButton setFrame:CGRectMake(0, 0, kXHEmotionImageViewSize, kXHEmotionImageViewSize)];
         [deleteButton setBackgroundImage:Image(@"face_delete") forState:UIControlStateNormal];
         [deleteButton setBackgroundImage:Image(@"face_delete_pressed") forState:UIControlStateSelected];
+        [deleteButton addTarget:self action:@selector(deleteEmotionButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
         cell.emotion = nil;
         [cell.contentView addSubview:deleteButton];
     } else if (currentIndex - indexPath.section > emotionManager.emotions.count - 1) {

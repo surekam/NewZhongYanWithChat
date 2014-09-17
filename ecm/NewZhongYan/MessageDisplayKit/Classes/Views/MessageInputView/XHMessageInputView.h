@@ -45,6 +45,8 @@ typedef NS_ENUM(NSInteger, XHMessageInputViewStyle) {
 
 - (void)didSendMixContentAction:(NSString *)text;
 
+- (void)didKeybordDeleteButtonClicked;
+
 /**
  *  发送文本消息，包括系统的表情
  *

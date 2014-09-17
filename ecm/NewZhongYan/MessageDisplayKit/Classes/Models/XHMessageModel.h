@@ -16,7 +16,9 @@
 
 @required
 - (NSString *)rid;
+- (NSString *)msgId;
 - (BOOL) isGroup;
+- (NSString *)receiver;
 - (NSString *)text;
 
 - (UIImage *)photo;
@@ -47,7 +49,7 @@
 @optional
 
 - (NSString *)sender;
-
+- (NSString *)senderName;
 - (NSDate *)timestamp;
 
 @end

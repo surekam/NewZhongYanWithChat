@@ -33,10 +33,12 @@
                                 SENDERID            TEXT,                           \
                                 RECEIVERID          TEXT,                           \
                                 ISGROUP             INTEGER,                        \
-                                GROUPSENDERID       TEXT,                           \
+                                GROUPID             TEXT,                           \
                                 ISREAD              INTEGER,                        \
                                 ISACKED             INTEGER,                        \
                                 DELIVERYSTATE       INTEGER,                        \
+                                MSGTYPE             INTEGER,                        \
+                                MSGSENDTYPE         INTEGER,                        \
                                 MSGBODY             TEXT,                           \
                                 SENDTIME            INTEGER                         \
                                 )";

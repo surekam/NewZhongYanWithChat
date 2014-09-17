@@ -13,7 +13,9 @@
 @interface XHMessage : NSObject <XHMessageModel, NSCoding, NSCopying>
 
 @property (nonatomic, copy) NSString *rid;
+@property (nonatomic, copy) NSString *msgId;
 @property (nonatomic, assign) BOOL isGroup;
+@property (nonatomic, copy) NSString *receiver;
 
 @property (nonatomic, copy) NSString *text;
 
@@ -39,6 +41,7 @@
 @property (nonatomic, copy) NSString *avatorUrl;
 
 @property (nonatomic, copy) NSString *sender;
+@property (nonatomic, copy) NSString *senderName;
 
 @property (nonatomic, strong) NSDate *timestamp;
 

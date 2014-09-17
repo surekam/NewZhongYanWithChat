@@ -21,7 +21,7 @@
 
 + (SKIMMessageDataManager *)sharedMessageDataManager;
 
-- (void)sendMessage:(XHMessage *)message withType:(XHBubbleMessageMediaType)messageType toChatter:(NSString *)chatterId;
+- (void)sendAndSaveMessage:(XHMessage *)message;
 
 - (void)addMessage:(NSDictionary *)messageDic;
 

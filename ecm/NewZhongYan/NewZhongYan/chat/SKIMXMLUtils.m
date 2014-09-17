@@ -79,7 +79,7 @@ SKIMXMLUtils *SharedInstance;
     [rootElement addChild:bodyElement];
     
     GDataXMLDocument *loginXml = [[GDataXMLDocument alloc] initWithRootElement:rootElement];
-    
+    [loginXml setCharacterEncoding:XML_ENCODING];
     return loginXml;
 }
 
@@ -112,6 +112,7 @@ SKIMXMLUtils *SharedInstance;
     [rootElement addChild:bodyElement];
     
     GDataXMLDocument *sendMsgXml = [[GDataXMLDocument alloc] initWithRootElement:rootElement];
+    [sendMsgXml setCharacterEncoding:XML_ENCODING];
     
     return sendMsgXml;
 }
@@ -143,6 +144,7 @@ SKIMXMLUtils *SharedInstance;
     [rootElement addChild:bodyElement];
     
     GDataXMLDocument *sendGMsgXml = [[GDataXMLDocument alloc] initWithRootElement:rootElement];
+    [sendGMsgXml setCharacterEncoding:XML_ENCODING];
     
     return sendGMsgXml;
 }

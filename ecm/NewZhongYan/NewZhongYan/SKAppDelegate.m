@@ -100,7 +100,9 @@ NSUInteger DeviceSystemMajorVersion() {
  */
 -(void)imLogin
 {
-    [[SKIMTcpHelper shareChatTcpHelper] connectToHost];
+    if (_networkstatus != NotReachable) {
+        [[SKIMTcpHelper shareChatTcpHelper] connectToHost];
+    }
 }
 
 /**
@@ -119,7 +121,6 @@ NSUInteger DeviceSystemMajorVersion() {
     if (!self.logonManager) {
         self.logonManager = [APPUtils AppLogonManager];
     }
-    [self imLogin];
 }
 
 - (void)updateInterfaceWithReachability:(Reachability *)reachability
@@ -151,6 +152,7 @@ NSUInteger DeviceSystemMajorVersion() {
         NSString *connectionRequiredFormatString = NSLocalizedString(@"%@, Connection Required", @"Concatenation of status string with connection requirement");
         statusString= [NSString stringWithFormat:connectionRequiredFormatString, statusString];
     }
+    [self imLogin];
 }
 
 - (void) reachabilityChanged:(NSNotification *)note

@@ -9,6 +9,8 @@
 #ifndef NewZhongYan_SKIMXMLConstants_h
 #define NewZhongYan_SKIMXMLConstants_h
 
+#define     XML_ENCODING                                    @"GB18030"
+
 #define     IM_XML_ROOT_NODE_NAME                           @"R"
 
 #define     IM_XML_HEAD_NODE_NAME                           @"H"

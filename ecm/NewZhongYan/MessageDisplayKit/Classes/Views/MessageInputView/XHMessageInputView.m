@@ -10,6 +10,8 @@
 
 #import "NSString+MessageInputView.h"
 #import "XHMacro.h"
+#import "SKIMServiceDefs.h"
+#import "RegExCategories.h"
 
 #define kXHTouchToRecord         @"按住 说话"
 #define kXHTouchToFinish         @"松开 结束"
@@ -465,10 +467,22 @@
 
 - (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text {
     if ([text isEqualToString:@"\n"]) {
-        if ([self.delegate respondsToSelector:@selector(didSendTextAction:)]) {
-            [self.delegate didSendTextAction:textView.text];
+        BOOL isContainEmotion = [textView.text isMatch:RX(EMOTION_NAME_REGX)];
+        if (isContainEmotion) {
+            if ([self.delegate respondsToSelector:@selector(didSendMixContentAction:)]) {
+                [self.delegate didSendMixContentAction:textView.text];
+            }
+        } else {
+            if ([self.delegate respondsToSelector:@selector(didSendTextAction:)]) {
+                [self.delegate didSendTextAction:textView.text];
+            }
         }
         return NO;
+    } else if (text.length == 0) {
+        if ([self.delegate respondsToSelector:@selector(didKeybordDeleteButtonClicked)]) {
+            [self.delegate didKeybordDeleteButtonClicked];
+            return NO;
+        }
     }
     return YES;
 }

@@ -37,8 +37,8 @@
                 [SKIMStatus sharedStatus].isLogin = YES;
                 [SKIMStatus sharedStatus].sessionId = [bodyDic objectForKey:IM_XML_BODY_SESSIONID_ATTR];
                 
-                NSData *testMsg = [TcpSendPackage createMessagePackageWithMsg:@"Hello!" toUser:@"p_ljf" msgType:@""];
-                [[SKIMTcpHelper shareChatTcpHelper] sendMessage:testMsg withTimeout:-1 tag:TCP_SEND_COMMAND_ID];
+//                NSData *testMsg = [TcpSendPackage createMessagePackageWithMsg:@"Hello!" toUser:@"p_ljf" msgType:@""];
+//                [[SKIMTcpHelper shareChatTcpHelper] sendMessage:testMsg withTimeout:-1 tag:TCP_SEND_COMMAND_ID];
             }
      
         } else if ([businessCode isEqualToString:BUSINESS_SERVER_SENDMSG]) {
