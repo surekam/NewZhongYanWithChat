@@ -36,26 +36,21 @@
     for (NSDictionary *dic in modelArray) {
         XHMessage *msg = [[XHMessage alloc] init];
         msg.rid = [dic objectForKey:@"RID"];
-        msg.timestamp = [NSDate dateWithTimeIntervalSince1970:[[dic objectForKey:@"SENDTIME"] doubleValue]/1000];
-        msg.isGroup = [[dic objectForKey:@"ISGROUP"] intValue];
-        
-        
-        if ([[SKIMUser currentUser].rid isEqualToString:[dic objectForKey:@"SENDERID"]]) {
-            msg.bubbleMessageType = XHBubbleMessageTypeSending;
-            msg.avatorUrl = [SKIMUser getUserFromUid:[dic objectForKey:@"SENDERID"]].avatarUri;
-        } else if (msg.isGroup) {
-            msg.bubbleMessageType = XHBubbleMessageTypeReceiving;
-            msg.avatorUrl = [SKIMUser getUserFromUid:[dic objectForKey:@"GROUPSENDERID"]].avatarUri;
-        } else {
-            msg.bubbleMessageType = XHBubbleMessageTypeReceiving;
-            msg.avatorUrl = [SKIMUser getUserFromUid:[dic objectForKey:@"RECEIVERID"]].avatarUri;
-        }
-        msg.avator = [UIImage imageNamed:@"avator"];
-        msg.messageMediaType = XHBubbleMessageMediaTypeText;
+        msg.msgId = [dic objectForKey:@"MSGID"];
+        msg.sender = [dic objectForKey:@"SENDERID"];
+        msg.receiver = [dic objectForKey:@"RECEIVERID"];
+        msg.isGroup = [[dic objectForKey:@"ISGROUP"] boolValue];
+        msg.groupId = [dic objectForKey:@"GROUPID"];
+        msg.isRead = [[dic objectForKey:@"ISREAD"] boolValue];
+        msg.isAcked = [[dic objectForKey:@"ISACKED"] boolValue];
+        msg.deliveryState = [dic objectForKey:@"DELIVERYSTATE"];
+        msg.messageMediaType = (XHBubbleMessageMediaType)[[dic objectForKey:@"MSGTYPE"] integerValue];
+        msg.bubbleMessageType = (XHBubbleMessageType)[[dic objectForKey:@"MSGSENDTYPE"] integerValue];
         msg.text = [dic objectForKey:@"MSGBODY"];
+        msg.timestamp = [DateUtils stringToDate:[dic objectForKey:@"SENDTIME"] DateFormat:@"yyyy-MM-dd HH:mm:ss"] ;
+        msg.avatorUrl = [SKIMUser getUserFromUid:[dic objectForKey:@"SENDERID"]].avatarUri;
+        msg.avator = [UIImage imageNamed:@"avator"];
         
-        
-        //TODO: 完善消息实体赋值
         [msgArray addObject:msg];
     }
     return msgArray;

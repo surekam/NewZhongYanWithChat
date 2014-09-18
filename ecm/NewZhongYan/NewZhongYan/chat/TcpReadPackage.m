@@ -33,18 +33,23 @@
         if ([businessCode isEqualToString:BUSINESS_SERVER_MLOGINRET]) {
             bodyDic = [[SKIMXMLUtils sharedXMLUtils] getLoginBody:xml];
             NSString *resultCode = [bodyDic objectForKey:IM_XML_BODY_RESULTCODE_ATTR];
-            if ([resultCode isEqualToString:LOGIN_SUCCESS]) {
+            if ([resultCode isEqualToString:RETURN_CODE_SUCCESS]) {
                 [SKIMStatus sharedStatus].isLogin = YES;
                 [SKIMStatus sharedStatus].sessionId = [bodyDic objectForKey:IM_XML_BODY_SESSIONID_ATTR];
-                
-//                NSData *testMsg = [TcpSendPackage createMessagePackageWithMsg:@"Hello!" toUser:@"p_ljf" msgType:@""];
-//                [[SKIMTcpHelper shareChatTcpHelper] sendMessage:testMsg withTimeout:-1 tag:TCP_SEND_COMMAND_ID];
             }
      
         } else if ([businessCode isEqualToString:BUSINESS_SERVER_SENDMSG]) {
             bodyDic = [[SKIMXMLUtils sharedXMLUtils] getServerSendMsgBody:xml];
-            [[SKIMMessageDataManager sharedMessageDataManager] addMessage:bodyDic];
+            [bodyDic setValue:[headInfos objectForKey:IM_XML_HEAD_USERID_ATTR] forKey:IM_XML_HEAD_USERID_ATTR];
+            [[SKIMMessageDataManager sharedMessageDataManager] receiveAndSaveMessage:bodyDic];
             NSLog(@"%@\n,%@", headInfos, bodyDic);
+            
+        } else if ([businessCode isEqualToString:BUSINESS_SERVER_MSENDMSGRET]) {
+            bodyDic = [[SKIMXMLUtils sharedXMLUtils] getServerSendMsgRetBody:xml];
+            [bodyDic setValue:[headInfos objectForKey:IM_XML_HEAD_INDEX_ATTR] forKey:IM_XML_HEAD_INDEX_ATTR];
+            [[SKIMMessageDataManager sharedMessageDataManager] receiveSendMessageRet:bodyDic];
+            NSLog(@"%@\n,%@", headInfos, bodyDic);
+            
         } else if ([businessCode isEqualToString:BUSINESS_SERVER_RELOGIN]) {
             NSLog(@"用户已在其它地方重新登录");
         }

@@ -25,6 +25,7 @@
                                     )";
     
     // IM_MESSAGE 表
+    // DELIVERYSTATE
     NSString *im_message = IM_MESSAGE;
     NSString *im_message_sql = @"create table IM_MESSAGE(                           \
                                 RID                 INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,   \
@@ -40,7 +41,7 @@
                                 MSGTYPE             INTEGER,                        \
                                 MSGSENDTYPE         INTEGER,                        \
                                 MSGBODY             TEXT,                           \
-                                SENDTIME            INTEGER                         \
+                                SENDTIME            DATETIME                        \
                                 )";
     
     // IM_USER 表

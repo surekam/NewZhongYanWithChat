@@ -28,6 +28,10 @@
     return self;
 }
 
+- (void)viewWillAppear:(BOOL)animated {
+    [self loadDataSource];
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];

@@ -16,7 +16,7 @@
 //登录包
 + (NSData *)createLoginPackage;
 
-+ (NSData *)createMessagePackageWithMsg:(NSString *)message toUser:(NSString*)toUser msgType:(NSString *)msgType;
++ (NSData *)createMessagePackageWithMsg:(NSString *)message toUser:(NSString*)toUser msgType:(NSString *)msgType bySendIndex:(NSString **)sendIndex;
 
 //注销包
 + (id)createLogoutPackage;

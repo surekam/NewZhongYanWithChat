@@ -192,6 +192,15 @@ SKIMXMLUtils *SharedInstance;
     return bodyDic;
 }
 
+- (NSDictionary *)getServerSendMsgRetBody:(GDataXMLDocument *)xml
+{
+    NSMutableDictionary *bodyDic = [NSMutableDictionary dictionary];
+    if (xml) {
+        [bodyDic setDictionary:[self getBodySParam:xml]];
+    }
+    return bodyDic;
+}
+
 - (NSDictionary *)getBodySParam:(GDataXMLDocument *)xml
 {
     NSMutableDictionary *bodySParamDic = [NSMutableDictionary dictionary];

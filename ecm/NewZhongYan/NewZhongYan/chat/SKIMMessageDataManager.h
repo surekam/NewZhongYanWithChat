@@ -23,6 +23,8 @@
 
 - (void)sendAndSaveMessage:(XHMessage *)message;
 
-- (void)addMessage:(NSDictionary *)messageDic;
+- (void)receiveAndSaveMessage:(NSDictionary *)messageDic;
+
+- (void)receiveSendMessageRet:(NSDictionary *)messageRetDic;
 
 @end

@@ -65,6 +65,10 @@
 
 #define     IM_XML_BODY_SENDMSG_CONTENT_ATTR                @"CONTENT"
 
+#define     IM_XML_BODY_SENDMSG_MESSAGEID_ATTR              @"MESSAGEID"
+
+#define     IM_XML_BODY_SENDMSG_SENDDATE_ATTR               @"SENDDATE"
+
 
 #define     IM_XML_HEAD_BUSINESS_SENDGMSG_VALUE             @"MSendGMsg"
 
@@ -88,7 +92,11 @@
 //服务端发送消息
 #define     BUSINESS_SERVER_SENDMSG                         @"SendMsg"
 
-#define     LOGIN_SUCCESS                                   @"0"
+//手机发送个人消息后服务端返回
+#define     BUSINESS_SERVER_MSENDMSGRET                     @"MSendMsgRet"
+
+
+#define     RETURN_CODE_SUCCESS                             @"0"
 
 /******************************** 返回业务码 **********************************/
 

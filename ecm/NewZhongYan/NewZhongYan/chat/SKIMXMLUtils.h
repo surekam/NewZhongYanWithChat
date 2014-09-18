@@ -24,6 +24,7 @@
 - (GDataXMLDocument *)buildSendMsgXML:(NSMutableDictionary *)params;
 
 //4.解析发送消息之后返回的xml
+- (NSDictionary *)getServerSendMsgRetBody:(GDataXMLDocument *)xml;
 
 //5.构造发送群消息的xml
 - (GDataXMLDocument *)buildSendGMsgXML:(NSMutableDictionary *)params;

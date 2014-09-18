@@ -18,7 +18,11 @@
 - (NSString *)rid;
 - (NSString *)msgId;
 - (BOOL) isGroup;
+- (NSString *)groupId;
 - (NSString *)receiver;
+- (BOOL) isRead;
+- (BOOL) isAcked;
+- (NSString *)deliveryState;
 - (NSString *)text;
 
 - (UIImage *)photo;

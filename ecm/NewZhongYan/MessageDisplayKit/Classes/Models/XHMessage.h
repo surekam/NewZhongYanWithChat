@@ -15,8 +15,11 @@
 @property (nonatomic, copy) NSString *rid;
 @property (nonatomic, copy) NSString *msgId;
 @property (nonatomic, assign) BOOL isGroup;
+@property (nonatomic, copy) NSString *groupId;
 @property (nonatomic, copy) NSString *receiver;
-
+@property (nonatomic, assign) BOOL isRead;
+@property (nonatomic, assign) BOOL isAcked;
+@property (nonatomic, copy) NSString *deliveryState;
 @property (nonatomic, copy) NSString *text;
 
 @property (nonatomic, strong) UIImage *photo;
@@ -44,8 +47,6 @@
 @property (nonatomic, copy) NSString *senderName;
 
 @property (nonatomic, strong) NSDate *timestamp;
-
-@property (nonatomic, assign) BOOL sended;
 
 @property (nonatomic, assign) XHBubbleMessageMediaType messageMediaType;
 

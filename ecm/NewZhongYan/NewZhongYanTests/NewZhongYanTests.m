@@ -50,4 +50,12 @@
         [tcpRequestHelper sendLogingPackageCommandId:0];
     }
 }
+
+- (void)test_datetime {
+    
+    NSString *dateTime = @"2014-09-18 16:40:04";
+    NSDate *date = [DateUtils stringToDate:dateTime DateFormat:@"yyyy-MM-dd HH:mm:ss"];
+    NSLog(@"date=%@", date);
+}
+
 @end

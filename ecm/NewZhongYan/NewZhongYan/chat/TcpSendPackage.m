@@ -18,6 +18,9 @@ static unsigned long long sendIndex = 0;
 
 + (NSString *)sendIndex
 {
+    if (sendIndex > 99999) {
+        sendIndex = 0;
+    }
     return [NSString stringWithFormat:@"%llu", sendIndex++];
 }
 
@@ -42,13 +45,14 @@ static unsigned long long sendIndex = 0;
     return packageData;
 }
 
-+ (NSData *)createMessagePackageWithMsg:(NSString *)message toUser:(NSString*)toUser msgType:(NSString *)msgType
++ (NSData *)createMessagePackageWithMsg:(NSString *)message toUser:(NSString*)toUser msgType:(NSString *)msgType bySendIndex:(NSString **)sendIndex
 {
+    *sendIndex = [self sendIndex];
     NSMutableDictionary *params = [NSMutableDictionary dictionaryWithObjectsAndKeys:
                                    IM_XML_HEAD_SOURCE_MOBILE_VALUE,     IM_XML_HEAD_SOURCE_ATTR,
                                    IM_XML_HEAD_BUSINESS_SENDMSG_VALUE,  IM_XML_HEAD_BUSINESS_ATTR,
                                    [SKIMStatus sharedStatus].sessionId, IM_XML_HEAD_SESSIONID_ATTR,
-                                   [self sendIndex],                    IM_XML_HEAD_INDEX_ATTR,
+                                   *sendIndex,                          IM_XML_HEAD_INDEX_ATTR,
                                    [APPUtils loggedUser].uid,           IM_XML_BODY_LOGIN_USERID_ATTR,
                                    
                                    toUser,                              IM_XML_BODY_SENDMSG_TOUSER_ATTR,

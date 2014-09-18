@@ -56,10 +56,18 @@
         SKIMMessageDBModel *msgModel = [[SKIMMessageDBModel alloc] init];
         msgModel.where = [NSString stringWithFormat:@"CONVERSATIONID = %@", self.rid];
         msgModel.orderBy = @"SENDTIME";
+        msgModel.orderType = @"DESC";
         msgModel.limit = 20;
         NSArray *resultDics = [msgModel getList];
         
-        [_messages addObjectsFromArray:[SKIMMessageDBModel getMessagesFromModelArray:resultDics]];
+        NSArray *msgArray = [SKIMMessageDBModel getMessagesFromModelArray:resultDics];
+        
+        if (msgArray.count) {
+            NSArray *sortedArray = [msgArray sortedArrayUsingComparator:^NSComparisonResult(XHMessage *c1, XHMessage *c2) {
+                return [c1.timestamp compare:c2.timestamp];
+            }];
+            _messages = [sortedArray copy];
+        }
     }
     return _messages;
 }
