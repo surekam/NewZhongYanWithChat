@@ -22,6 +22,7 @@
 @synthesize chatter = _chatter;
 @synthesize isGroup = _isGroup;
 @synthesize messages = _messages;
+@synthesize isEnable = _isEnable;
 
 - (instancetype)init
 {
@@ -30,6 +31,13 @@
         _messages = [NSMutableArray array];
     }
     return self;
+}
+
+- (void)setEnabled:(BOOL)enabled {
+    _isEnable = enabled;
+    SKIMConversationDBModel *conversationModel = [[SKIMConversationDBModel alloc] init];
+    NSString *upateSql = [NSString stringWithFormat:@"UPDATE IM_CONVERSATION SET ISENABLE = %d WHERE RID = %@", _isEnable, _rid];
+    [conversationModel queryUpdateSql:upateSql];
 }
 
 - (id<SKIMChater>)chatter
@@ -129,12 +137,20 @@
         msgRid = firstMsg.rid;
     }
     msgModel.where = [NSString stringWithFormat:@"CONVERSATIONID = %@ AND RID < %@", self.rid, msgRid];
-    msgModel.orderBy = @"RID";
+    msgModel.orderBy = @"SENDTIME";
+    msgModel.orderType = @"DESC";
     msgModel.limit = count;
     NSArray *resultDics = [msgModel getList];
     
-    //TODO:这里还需要考虑排序的问题
-    return [SKIMMessageDBModel getMessagesFromModelArray:resultDics];
+    NSArray *msgArray = [SKIMMessageDBModel getMessagesFromModelArray:resultDics];
+    
+    if (msgArray.count) {
+        NSArray *sortedArray = [msgArray sortedArrayUsingComparator:^NSComparisonResult(XHMessage *c1, XHMessage *c2) {
+            return [c1.timestamp compare:c2.timestamp];
+        }];
+        return sortedArray;
+    }
+    return nil;
 }
 
 //加载所有已经存在的会话

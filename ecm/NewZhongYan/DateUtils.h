@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #define dateTimeFormat          @"yyyy-MM-dd'T'HH:mm:ss.SSS"
 #define displayDateTimeFormat   @"yyyy-MM-dd HH:mm:ss"
-#define sdateFormat              @"yyyy-MM-dd"
+#define sdateFormat             @"yyyy-MM-dd"
 #define timeFormat              @"HH:mm"
 
 #define D_MINUTE	60

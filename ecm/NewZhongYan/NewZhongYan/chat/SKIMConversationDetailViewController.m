@@ -45,6 +45,9 @@
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
     [[XHAudioPlayerHelper shareInstance] stopAudio];
+    if (_conversation.messages && !_conversation.isEnable) {
+        _conversation.isEnable = YES;
+    }
 }
 
 - (void)viewDidLoad

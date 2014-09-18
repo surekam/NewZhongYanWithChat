@@ -71,7 +71,8 @@
         if ([resultCode isEqualToString:RETURN_CODE_SUCCESS]) {
             NSString *index = [messageRetDic objectForKey:IM_XML_HEAD_INDEX_ATTR];
             NSString *msgId = [messageRetDic objectForKey:IM_XML_BODY_SENDMSG_MESSAGEID_ATTR];
-            NSDate *sendDate = [messageRetDic objectForKey:IM_XML_BODY_SENDMSG_SENDDATE_ATTR];
+            //NSDate *sendDate = [messageRetDic objectForKey:IM_XML_BODY_SENDMSG_SENDDATE_ATTR];
+            NSDate *sendDate = [DateUtils stringToDate:[messageRetDic objectForKey:IM_XML_BODY_SENDMSG_SENDDATE_ATTR] DateFormat:displayDateTimeFormat];
             
             SKIMMessageDBModel *msgModel = [[SKIMMessageDBModel alloc] init];
             NSString *querySql = [[@"SELECT RID FROM IM_MESSAGE WHERE ISACKED = 0 AND MSGSENDTYPE = 0 AND MSGID = '" stringByAppendingString:index] stringByAppendingString:@"'"];
@@ -129,7 +130,8 @@
         message.bubbleMessageType = XHBubbleMessageTypeReceiving;
         message.isGroup = NO;
         message.msgId = [messageDic objectForKey:IM_XML_BODY_SENDMSG_MESSAGEID_ATTR];
-        message.timestamp = [messageDic objectForKey:IM_XML_BODY_SENDMSG_SENDDATE_ATTR];
+        //message.timestamp = [messageDic objectForKey:IM_XML_BODY_SENDMSG_SENDDATE_ATTR];
+        message.timestamp = [DateUtils stringToDate:[messageDic objectForKey:IM_XML_BODY_SENDMSG_SENDDATE_ATTR] DateFormat:displayDateTimeFormat];
         message.sender = [messageDic objectForKey:IM_XML_HEAD_USERID_ATTR];
         message.receiver = [APPUtils userUid];
         
@@ -166,7 +168,7 @@
         [dataDic setObject:msgType forKey:@"MSGTYPE"];
         [dataDic setObject:msgSendType forKey:@"MSGSENDTYPE"];
         [dataDic setObject:message.text forKey:@"MSGBODY"];
-        [dataDic setObject:message.timestamp forKey:@"SENDTIME"];
+        [dataDic setObject:[DateUtils dateToString:message.timestamp DateFormat:displayDateTimeFormat] forKey:@"SENDTIME"];
         
         [msgModel insertDB:dataDic];
     }

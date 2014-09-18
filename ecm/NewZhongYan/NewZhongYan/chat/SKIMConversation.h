@@ -28,7 +28,7 @@
 @property (nonatomic, assign) BOOL isReceiveMsg;
 
 //此会话是否被移除
-@property (nonatomic, assign) BOOL isEnable;
+@property (nonatomic, assign, setter=setEnabled:) BOOL isEnable;
 
 #pragma mark - message
 /*!

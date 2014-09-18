@@ -47,7 +47,7 @@
         msg.messageMediaType = (XHBubbleMessageMediaType)[[dic objectForKey:@"MSGTYPE"] integerValue];
         msg.bubbleMessageType = (XHBubbleMessageType)[[dic objectForKey:@"MSGSENDTYPE"] integerValue];
         msg.text = [dic objectForKey:@"MSGBODY"];
-        msg.timestamp = [DateUtils stringToDate:[dic objectForKey:@"SENDTIME"] DateFormat:@"yyyy-MM-dd HH:mm:ss"] ;
+        msg.timestamp = [DateUtils stringToDate:[dic objectForKey:@"SENDTIME"] DateFormat:displayDateTimeFormat];
         msg.avatorUrl = [SKIMUser getUserFromUid:[dic objectForKey:@"SENDERID"]].avatarUri;
         msg.avator = [UIImage imageNamed:@"avator"];
         
