@@ -497,9 +497,10 @@ static CGPoint  delayOffset = {0.0};
 - (void)initilzer {
     if( ([[[UIDevice currentDevice] systemVersion] doubleValue] >= 7.0)) {
         if ([self respondsToSelector:@selector(automaticallyAdjustsScrollViewInsets)]) {
-            self.automaticallyAdjustsScrollViewInsets = YES;
+            //self.edgesForExtendedLayout = UIRectEdgeAll;
+            self.automaticallyAdjustsScrollViewInsets = NO;
         }
-        self.navigationController.navigationBar.translucent = YES;
+        //self.navigationController.navigationBar.translucent = YES;
     }
     // 默认设置用户滚动为NO
     _isUserScrolling = NO;
@@ -791,9 +792,20 @@ static CGPoint  delayOffset = {0.0};
 }
 
 - (UIEdgeInsets)tableViewInsetsWithBottomValue:(CGFloat)bottom {
+//    UIEdgeInsets insets = UIEdgeInsetsZero;
+//    insets.top = -44;
+//    insets.bottom = bottom;
+//    return insets;
     UIEdgeInsets insets = UIEdgeInsetsZero;
-    insets.top = -44;
+    
+    if ([self respondsToSelector:@selector(topLayoutGuide)]) {
+        insets.top = 20;
+    } else {
+        insets.top = -44;
+    }
+    
     insets.bottom = bottom;
+    
     return insets;
 }
 

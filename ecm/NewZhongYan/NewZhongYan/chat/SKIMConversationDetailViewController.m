@@ -63,7 +63,6 @@
         [backbtn addTarget:self action:@selector(back:) forControlEvents:UIControlEventTouchUpInside];
         UIBarButtonItem* backItem = [[UIBarButtonItem alloc] initWithCustomView:backbtn];
         self.navigationItem.leftBarButtonItem = backItem;
-        self.navigationController.navigationBar.translucent = NO;
     }else{
         UIBarButtonItem *barBtn = [[UIBarButtonItem alloc] init];
         barBtn.title = @"返回";

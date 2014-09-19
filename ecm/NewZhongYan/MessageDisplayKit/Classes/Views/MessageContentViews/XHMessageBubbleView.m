@@ -49,25 +49,23 @@
 #pragma mark - Bubble view
 
 + (CGFloat)neededWidthForText:(NSString *)text {
-//    CGSize stringSize;
-//    stringSize = [text sizeWithFont:[[XHMessageBubbleView appearance] font] constrainedToSize:CGSizeMake(MAXFLOAT, 19)];
-//    NSDictionary *dic = [[XHMessageBubbleView appearance] font].fontDescriptor.fontAttributes;
-//    stringSize = [text sizeWithAttributes:dic];
-//    return roundf(stringSize.width);
+    CGSize stringSize;
+    stringSize = [text sizeWithFont:[[XHMessageBubbleView appearance] font] constrainedToSize:CGSizeMake(MAXFLOAT, 19)];
+    return roundf(stringSize.width);
     
-    NSDictionary *dic = [[XHMessageBubbleView appearance] font].fontDescriptor.fontAttributes;
-    NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc]init];
-    paragraphStyle.lineBreakMode = NSLineBreakByWordWrapping;
-    [dic setValue:paragraphStyle forKey:NSParagraphStyleAttributeName];
-    // 计算文本的大小
-    CGFloat maxWidth = CGRectGetWidth([[UIScreen mainScreen] bounds]) * (kIsiPad ? 0.8 : 0.55);
-    CGSize textSize = [text boundingRectWithSize:CGSizeMake(maxWidth, MAXFLOAT) // 用于计算文本绘制时占据的矩形块
-                                                  options:NSStringDrawingTruncatesLastVisibleLine | NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading // 文本绘制时的附加选项
-                                               attributes:dic        // 文字的属性
-                                                  context:nil].size; // context上下文。包括一些信息，例如如何调整字间距以及缩放。该对象包含的信息将用于文本绘制。该参数可为nil
-    NSLog(@"w = %f", textSize.width);
-    NSLog(@"h = %f", textSize.height);
-    return roundf(textSize.width);
+//    NSDictionary *dic = [[XHMessageBubbleView appearance] font].fontDescriptor.fontAttributes;
+//    NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc]init];
+//    paragraphStyle.lineBreakMode = NSLineBreakByWordWrapping;
+//    [dic setValue:paragraphStyle forKey:NSParagraphStyleAttributeName];
+//    // 计算文本的大小
+//    CGFloat maxWidth = CGRectGetWidth([[UIScreen mainScreen] bounds]) * (kIsiPad ? 0.8 : 0.55);
+//    CGSize textSize = [text boundingRectWithSize:CGSizeMake(maxWidth, MAXFLOAT) // 用于计算文本绘制时占据的矩形块
+//                                                  options:NSStringDrawingTruncatesLastVisibleLine | NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading // 文本绘制时的附加选项
+//                                               attributes:dic        // 文字的属性
+//                                                  context:nil].size; // context上下文。包括一些信息，例如如何调整字间距以及缩放。该对象包含的信息将用于文本绘制。该参数可为nil
+//    NSLog(@"w = %f", textSize.width);
+//    NSLog(@"h = %f", textSize.height);
+//    return roundf(textSize.width);
 }
 
 + (CGSize)neededSizeForText:(NSString *)text {
