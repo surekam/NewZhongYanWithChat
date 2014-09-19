@@ -25,7 +25,6 @@
 #import "SKECMRootController.h"
 #import "SKSettingController.h"
 #import "SKHToolBar.h"
-#import "SKMessageRootViewController.h"
 #define OriginY ((IS_IOS7) ? 64 : 0 )
 #define DepartmentInfomationCheckDate @"DepartmentInfomationCheckDate"
 #define ClientInfomationCheckDate @"ClientInfomationCheckDate"
@@ -194,15 +193,6 @@
         {
             //item.selectedImage = Image(@"setting_highnight");
             [self performSegueWithIdentifier:@"setting"sender:self];
-            break;
-        }
-        case 5:
-        {
-            //item.selectedImage = Image(@"btn_sms_ecm_press");
-            //[self performSegueWithIdentifier:@"chat"sender:self];
-            SKMessageRootViewController *chatView = [[SKMessageRootViewController alloc] init];
-            chatView.title = @"即时聊天";
-            [[self navigationController] pushViewController:chatView animated:YES];
             break;
         }
         default:

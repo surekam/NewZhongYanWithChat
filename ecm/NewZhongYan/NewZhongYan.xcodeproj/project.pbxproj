@@ -229,8 +229,6 @@
 		3B05EACF196FD0FE00866FA5 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3B05EACE196FD0FE00866FA5 /* MapKit.framework */; };
 		3B05EAD1196FD10F00866FA5 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3B05EAD0196FD10F00866FA5 /* CoreLocation.framework */; };
 		3B05EAD3196FD11B00866FA5 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3B05EAD2196FD11B00866FA5 /* MediaPlayer.framework */; };
-		A31849D919923054004F2EF7 /* SKIMChatText.m in Sources */ = {isa = PBXBuildFile; fileRef = A31849D819923054004F2EF7 /* SKIMChatText.m */; };
-		A38FB009199223F5002580EC /* SKIMTextMessageBody.m in Sources */ = {isa = PBXBuildFile; fileRef = A38FB008199223F5002580EC /* SKIMTextMessageBody.m */; };
 		A398294319A2DEA700787F71 /* SKIMConversationListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A398294219A2DEA700787F71 /* SKIMConversationListViewController.m */; };
 		A398C47C19B5A1D4007952A9 /* SKIMStatus.m in Sources */ = {isa = PBXBuildFile; fileRef = A398C47B19B5A1D4007952A9 /* SKIMStatus.m */; };
 		A398FAF519A6DF8200D081C1 /* SKIMDBOperate.m in Sources */ = {isa = PBXBuildFile; fileRef = A398FAF419A6DF8200D081C1 /* SKIMDBOperate.m */; };
@@ -245,14 +243,12 @@
 		A399E3131977770000B9FAC8 /* cancel@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A399E3121977770000B9FAC8 /* cancel@2x.png */; };
 		A399E3151977789400B9FAC8 /* SearchIcon_white@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A399E3141977789400B9FAC8 /* SearchIcon_white@2x.png */; };
 		A39A7927198B73230003BC56 /* AGSimpleImageEditorView.m in Sources */ = {isa = PBXBuildFile; fileRef = A39A7926198B73230003BC56 /* AGSimpleImageEditorView.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		A39AB2C419792CE20027BAE5 /* SKChater.m in Sources */ = {isa = PBXBuildFile; fileRef = A39AB2C319792CE20027BAE5 /* SKChater.m */; };
 		A39AD0AA19B6F7860026BEC0 /* SKIMMessageDataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A39AD0A919B6F7860026BEC0 /* SKIMMessageDataManager.m */; };
 		A39ADE3B1989F48B008EBEE7 /* signature@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A39ADE3A1989F48B008EBEE7 /* signature@2x.png */; };
 		A39ADE3D1989F95D008EBEE7 /* right_arrow_black@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A39ADE3C1989F95D008EBEE7 /* right_arrow_black@2x.png */; };
 		A39ADE40198A1E97008EBEE7 /* UIImage+ImageWithColour.m in Sources */ = {isa = PBXBuildFile; fileRef = A39ADE3F198A1E97008EBEE7 /* UIImage+ImageWithColour.m */; };
 		A39ADE43198A2961008EBEE7 /* SKSignatureViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A39ADE42198A2961008EBEE7 /* SKSignatureViewController.m */; };
 		A39ADE45198A4C2C008EBEE7 /* btn_done_blue@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A39ADE44198A4C2B008EBEE7 /* btn_done_blue@2x.png */; };
-		A39B592E1990CF4700929560 /* SKIMMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = A39B592D1990CF4700929560 /* SKIMMessage.m */; };
 		A39B59311990D43400929560 /* SKIMUser.m in Sources */ = {isa = PBXBuildFile; fileRef = A39B59301990D43400929560 /* SKIMUser.m */; };
 		A39B59341990D94100929560 /* SKIMConversation.m in Sources */ = {isa = PBXBuildFile; fileRef = A39B59331990D94100929560 /* SKIMConversation.m */; };
 		A39B743119AC9593003D85D1 /* MKAnnotationView+WebCache.m in Sources */ = {isa = PBXBuildFile; fileRef = A39B741119AC9593003D85D1 /* MKAnnotationView+WebCache.m */; };
@@ -558,7 +554,6 @@
 		A39F397B19B016B700666637 /* libxml2.2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F28846D71803FBA9006A5D62 /* libxml2.2.dylib */; };
 		A3A04D05199CA83400BF7249 /* SECoreTextView.bundle in Resources */ = {isa = PBXBuildFile; fileRef = A3A04D04199CA83400BF7249 /* SECoreTextView.bundle */; };
 		A3A04D0C199CBB9100BF7249 /* SKIMMessageDBModel.m in Sources */ = {isa = PBXBuildFile; fileRef = A3A04D0B199CBB9100BF7249 /* SKIMMessageDBModel.m */; };
-		A3A0AF671976106D00497936 /* SKChatMessageTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A3A0AF661976106D00497936 /* SKChatMessageTableViewController.m */; };
 		A3A0D41219AED2260061B373 /* SKIMTcpHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = A3A0D41119AED2260061B373 /* SKIMTcpHelper.m */; };
 		A3A0D41619AED3EB0061B373 /* AsyncSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = A3A0D41519AED3EB0061B373 /* AsyncSocket.m */; };
 		A3A0D42019AEDC5E0061B373 /* SKIMXMLUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = A3A0D41E19AEDC5E0061B373 /* SKIMXMLUtils.m */; };
@@ -567,14 +562,12 @@
 		A3A66AF919C683710059428F /* face_delete_pressed@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A3A66AF719C683710059428F /* face_delete_pressed@2x.png */; };
 		A3A66AFA19C683710059428F /* face_delete@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A3A66AF819C683710059428F /* face_delete@2x.png */; };
 		A3E629E7198F7E220056C259 /* SKChatConversationCellTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A3E629E6198F7E220056C259 /* SKChatConversationCellTableViewCell.m */; };
-		A3E6CBE319989A7D004D0BE4 /* SKChatConversationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A3E6CBE219989A7D004D0BE4 /* SKChatConversationViewController.m */; };
 		A3E6CBE71998A717004D0BE4 /* SKIMBaseDBModel.m in Sources */ = {isa = PBXBuildFile; fileRef = A3E6CBE61998A717004D0BE4 /* SKIMBaseDBModel.m */; };
 		A3E6CBEB1998A88D004D0BE4 /* FileManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A3E6CBEA1998A88D004D0BE4 /* FileManager.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		A3E6CBEE1998B429004D0BE4 /* SKIMConversationDBModel.m in Sources */ = {isa = PBXBuildFile; fileRef = A3E6CBED1998B429004D0BE4 /* SKIMConversationDBModel.m */; };
 		A3E6CBF11998C6A2004D0BE4 /* SKIMDBConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = A3E6CBF01998C6A2004D0BE4 /* SKIMDBConfig.m */; };
 		A3EA69251975224200730437 /* SKMultiSelectItem.m in Sources */ = {isa = PBXBuildFile; fileRef = A3EA69221975224200730437 /* SKMultiSelectItem.m */; };
 		A3EA69261975224200730437 /* SKToolBarMultiSelectPanel.m in Sources */ = {isa = PBXBuildFile; fileRef = A3EA69241975224200730437 /* SKToolBarMultiSelectPanel.m */; };
-		A3EA6929197522F200730437 /* SKMessageRootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A3EA6928197522F200730437 /* SKMessageRootViewController.m */; };
 		BE0D610919346A44008ED909 /* help5_1.png in Resources */ = {isa = PBXBuildFile; fileRef = BE0D610819346A44008ED909 /* help5_1.png */; };
 		BE0D610B19346A4A008ED909 /* help4_1.png in Resources */ = {isa = PBXBuildFile; fileRef = BE0D610A19346A4A008ED909 /* help4_1.png */; };
 		BE66142219259CB400253C43 /* Default_logo@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BE66142019259CB400253C43 /* Default_logo@2x.png */; };
@@ -1377,17 +1370,11 @@
 		3B05EACE196FD0FE00866FA5 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		3B05EAD0196FD10F00866FA5 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		3B05EAD2196FD11B00866FA5 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
-		A31849D719923054004F2EF7 /* SKIMChatText.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SKIMChatText.h; sourceTree = "<group>"; };
-		A31849D819923054004F2EF7 /* SKIMChatText.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SKIMChatText.m; sourceTree = "<group>"; };
-		A38FB007199223F5002580EC /* SKIMTextMessageBody.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SKIMTextMessageBody.h; sourceTree = "<group>"; };
-		A38FB008199223F5002580EC /* SKIMTextMessageBody.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SKIMTextMessageBody.m; sourceTree = "<group>"; };
 		A398294119A2DEA700787F71 /* SKIMConversationListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SKIMConversationListViewController.h; sourceTree = "<group>"; };
 		A398294219A2DEA700787F71 /* SKIMConversationListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SKIMConversationListViewController.m; sourceTree = "<group>"; };
 		A398C47A19B5A1D4007952A9 /* SKIMStatus.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SKIMStatus.h; sourceTree = "<group>"; };
 		A398C47B19B5A1D4007952A9 /* SKIMStatus.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SKIMStatus.m; sourceTree = "<group>"; };
 		A398CF7A19921344005D6F3A /* SKIMServiceDefs.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SKIMServiceDefs.h; sourceTree = "<group>"; };
-		A398CF7E19921A91005D6F3A /* ISKIMChatObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ISKIMChatObject.h; sourceTree = "<group>"; };
-		A398CF7F19921AD6005D6F3A /* ISKIMMessageBody.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ISKIMMessageBody.h; sourceTree = "<group>"; };
 		A398FAF319A6DF8200D081C1 /* SKIMDBOperate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SKIMDBOperate.h; sourceTree = "<group>"; };
 		A398FAF419A6DF8200D081C1 /* SKIMDBOperate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SKIMDBOperate.m; sourceTree = "<group>"; };
 		A398FAF619A72B2E00D081C1 /* SKIMUserDBModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SKIMUserDBModel.h; sourceTree = "<group>"; };
@@ -1409,8 +1396,6 @@
 		A39A7925198B73230003BC56 /* AGSimpleImageEditorView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AGSimpleImageEditorView.h; sourceTree = "<group>"; };
 		A39A7926198B73230003BC56 /* AGSimpleImageEditorView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AGSimpleImageEditorView.m; sourceTree = "<group>"; };
 		A39A7E3019A199BB00EF3460 /* SKIMChater.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SKIMChater.h; sourceTree = "<group>"; };
-		A39AB2C219792CE20027BAE5 /* SKChater.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SKChater.h; sourceTree = "<group>"; };
-		A39AB2C319792CE20027BAE5 /* SKChater.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SKChater.m; sourceTree = "<group>"; };
 		A39AD0A819B6F7860026BEC0 /* SKIMMessageDataManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SKIMMessageDataManager.h; sourceTree = "<group>"; };
 		A39AD0A919B6F7860026BEC0 /* SKIMMessageDataManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SKIMMessageDataManager.m; sourceTree = "<group>"; };
 		A39ADE3A1989F48B008EBEE7 /* signature@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "signature@2x.png"; sourceTree = "<group>"; };
@@ -1420,8 +1405,6 @@
 		A39ADE41198A2961008EBEE7 /* SKSignatureViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SKSignatureViewController.h; sourceTree = "<group>"; };
 		A39ADE42198A2961008EBEE7 /* SKSignatureViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SKSignatureViewController.m; sourceTree = "<group>"; };
 		A39ADE44198A4C2B008EBEE7 /* btn_done_blue@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn_done_blue@2x.png"; sourceTree = "<group>"; };
-		A39B592C1990CF4700929560 /* SKIMMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SKIMMessage.h; sourceTree = "<group>"; };
-		A39B592D1990CF4700929560 /* SKIMMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SKIMMessage.m; sourceTree = "<group>"; };
 		A39B592F1990D43400929560 /* SKIMUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SKIMUser.h; sourceTree = "<group>"; };
 		A39B59301990D43400929560 /* SKIMUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SKIMUser.m; sourceTree = "<group>"; };
 		A39B59321990D94100929560 /* SKIMConversation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SKIMConversation.h; sourceTree = "<group>"; };
@@ -1748,8 +1731,6 @@
 		A3A04D04199CA83400BF7249 /* SECoreTextView.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = SECoreTextView.bundle; sourceTree = "<group>"; };
 		A3A04D0A199CBB9100BF7249 /* SKIMMessageDBModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SKIMMessageDBModel.h; sourceTree = "<group>"; };
 		A3A04D0B199CBB9100BF7249 /* SKIMMessageDBModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SKIMMessageDBModel.m; sourceTree = "<group>"; };
-		A3A0AF651976106D00497936 /* SKChatMessageTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SKChatMessageTableViewController.h; sourceTree = "<group>"; };
-		A3A0AF661976106D00497936 /* SKChatMessageTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SKChatMessageTableViewController.m; sourceTree = "<group>"; };
 		A3A0D41019AED2250061B373 /* SKIMTcpHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SKIMTcpHelper.h; sourceTree = "<group>"; };
 		A3A0D41119AED2260061B373 /* SKIMTcpHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SKIMTcpHelper.m; sourceTree = "<group>"; };
 		A3A0D41419AED3EB0061B373 /* AsyncSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AsyncSocket.h; sourceTree = "<group>"; };
@@ -1766,8 +1747,6 @@
 		A3A66AF819C683710059428F /* face_delete@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "face_delete@2x.png"; sourceTree = "<group>"; };
 		A3E629E5198F7E220056C259 /* SKChatConversationCellTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SKChatConversationCellTableViewCell.h; sourceTree = "<group>"; };
 		A3E629E6198F7E220056C259 /* SKChatConversationCellTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SKChatConversationCellTableViewCell.m; sourceTree = "<group>"; };
-		A3E6CBE119989A7D004D0BE4 /* SKChatConversationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SKChatConversationViewController.h; sourceTree = "<group>"; };
-		A3E6CBE219989A7D004D0BE4 /* SKChatConversationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SKChatConversationViewController.m; sourceTree = "<group>"; };
 		A3E6CBE51998A717004D0BE4 /* SKIMBaseDBModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SKIMBaseDBModel.h; sourceTree = "<group>"; };
 		A3E6CBE61998A717004D0BE4 /* SKIMBaseDBModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SKIMBaseDBModel.m; sourceTree = "<group>"; };
 		A3E6CBE91998A88D004D0BE4 /* FileManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FileManager.h; sourceTree = "<group>"; };
@@ -1781,8 +1760,6 @@
 		A3EA69221975224200730437 /* SKMultiSelectItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SKMultiSelectItem.m; sourceTree = "<group>"; };
 		A3EA69231975224200730437 /* SKToolBarMultiSelectPanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SKToolBarMultiSelectPanel.h; sourceTree = "<group>"; };
 		A3EA69241975224200730437 /* SKToolBarMultiSelectPanel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SKToolBarMultiSelectPanel.m; sourceTree = "<group>"; };
-		A3EA6927197522F200730437 /* SKMessageRootViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SKMessageRootViewController.h; sourceTree = "<group>"; };
-		A3EA6928197522F200730437 /* SKMessageRootViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SKMessageRootViewController.m; sourceTree = "<group>"; };
 		BE0D610819346A44008ED909 /* help5_1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = help5_1.png; sourceTree = "<group>"; };
 		BE0D610A19346A4A008ED909 /* help4_1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = help4_1.png; sourceTree = "<group>"; };
 		BE66142019259CB400253C43 /* Default_logo@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default_logo@2x.png"; sourceTree = "<group>"; };
@@ -3403,16 +3380,8 @@
 				A39B59301990D43400929560 /* SKIMUser.m */,
 				A399DDBF199E047D006F56F9 /* SKIMGroup.h */,
 				A399DDC0199E047D006F56F9 /* SKIMGroup.m */,
-				A39B592C1990CF4700929560 /* SKIMMessage.h */,
-				A39B592D1990CF4700929560 /* SKIMMessage.m */,
-				A38FB007199223F5002580EC /* SKIMTextMessageBody.h */,
-				A38FB008199223F5002580EC /* SKIMTextMessageBody.m */,
-				A31849D719923054004F2EF7 /* SKIMChatText.h */,
-				A31849D819923054004F2EF7 /* SKIMChatText.m */,
 				A39B59321990D94100929560 /* SKIMConversation.h */,
 				A39B59331990D94100929560 /* SKIMConversation.m */,
-				A398CF7F19921AD6005D6F3A /* ISKIMMessageBody.h */,
-				A398CF7E19921A91005D6F3A /* ISKIMChatObject.h */,
 				A398CF7A19921344005D6F3A /* SKIMServiceDefs.h */,
 			);
 			name = entity;
@@ -3860,14 +3829,6 @@
 				A3E6CBE41998A605004D0BE4 /* model */,
 				A39B592B1990CF2600929560 /* entity */,
 				A3A04D06199CAD9800BF7249 /* views */,
-				A39AB2C219792CE20027BAE5 /* SKChater.h */,
-				A39AB2C319792CE20027BAE5 /* SKChater.m */,
-				A3EA6927197522F200730437 /* SKMessageRootViewController.h */,
-				A3EA6928197522F200730437 /* SKMessageRootViewController.m */,
-				A3E6CBE119989A7D004D0BE4 /* SKChatConversationViewController.h */,
-				A3E6CBE219989A7D004D0BE4 /* SKChatConversationViewController.m */,
-				A3A0AF651976106D00497936 /* SKChatMessageTableViewController.h */,
-				A3A0AF661976106D00497936 /* SKChatMessageTableViewController.m */,
 			);
 			path = chat;
 			sourceTree = "<group>";
@@ -5916,7 +5877,6 @@
 				F28DE6EE1816648900E8CA79 /* SKTableViewCell.m in Sources */,
 				F28846BB1803F7DD006A5D62 /* SKLauncherItem.m in Sources */,
 				F212E45818233BA3001A0A74 /* REMenuItem.m in Sources */,
-				A31849D919923054004F2EF7 /* SKIMChatText.m in Sources */,
 				3B05EA51196FCA8600866FA5 /* XHContactView.m in Sources */,
 				F291E248180CDD000027F0C9 /* ASIAuthenticationDialog.m in Sources */,
 				F2E5D59E182A63ED00BFB48D /* SKNextBranchesController.m in Sources */,
@@ -5941,10 +5901,8 @@
 				3B05EA0B196FCA8600866FA5 /* XHMoreExpressionShopsTableViewController.m in Sources */,
 				F23AA24B184F1624004248DB /* SKSecretController.m in Sources */,
 				F2F038FD181908D400B9116C /* EGOImageView.m in Sources */,
-				A39B592E1990CF4700929560 /* SKIMMessage.m in Sources */,
 				3B05E9DF196FCA8600866FA5 /* NSString+MessageInputView.m in Sources */,
 				F2F038F1181908B700B9116C /* EGOCache.m in Sources */,
-				A3EA6929197522F200730437 /* SKMessageRootViewController.m in Sources */,
 				F2E5D5A4182A654600BFB48D /* SKSToolBar.m in Sources */,
 				F2B66EFC18154B8500AD6286 /* SKToolBar.m in Sources */,
 				3B05EA6A196FCA8600866FA5 /* XHLoadMoreView.m in Sources */,
@@ -5971,7 +5929,6 @@
 				3B05E9EE196FCA8600866FA5 /* XHFoundationCommon.m in Sources */,
 				3B05E9FF196FCA8600866FA5 /* XHLocationServiceTableViewController.m in Sources */,
 				F200C88818272F3700161747 /* SKToken.m in Sources */,
-				A39AB2C419792CE20027BAE5 /* SKChater.m in Sources */,
 				F23CE44D182B23680066F214 /* SKCommonLanguageCell.m in Sources */,
 				F291E221180CDABE0027F0C9 /* FMDatabase+InMemoryOnDiskIO.m in Sources */,
 				F2B494D3180FE1E100246822 /* OpenUDID.m in Sources */,
@@ -5982,7 +5939,6 @@
 				F22E54C318E9052800E3440A /* UncaughtExceptionHandler.m in Sources */,
 				A3A0D42419AF08FC0061B373 /* SKIMTcpRequestHelper.m in Sources */,
 				3B05EA5D196FCA8600866FA5 /* XHVoiceRecordHUD.m in Sources */,
-				A38FB009199223F5002580EC /* SKIMTextMessageBody.m in Sources */,
 				F28DF845185AAA8F000B6C1F /* FXBlurView.m in Sources */,
 				3B05E9F3196FCA8600866FA5 /* XHVoiceRecordHelper.m in Sources */,
 				F2D8149B1835C75300FE0839 /* NewsHelper.m in Sources */,
@@ -6078,7 +6034,6 @@
 				3B05EA50196FCA8600866FA5 /* XHContactTableViewCell.m in Sources */,
 				A39ADE40198A1E97008EBEE7 /* UIImage+ImageWithColour.m in Sources */,
 				3B05E9F9196FCA8600866FA5 /* XHBaseViewController.m in Sources */,
-				A3E6CBE319989A7D004D0BE4 /* SKChatConversationViewController.m in Sources */,
 				A398294319A2DEA700787F71 /* SKIMConversationListViewController.m in Sources */,
 				F28846D41803FAC3006A5D62 /* DDXMLElement.m in Sources */,
 				F2F0392218190A9000B9116C /* MWCaptionView.m in Sources */,
@@ -6149,7 +6104,6 @@
 				F28846B51803F71F006A5D62 /* CustomBadge.m in Sources */,
 				A39B743319AC9593003D85D1 /* SDImageCache.m in Sources */,
 				3B05EA3E196FCA8600866FA5 /* SETextSelection.m in Sources */,
-				A3A0AF671976106D00497936 /* SKChatMessageTableViewController.m in Sources */,
 				3B05EA3B196FCA8600866FA5 /* SETextLayout.m in Sources */,
 				3B05E9EF196FCA8600866FA5 /* XHLocationHelper.m in Sources */,
 				F200C88D1827300300161747 /* SKPlaceholderTextView.m in Sources */,

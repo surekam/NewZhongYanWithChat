@@ -10,8 +10,8 @@
 
 
 @implementation SKHToolBar
-@synthesize remindBtn,emailBtn,addressdBtn,settingBtn,chatBtn;
-@synthesize remindLabel,emailLabel,addressdLabel,settingLabel,chatLabel;
+@synthesize remindBtn,emailBtn,addressdBtn,settingBtn;
+@synthesize remindLabel,emailLabel,addressdLabel,settingLabel;
 @synthesize remindBadge,emailBadge;
 @synthesize owner;
 
@@ -27,7 +27,7 @@
         [view setBackgroundColor:[UIColor lightGrayColor]];
         [self addSubview:view];
         
-        UIView *remindView=[[UIView alloc] initWithFrame:CGRectMake(20, 0, 42, 49)];
+        UIView *remindView=[[UIView alloc] initWithFrame:CGRectMake(25, 0, 42, 49)];
         remindView.backgroundColor=[UIColor clearColor];
         remindView.tag=1;
         UITapGestureRecognizer *singleTab =[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(singleOne:)];
@@ -57,7 +57,7 @@
         
         
         
-        UIView *emailView=[[UIView alloc] initWithFrame:CGRectMake(80, 0, 42, 49)];
+        UIView *emailView=[[UIView alloc] initWithFrame:CGRectMake(100, 0, 42, 49)];
         emailView.backgroundColor=[UIColor clearColor];
         emailView.tag=2;
         UITapGestureRecognizer *singleTab1 =[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(singleOne:)];
@@ -83,7 +83,7 @@
         //emailBadge.badgeText = [NSString stringWithFormat:@"%d", 2];
         
         
-        UIView *addressdView=[[UIView alloc] initWithFrame:CGRectMake(140, 0, 42, 49)];
+        UIView *addressdView=[[UIView alloc] initWithFrame:CGRectMake(176, 0, 42, 49)];
         addressdView.backgroundColor=[UIColor clearColor];
         addressdView.tag=3;
         UITapGestureRecognizer *singleTab2 =[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(singleOne:)];
@@ -107,7 +107,7 @@
         
         
         
-        UIView *settingView=[[UIView alloc] initWithFrame:CGRectMake(200, 0, 42, 49)];
+        UIView *settingView=[[UIView alloc] initWithFrame:CGRectMake(252, 0, 42, 49)];
         settingView.backgroundColor=[UIColor clearColor];
         settingView.tag=4;
         UITapGestureRecognizer *singleTab3 =[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(singleOne:)];
@@ -127,30 +127,6 @@
         settingLabel.backgroundColor = [UIColor clearColor];
         settingLabel.font = [UIFont systemFontOfSize:13];
         [settingView addSubview:settingLabel];
-        
-        
-        
-        //chat
-        UIView *chatView = [[UIView alloc] initWithFrame:CGRectMake(260, 0, 42, 49)];
-        chatView.backgroundColor = [UIColor clearColor];
-        chatView.tag = 5;
-        UITapGestureRecognizer *singleTab4 =[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(singleOne:)];
-        [chatView addGestureRecognizer:singleTab4];
-        [self addSubview:chatView];
-        chatBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        chatBtn.userInteractionEnabled=NO;
-        [chatBtn setImage:Image(@"btn_sms_ecm") forState:UIControlStateNormal];
-        [chatBtn setImage:Image(@"btn_sms_ecm_press") forState:UIControlStateSelected];
-        [chatBtn setImage:Image(@"btn_sms_ecm_press") forState:UIControlStateHighlighted];
-        [chatBtn setFrame:CGRectMake(8, 9, 25, 25)];
-        [chatView addSubview:chatBtn];
-        
-        chatLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 30, 42, 21)];
-        chatLabel.text = @"聊天";
-        chatLabel.textAlignment = NSTextAlignmentCenter;
-        chatLabel.backgroundColor = [UIColor clearColor];
-        chatLabel.font = [UIFont systemFontOfSize:13];
-        [chatView addSubview:chatLabel];
     }
     return self;
 }
@@ -165,7 +141,7 @@
     //NSLog(@"%ld",(long)view.tag);
     if (owner && [owner respondsToSelector:@selector(onSingleOneDone:)])
     {
-     [owner onSingleOneDone:view.tag];
+        [owner onSingleOneDone:view.tag];
     }
     
 }
@@ -177,12 +153,12 @@
 }
 
 /*
-// Only override drawRect: if you perform custom drawing.
-// An empty implementation adversely affects performance during animation.
-- (void)drawRect:(CGRect)rect
-{
-    // Drawing code
-}
-*/
+ // Only override drawRect: if you perform custom drawing.
+ // An empty implementation adversely affects performance during animation.
+ - (void)drawRect:(CGRect)rect
+ {
+ // Drawing code
+ }
+ */
 
 @end

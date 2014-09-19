@@ -1570,7 +1570,7 @@
         [signatureImageView.tdView setHidden:NO];
         return;
     }
-    NSURL* signatureUrl = [DataServiceURLs getSignature:[APPUtils userUid] TFRM:GTaskDetailInfo[@"TFRM"] Style:@"0"];
+    NSURL* signatureUrl = [DataServiceURLs getSignature:[APPUtils userUid] TFRM:GTaskDetailInfo[@"TFRM"] Style:@"2"];
     
     SKHTTPRequest *request = [SKHTTPRequest requestWithURL:signatureUrl];
     __weak SKHTTPRequest *req = request;

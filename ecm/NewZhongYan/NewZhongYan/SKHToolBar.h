@@ -27,13 +27,11 @@
 @property(nonatomic,strong)UIButton* emailBtn;
 @property(nonatomic,strong)UIButton* addressdBtn;
 @property(nonatomic,retain)UIButton* settingBtn;
-@property(nonatomic,strong) UIButton *chatBtn;
 
 @property(nonatomic,strong)UILabel*  remindLabel;
 @property(nonatomic,strong)UILabel*  emailLabel;
 @property(nonatomic,strong)UILabel*  addressdLabel;
 @property(nonatomic,strong)UILabel*  settingLabel;
-@property(nonatomic, strong) UILabel *chatLabel;
 @property(nonatomic,strong)JSBadgeView *remindBadge;
 @property(nonatomic,strong)JSBadgeView *emailBadge;
 

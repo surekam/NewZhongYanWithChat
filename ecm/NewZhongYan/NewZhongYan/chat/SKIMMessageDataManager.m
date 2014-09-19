@@ -71,8 +71,7 @@
         if ([resultCode isEqualToString:RETURN_CODE_SUCCESS]) {
             NSString *index = [messageRetDic objectForKey:IM_XML_HEAD_INDEX_ATTR];
             NSString *msgId = [messageRetDic objectForKey:IM_XML_BODY_SENDMSG_MESSAGEID_ATTR];
-            //NSDate *sendDate = [messageRetDic objectForKey:IM_XML_BODY_SENDMSG_SENDDATE_ATTR];
-            NSDate *sendDate = [DateUtils stringToDate:[messageRetDic objectForKey:IM_XML_BODY_SENDMSG_SENDDATE_ATTR] DateFormat:displayDateTimeFormat];
+            NSString *sendDate = [messageRetDic objectForKey:IM_XML_BODY_SENDMSG_SENDDATE_ATTR];
             
             SKIMMessageDBModel *msgModel = [[SKIMMessageDBModel alloc] init];
             NSString *querySql = [[@"SELECT RID FROM IM_MESSAGE WHERE ISACKED = 0 AND MSGSENDTYPE = 0 AND MSGID = '" stringByAppendingString:index] stringByAppendingString:@"'"];
