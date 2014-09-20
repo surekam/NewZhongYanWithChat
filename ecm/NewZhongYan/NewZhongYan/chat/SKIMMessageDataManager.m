@@ -161,7 +161,7 @@
         [dataDic setObject:message.receiver forKey:@"RECEIVERID"];
         [dataDic setObject:[NSNumber numberWithBool:message.isGroup] forKey:@"ISGROUP"];
         [dataDic setObject:(message.isGroup ? message.groupId : [NSNull null]) forKey:@"GROUPID"];
-        [dataDic setObject:[NSNumber numberWithBool:NO] forKey:@"ISREAD"];
+        [dataDic setObject:[NSNumber numberWithBool:message.isRead] forKey:@"ISREAD"];
         [dataDic setObject:isAcked forKey:@"ISACKED"];
         [dataDic setObject:[NSNumber numberWithInteger:0] forKey:@"DELIVERYSTATE"];
         [dataDic setObject:msgType forKey:@"MSGTYPE"];

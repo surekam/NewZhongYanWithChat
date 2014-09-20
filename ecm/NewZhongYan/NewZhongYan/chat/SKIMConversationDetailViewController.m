@@ -311,6 +311,7 @@
     mixMessage.avatorUrl = [SKIMUser currentUser].avatarUri;
     mixMessage.receiver = self.conversation.chatterId;
     mixMessage.isGroup = self.conversation.isGroup;
+    mixMessage.isRead = YES;
     mixMessage.messageMediaType = XHBubbleMessageMediaTypeMix;
     [self addMessage:mixMessage];
     [self finishSendMessageWithBubbleMessageType:XHBubbleMessageMediaTypeMix];
@@ -330,6 +331,7 @@
     textMessage.avatorUrl = [SKIMUser currentUser].avatarUri;
     textMessage.receiver = self.conversation.chatterId;
     textMessage.isGroup = self.conversation.isGroup;
+    textMessage.isRead = YES;
     textMessage.messageMediaType = XHBubbleMessageMediaTypeText;
     [self addMessage:textMessage];
     [self finishSendMessageWithBubbleMessageType:XHBubbleMessageMediaTypeText];
@@ -416,10 +418,19 @@
  *  @return 根据indexPath获取消息的Model的对象，从而判断返回YES or NO来控制是否显示时间轴Label
  */
 - (BOOL)shouldDisplayTimestampForRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (indexPath.row % 2)
-        return YES;
-    else
+    NSDate *currentMsgDate = ((id<XHMessageModel>)self.messages[indexPath.row]).timestamp;
+    NSDate *preMsgDate = [NSDate dateWithTimeIntervalSince1970:0];
+    if (indexPath.row > 0) {
+        preMsgDate = ((id<XHMessageModel>)self.messages[indexPath.row - 1]).timestamp;
+    }
+    NSDateComponents *comp1 = [[NSCalendar currentCalendar] components:(NSYearCalendarUnit| NSMonthCalendarUnit| NSDayCalendarUnit|  NSHourCalendarUnit| NSMinuteCalendarUnit) fromDate:preMsgDate];
+    NSDateComponents *comp2 = [[NSCalendar currentCalendar] components:(NSYearCalendarUnit| NSMonthCalendarUnit| NSDayCalendarUnit|  NSHourCalendarUnit| NSMinuteCalendarUnit) fromDate:currentMsgDate];
+    currentMsgDate = [[NSCalendar currentCalendar] dateFromComponents:comp1];
+    preMsgDate = [[NSCalendar currentCalendar] dateFromComponents:comp2];
+    if ([currentMsgDate isEqualToDate:preMsgDate]) {
         return NO;
+    }
+    return YES;
 }
 
 /**

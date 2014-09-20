@@ -10,6 +10,7 @@
 #import "SKIMTcpHelper.h"
 #import "SKIMTcpRequestHelper.h"
 #import "DDXMLNode.h"
+#import "RegExCategories.h"
 
 @interface NewZhongYanTests () 
 {
@@ -56,6 +57,16 @@
     NSString *dateTime = @"2014-09-18 16:40:04";
     NSDate *date = [DateUtils stringToDate:dateTime DateFormat:@"yyyy-MM-dd HH:mm:ss"];
     NSLog(@"date=%@", date);
+}
+
+- (void)test_regx {
+    
+    NSString *regx = @"/\\{\\{.+/\\}\\}";
+    NSString *str = @"FHA/{{adfads.png/}}asdfa";
+    NSArray *matchs = [str matchesWithDetails:RX(regx)];
+    for (RxMatch *match in matchs) {
+        NSLog(@"matched value = (%@), matched range = (%d, %d)", match.value, match.range.location, match.range.length);
+    }
 }
 
 @end

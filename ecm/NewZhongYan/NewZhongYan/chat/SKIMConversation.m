@@ -121,7 +121,16 @@
 
 - (NSUInteger)unreadMessagesCount
 {
-    return 100;
+    NSUInteger unreadCount = 0;
+    if (self.rid) {
+        SKIMMessageDBModel *msgModel = [[SKIMMessageDBModel alloc] init];
+        NSString *querySql = [NSString stringWithFormat:@"SELECT COUNT(1) AS UNREADCOUNT FROM IM_MESSAGE WHERE ISREAD = 0 AND CONVERSATIONID = %@", self.rid];
+        NSArray *resultDics = [msgModel querSelectSql:querySql];
+        if (resultDics.count) {
+            unreadCount = [[resultDics[0] objectForKey:@"UNREADCOUNT"] intValue];
+        }
+    }
+    return unreadCount;
 }
 
 //加载指定条数的消息

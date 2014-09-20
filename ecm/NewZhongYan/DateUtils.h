@@ -69,8 +69,10 @@
 +(NSInteger)weekToNumber:(NSString*)weekString;
 +(NSString*)numberToWeek:(NSInteger)weekNumber;
 
-//转换IM时间
-- (NSString *)datetoIMDate;
+//转换聊天会话列表时间
+- (NSString *)dateToConversationListDate;
+//转换聊天会话详情时间
+- (NSString *)dateToConversationDetailDate;
 //今天 昨天 前天....
 -(NSString*)dateToDetail;
 //日期转农历

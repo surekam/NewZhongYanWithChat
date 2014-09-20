@@ -431,7 +431,7 @@
     
 }
 
-- (NSString *)datetoIMDate
+- (NSString *)dateToConversationListDate
 {
     NSString *dateString = nil;
     NSDate *now = [NSDate date];
@@ -446,6 +446,24 @@
         dateString = [DateUtils dateToString:self DateFormat:@"MM-dd"];
     } else {
         dateString = [DateUtils dateToString:self DateFormat:@"yyyy-MM-dd"];
+    }
+    return dateString;
+}
+
+- (NSString *)dateToConversationDetailDate
+{
+    NSString *dateString = nil;
+    NSDate *now = [NSDate date];
+    if ([self isToday]) {
+        dateString = [@"今天 " stringByAppendingString:[DateUtils dateToString:self DateFormat:@"HH:mm"]];
+    } else if ([self isYesterday]) {
+        dateString = [@"昨天 " stringByAppendingString:[DateUtils dateToString:self DateFormat:@"HH:mm"]];
+    } else if ([self isEqualToDateIgnoringTime:[NSDate dateWithDaysBeforeNow:2]]) {
+        dateString = [@"前天 " stringByAppendingString:[DateUtils dateToString:self DateFormat:@"HH:mm"]];
+    } else if ([self isSameYearAsDate:now]) {
+        dateString = [DateUtils dateToString:self DateFormat:@"MM-dd HH:mm"];
+    } else {
+        dateString = [DateUtils dateToString:self DateFormat:@"yyyy-MM-dd  HH:mm"];
     }
     return dateString;
 }

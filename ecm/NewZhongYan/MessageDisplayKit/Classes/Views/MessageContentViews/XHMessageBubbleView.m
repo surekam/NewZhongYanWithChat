@@ -118,7 +118,7 @@
     CGSize picSize = [XHMessageBubbleView neededSizeForPhoto:nil];
     CGFloat picWidth = pictureMatchs.count ? picSize.width : 0.0;
     
-    CGFloat dyWidth = textSize.width > picWidth ? textSize.width : picWidth;
+    CGFloat dyWidth = textSize.width > picWidth ? textSize.width : picWidth + kBubblePaddingRight * 3;
 
     return CGSizeMake(dyWidth, textSize.height + picSize.height * pictureMatchs.count);
 }

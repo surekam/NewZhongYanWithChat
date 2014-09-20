@@ -162,16 +162,14 @@ static const CGFloat kXHBubbleMessageViewPadding = 8;
     self.displayTimestamp = displayTimestamp;
     self.timestampLabel.hidden = !self.displayTimestamp;
     if (displayTimestamp) {
-        self.timestampLabel.text = [NSDateFormatter localizedStringFromDate:message.timestamp
-                                                                  dateStyle:NSDateFormatterMediumStyle
-                                                                  timeStyle:NSDateFormatterShortStyle];
+        self.timestampLabel.text = [message.timestamp dateToConversationDetailDate];
     }
 }
 
 - (void)configAvatorWithMessage:(id <XHMessageModel>)message {
     if (message.avator) {
         [self.avatorButton setImage:message.avator forState:UIControlStateNormal];
-        if (message.avatorUrl) {
+        if (message.avatorUrl.length) {
             UIImageView *avatarView = [[UIImageView alloc] init];
             [avatarView sd_setImageWithURL:[NSURL URLWithString:message.avatorUrl] placeholderImage:[UIImage imageNamed:message.rid]];
             [self.avatorButton setImage:[XHMessageAvatorFactory avatarImageNamed:avatarView.image messageAvatorType:XHMessageAvatorTypeSquare] forState:UIControlStateNormal];
@@ -185,7 +183,9 @@ static const CGFloat kXHBubbleMessageViewPadding = 8;
 }
 
 - (void)configUserNameWithMessage:(id <XHMessageModel>)message {
-    self.userNameLabel.text = [message sender];
+    if ([message isGroup]) {
+        self.userNameLabel.text = [message senderName];
+    }
 }
 
 - (void)configureMessageBubbleViewWithMessage:(id <XHMessageModel>)message {

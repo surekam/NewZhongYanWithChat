@@ -12,6 +12,8 @@
 #import "SKIMConversationDetailViewController.h"
 #import "UIImageView+WebCache.h"
 #import "SKAddressController.h"
+#import "RegExCategories.h"
+#import "SKIMServiceDefs.h"
 
 @interface SKIMConversationListViewController ()
 
@@ -85,7 +87,7 @@
 -(void)createToolBar
 {
     SKSToolBar* myToolBar = [[SKSToolBar alloc] initWithFrame:CGRectMake(0, BottomY-49, 320, 49)];
-    [myToolBar.firstButton addTarget:self action:@selector(showMenuOnView:) forControlEvents:UIControlEventTouchUpInside];
+    //[myToolBar.firstButton addTarget:self action:@selector(showMenuOnView:) forControlEvents:UIControlEventTouchUpInside];
     //    [myToolBar.secondButton addTarget:self action:@selector(getUserInfoFromServer) forControlEvents:UIControlEventTouchUpInside];
     [myToolBar setFirstItem:@"btn_sms_ecm" Title:@"新建"];
     [myToolBar setSecondItem:@"btn_refresh_ecm" Title:@"刷新"];
@@ -147,10 +149,12 @@
                 case XHBubbleMessageMediaTypeEmotion:
                     cell.msgLabel.text = @"[表情]";
                     break;
+                case XHBubbleMessageMediaTypeMix:
+                    cell.msgLabel.text = [latestMsg.text replace:RX(PICTURE_REGX) with:@"[图片]"];
+                    break;
                 default:
                     break;
             }
-
         }
         [cell setUnreadNum:[NSString stringWithFormat:@"%lu", (unsigned long)[conversation unreadMessagesCount]]];
     }
