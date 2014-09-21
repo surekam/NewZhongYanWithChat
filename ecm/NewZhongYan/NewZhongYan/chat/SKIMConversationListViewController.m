@@ -57,7 +57,7 @@
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(showContactsPicker)];
     self.tableView.frame = CGRectMake(0.0f, 0.0f,self.view.bounds.size.width, self.view.bounds.size.height-49.0f);
     [self createToolBar];
-    [self loadDataSource];
+    //[self loadDataSource];
     [self configuraTableViewNormalSeparatorInset];
     [self setExtraCellLineHidden:self.tableView];
 }
@@ -156,7 +156,9 @@
                     break;
             }
         }
-        [cell setUnreadNum:[NSString stringWithFormat:@"%lu", (unsigned long)[conversation unreadMessagesCount]]];
+        NSString *unreadCount = [NSString stringWithFormat:@"%lu", (unsigned long)[conversation unreadMessagesCount]];
+        NSLog(@"unreadCount=%@", unreadCount);
+        [cell setUnreadNum:unreadCount];
     }
     return cell;
 }
