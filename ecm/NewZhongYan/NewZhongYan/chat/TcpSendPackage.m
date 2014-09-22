@@ -60,7 +60,7 @@ static unsigned long long sendIndex = 0;
                                    message,                             IM_XML_BODY_SENDMSG_CONTENT_ATTR, nil];
     
     NSData *packageBody = [[[SKIMXMLUtils sharedXMLUtils] buildSendMsgXML:params] XMLData];
-    NSLog(@"sendMessage=%@", [NSString stringWithUTF8String:[packageBody bytes]]);
+    //NSLog(@"sendMessage=%@", [NSString stringWithUTF8String:[packageBody bytes]]);
     NSData *packageData = [self createPackageWithBody:packageBody];
     return packageData;
 }

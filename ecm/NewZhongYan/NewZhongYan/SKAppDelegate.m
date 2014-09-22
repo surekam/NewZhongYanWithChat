@@ -25,6 +25,8 @@
 #import "SKIMDBOperate.h"
 #import "SKIMTcpHelper.h"
 #import "SKIMTcpRequestHelper.h"
+#import "SKIMStatus.h"
+
 #define MAXTIME 1
 static User* currentUser = nil;
 @implementation SKAppDelegate

@@ -10,6 +10,7 @@
 #import "SKIMSocketConfig.h"
 #import "SKIMTcpRequestHelper.h"
 #import "TcpReadPackage.h"
+#import "SKIMStatus.h"
 
 SKIMTcpHelper *TcpHelperSINGLE;
 
@@ -98,7 +99,9 @@ SKIMTcpHelper *TcpHelperSINGLE;
 {
     [sock readDataWithTimeout:-1 tag:tcpCommandId];
     NSLog(@"=====Soket 已经连接到服务器:%@ %hu",host,port);
-    [[SKIMTcpRequestHelper shareTcpRequestHelper] sendLogingPackageCommandId:TCP_LOGIN_COMMAND_ID];
+    if (![SKIMStatus sharedStatus].isLogin) {
+        [[SKIMTcpRequestHelper shareTcpRequestHelper] sendLogingPackageCommandId:TCP_LOGIN_COMMAND_ID];
+    }
 }
 
 // 接收到了一个新的socket连接 自动回调
@@ -211,6 +214,7 @@ SKIMTcpHelper *TcpHelperSINGLE;
 
 - (void)onSocketDidDisconnect:(AsyncSocket *)sock{
     NSLog(@"======Socket DidDisconnected");
+    [SKIMStatus sharedStatus].isLogin = NO;
 }
 
 @end

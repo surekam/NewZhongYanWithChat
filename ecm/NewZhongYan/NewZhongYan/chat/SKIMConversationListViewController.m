@@ -17,6 +17,8 @@
 
 @interface SKIMConversationListViewController ()
 
+@property (nonatomic, weak) UIView *networkNotificationView;
+
 @end
 
 @implementation SKIMConversationListViewController
@@ -53,19 +55,26 @@
         self.navigationItem.backBarButtonItem = barBtn;
     }
     self.title = @"即时聊天";
-    [self.view addSubview:self.tableView];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(showContactsPicker)];
     self.tableView.frame = CGRectMake(0.0f, 0.0f,self.view.bounds.size.width, self.view.bounds.size.height-49.0f);
+    
+    [self.view addSubview:self.tableView];
+    [self addNetworkNotificationView];
     [self createToolBar];
     //[self loadDataSource];
     [self configuraTableViewNormalSeparatorInset];
     [self setExtraCellLineHidden:self.tableView];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(netWorkChanged:) name:kReachabilityChangedNotification object:nil];
 }
 
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void) dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:kReachabilityChangedNotification object:nil];
 }
 
 -(void)back:(id)sender
@@ -83,7 +92,7 @@
     [self.navigationController presentViewController:nav animated:YES completion:nil];
 }
 
-#pragma mark - ToolBar
+#pragma mark - 自定View
 -(void)createToolBar
 {
     SKSToolBar* myToolBar = [[SKSToolBar alloc] initWithFrame:CGRectMake(0, BottomY-49, 320, 49)];
@@ -93,6 +102,32 @@
     [myToolBar setSecondItem:@"btn_refresh_ecm" Title:@"刷新"];
     
     [self.view addSubview:myToolBar];
+}
+
+- (void)addNetworkNotificationView {
+    
+    UIView *notificationView = [[UIView alloc] initWithFrame:CGRectMake(0, -40, self.tableView.bounds.size.width, 40)];
+    UIImageView *warningImageView = [[UIImageView alloc] initWithFrame:CGRectMake(10, 10, 24, 24)];
+    warningImageView.image = [UIImage imageNamed:@"chat_warning"];
+    UILabel *warningLabel = [[UILabel alloc] initWithFrame:CGRectMake(42, 10, 260, 24)];
+    warningLabel.font = [UIFont systemFontOfSize:14];
+    warningLabel.backgroundColor = [UIColor clearColor];
+    warningLabel.text = @"当前网络不可用，请检查你的网络设置。";
+    [notificationView addSubview:warningImageView];
+    [notificationView addSubview:warningLabel];
+    notificationView.backgroundColor = COLOR(252, 235, 168);
+    UIEdgeInsets tableInsets = self.tableView.contentInset;
+    if ([APPUtils currentReachabilityStatus] != NotReachable) {
+        self.tableView.contentInset = tableInsets;
+        notificationView.hidden = YES;
+    } else {
+        tableInsets.top = tableInsets.top + 40;
+        self.tableView.contentInset = tableInsets;
+        notificationView.hidden = NO;
+    }
+    _networkNotificationView = notificationView;
+    
+    [self.tableView addSubview:notificationView];
 }
 
 #pragma mark - DataSource
@@ -105,6 +140,31 @@
             [self.tableView reloadData];
         });
     });
+}
+
+#pragma mark - Reachability
+
+- (void)updateInterfaceWithReachability:(Reachability *)reachability
+{
+    NetworkStatus networkstatus = [reachability currentReachabilityStatus];
+    UIEdgeInsets tableInsets = self.tableView.contentInset;
+    if (networkstatus == NotReachable)
+    {
+        tableInsets.top = tableInsets.top + 40;
+        self.tableView.contentInset = tableInsets;
+        _networkNotificationView.hidden = NO;
+    } else {
+        tableInsets.top = tableInsets.top - 40;
+        self.tableView.contentInset = tableInsets;
+        _networkNotificationView.hidden = YES;
+    }
+}
+
+- (void) netWorkChanged:(NSNotification *)note
+{
+	Reachability* curReach = [note object];
+	NSParameterAssert([curReach isKindOfClass:[Reachability class]]);
+	[self updateInterfaceWithReachability:curReach];
 }
 
 #pragma mark - UITableView DataSource
