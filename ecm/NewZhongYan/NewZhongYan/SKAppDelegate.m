@@ -26,6 +26,7 @@
 #import "SKIMTcpHelper.h"
 #import "SKIMTcpRequestHelper.h"
 #import "SKIMStatus.h"
+#import "SKIMServiceDefs.h"
 
 #define MAXTIME 1
 static User* currentUser = nil;
@@ -164,12 +165,19 @@ NSUInteger DeviceSystemMajorVersion() {
 	[self updateInterfaceWithReachability:curReach];
 }
 
+- (void) socketDidDisconnected
+{
+    [self imLogin];
+}
+
 -(void)createNetObserver
 {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reachabilityChanged:) name:kReachabilityChangedNotification object:nil];
     self.internetReachability = [Reachability reachabilityWithHostname:@"tam.hngytobacco.com"];
 	[self.internetReachability startNotifier];
     [self updateInterfaceWithReachability:self.internetReachability];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(socketDidDisconnected) name:kNotiSocketDidDisconnected object:nil];
 }
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions

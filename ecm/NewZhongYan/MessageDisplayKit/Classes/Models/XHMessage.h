@@ -19,7 +19,7 @@
 @property (nonatomic, copy) NSString *receiver;
 @property (nonatomic, assign) BOOL isRead;
 @property (nonatomic, assign) BOOL isAcked;
-@property (nonatomic, copy) NSString *deliveryState;
+@property (nonatomic, assign) MessageDeliveryState deliveryState;
 @property (nonatomic, copy) NSString *text;
 
 @property (nonatomic, strong) UIImage *photo;

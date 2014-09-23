@@ -43,7 +43,7 @@
         msg.groupId = [dic objectForKey:@"GROUPID"];
         msg.isRead = [[dic objectForKey:@"ISREAD"] boolValue];
         msg.isAcked = [[dic objectForKey:@"ISACKED"] boolValue];
-        msg.deliveryState = [dic objectForKey:@"DELIVERYSTATE"];
+        msg.deliveryState = (MessageDeliveryState)[[dic objectForKey:@"DELIVERYSTATE"] integerValue];
         msg.messageMediaType = (XHBubbleMessageMediaType)[[dic objectForKey:@"MSGTYPE"] integerValue];
         msg.bubbleMessageType = (XHBubbleMessageType)[[dic objectForKey:@"MSGSENDTYPE"] integerValue];
         msg.text = [dic objectForKey:@"MSGBODY"];

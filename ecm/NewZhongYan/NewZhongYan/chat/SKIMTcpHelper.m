@@ -11,6 +11,7 @@
 #import "SKIMTcpRequestHelper.h"
 #import "TcpReadPackage.h"
 #import "SKIMStatus.h"
+#import "SKIMServiceDefs.h"
 
 SKIMTcpHelper *TcpHelperSINGLE;
 
@@ -215,6 +216,7 @@ SKIMTcpHelper *TcpHelperSINGLE;
 - (void)onSocketDidDisconnect:(AsyncSocket *)sock{
     NSLog(@"======Socket DidDisconnected");
     [SKIMStatus sharedStatus].isLogin = NO;
+    [[NSNotificationCenter defaultCenter] postNotificationName:kNotiSocketDidDisconnected object:nil];
 }
 
 @end

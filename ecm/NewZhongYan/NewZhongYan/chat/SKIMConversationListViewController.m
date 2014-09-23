@@ -64,6 +64,7 @@
     //[self loadDataSource];
     [self configuraTableViewNormalSeparatorInset];
     [self setExtraCellLineHidden:self.tableView];
+    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(netWorkChanged:) name:kReachabilityChangedNotification object:nil];
 }
 

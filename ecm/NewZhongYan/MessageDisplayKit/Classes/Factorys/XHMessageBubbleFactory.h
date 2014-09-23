@@ -48,6 +48,21 @@ typedef NS_ENUM(NSInteger, XHBubbleMessageMenuSelecteType) {
     XHBubbleMessageMenuSelecteTypeVoiceMore = 14,
 };
 
+/*!
+ @enum
+ @brief 聊天消息发送状态
+ @constant MessageDeliveryState_Pending 待发送
+ @constant MessageDeliveryState_Delivering 正在发送
+ @constant MessageDeliveryState_Delivered 已发送, 成功
+ @constant MessageDeliveryState_Failure 已发送, 失败
+ */
+typedef NS_ENUM(NSInteger, MessageDeliveryState){
+    MessageDeliveryState_Delivering = 0,
+    MessageDeliveryState_Delivered = 1,
+    MessageDeliveryState_Failure = 2,
+};
+
+
 @interface XHMessageBubbleFactory : NSObject
 
 + (UIImage *)bubbleImageViewForType:(XHBubbleMessageType)type

@@ -69,7 +69,7 @@
 }
 
 + (CGSize)neededSizeForText:(NSString *)text {
-    CGFloat maxWidth = CGRectGetWidth([[UIScreen mainScreen] bounds]) * (kIsiPad ? 0.8 : 0.55);
+    CGFloat maxWidth = CGRectGetWidth([[UIScreen mainScreen] bounds]) * (kIsiPad ? 0.8 : 0.50);
     
     CGFloat dyWidth = [XHMessageBubbleView neededWidthForText:text];
     
@@ -162,7 +162,7 @@
         default:
             break;
     }
-    NSLog(@"bubbleSize=%f,%f", bubbleSize.width, bubbleSize.height);
+    //NSLog(@"bubbleSize=%f,%f", bubbleSize.width, bubbleSize.height);
     return bubbleSize;
 }
 

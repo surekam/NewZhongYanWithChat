@@ -45,7 +45,7 @@
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
     [[XHAudioPlayerHelper shareInstance] stopAudio];
-    if (_conversation.messages && !_conversation.isEnable) {
+    if (self.messages.count && !_conversation.isEnable) {
         _conversation.isEnable = YES;
     }
 }
@@ -312,6 +312,7 @@
     mixMessage.receiver = self.conversation.chatterId;
     mixMessage.isGroup = self.conversation.isGroup;
     mixMessage.isRead = YES;
+    mixMessage.deliveryState = MessageDeliveryState_Delivering;
     mixMessage.messageMediaType = XHBubbleMessageMediaTypeMix;
     [self addMessage:mixMessage];
     [self finishSendMessageWithBubbleMessageType:XHBubbleMessageMediaTypeMix];
@@ -332,6 +333,7 @@
     textMessage.receiver = self.conversation.chatterId;
     textMessage.isGroup = self.conversation.isGroup;
     textMessage.isRead = YES;
+    textMessage.deliveryState = MessageDeliveryState_Delivering;
     textMessage.messageMediaType = XHBubbleMessageMediaTypeText;
     [self addMessage:textMessage];
     [self finishSendMessageWithBubbleMessageType:XHBubbleMessageMediaTypeText];

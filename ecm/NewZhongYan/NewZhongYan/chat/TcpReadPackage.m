@@ -12,7 +12,7 @@
 #import "SKIMXMLConstants.h"
 #import "SKIMStatus.h"
 #import "SKIMMessageDataManager.h"
-
+#import "SKIMServiceDefs.h"
 #import "TcpSendPackage.h"
 #import "SKIMTcpHelper.h"
 
@@ -48,6 +48,7 @@
             bodyDic = [[SKIMXMLUtils sharedXMLUtils] getServerSendMsgRetBody:xml];
             [bodyDic setValue:[headInfos objectForKey:IM_XML_HEAD_INDEX_ATTR] forKey:IM_XML_HEAD_INDEX_ATTR];
             [[SKIMMessageDataManager sharedMessageDataManager] receiveSendMessageRet:bodyDic];
+            [[NSNotificationCenter defaultCenter] postNotificationName:kNotiSendMessageSuccess object:bodyDic];
             NSLog(@"%@\n,%@", headInfos, bodyDic);
             
         } else if ([businessCode isEqualToString:BUSINESS_SERVER_RELOGIN]) {

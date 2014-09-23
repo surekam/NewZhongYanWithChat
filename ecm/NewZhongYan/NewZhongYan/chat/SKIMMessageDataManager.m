@@ -78,7 +78,7 @@
             NSArray* result = [msgModel querSelectSql:querySql];
             if (result.count) {
                 NSString *rid = [result[0] objectForKey:@"RID"];
-                NSString *updateSql = [NSString stringWithFormat:@"UPDATE IM_MESSAGE SET ISACKED = 1, MSGID = '%@', SENDTIME = '%@' WHERE RID = %@", msgId, sendDate, rid];
+                NSString *updateSql = [NSString stringWithFormat:@"UPDATE IM_MESSAGE SET ISACKED = 1, DELIVERYSTATE = 1, MSGID = '%@', SENDTIME = '%@' WHERE RID = %@", msgId, sendDate, rid];
                 [msgModel queryUpdateSql:updateSql];
             }
         }
@@ -154,6 +154,7 @@
         NSNumber *msgType = [NSNumber numberWithInteger:message.messageMediaType];
         NSNumber *msgSendType = [NSNumber numberWithInteger:message.bubbleMessageType];
         NSNumber *isAcked = msgSendType;
+        NSNumber *deliveryState = msgSendType.intValue ? [NSNumber numberWithInteger:(NSInteger)MessageDeliveryState_Delivered] : [NSNumber numberWithInteger:(NSInteger)MessageDeliveryState_Delivering];
         
         [dataDic setObject:(message.msgId ? message.msgId : [NSNull null]) forKey:@"MSGID"];
         [dataDic setObject:conversation.rid forKey:@"CONVERSATIONID"];
@@ -163,7 +164,7 @@
         [dataDic setObject:(message.isGroup ? message.groupId : [NSNull null]) forKey:@"GROUPID"];
         [dataDic setObject:[NSNumber numberWithBool:message.isRead] forKey:@"ISREAD"];
         [dataDic setObject:isAcked forKey:@"ISACKED"];
-        [dataDic setObject:[NSNumber numberWithInteger:0] forKey:@"DELIVERYSTATE"];
+        [dataDic setObject:deliveryState forKey:@"DELIVERYSTATE"];
         [dataDic setObject:msgType forKey:@"MSGTYPE"];
         [dataDic setObject:msgSendType forKey:@"MSGSENDTYPE"];
         [dataDic setObject:message.text forKey:@"MSGBODY"];

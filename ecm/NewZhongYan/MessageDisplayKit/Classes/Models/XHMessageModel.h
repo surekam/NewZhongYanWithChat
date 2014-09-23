@@ -22,7 +22,7 @@
 - (NSString *)receiver;
 - (BOOL) isRead;
 - (BOOL) isAcked;
-- (NSString *)deliveryState;
+- (MessageDeliveryState)deliveryState;
 - (NSString *)text;
 
 - (UIImage *)photo;
