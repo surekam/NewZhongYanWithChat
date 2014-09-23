@@ -15,6 +15,8 @@
 
 SKIMTcpHelper *TcpHelperSINGLE;
 
+static BOOL isConnecting;
+
 @implementation SKIMTcpHelper
 
 + (SKIMTcpHelper *)shareChatTcpHelper
@@ -37,6 +39,9 @@ SKIMTcpHelper *TcpHelperSINGLE;
 }
 
 - (BOOL)connectToHost {
+    if (isConnecting) {
+        return NO;
+    }
     if (allData != nil) {
         allData = nil;
     }
@@ -48,8 +53,9 @@ SKIMTcpHelper *TcpHelperSINGLE;
     
     // 连接服务器
     if (![_serverSocket isConnected]) {
+        isConnecting = YES;
         [_serverSocket disconnect];
-        
+        NSLog(@"=====Soket 正在连接服务器...:%@ %i",SOCKETIP,SOCKETPORT);
         return [_serverSocket connectToHost:SOCKETIP onPort:SOCKETPORT error:nil];
     }
     else{
@@ -65,6 +71,9 @@ SKIMTcpHelper *TcpHelperSINGLE;
 
 - (void)redirectConnectToHost:(NSString *)IPStr port:(int)portStr{
     
+    if (isConnecting) {
+        return;
+    }
     [self disConnectHost];
     
     if (allData != nil) {
@@ -79,7 +88,7 @@ SKIMTcpHelper *TcpHelperSINGLE;
     // 连接服务器
     if (![_serverSocket isConnected]) {
         [_serverSocket disconnect];
-        
+        NSLog(@"=====Soket 正在重定向服务器...:%@ %i",IPStr,portStr);
         [_serverSocket connectToHost:IPStr onPort:portStr error:nil];
     }
     else{
@@ -98,6 +107,7 @@ SKIMTcpHelper *TcpHelperSINGLE;
 // 成功连接后自动回调
 -(void)onSocket:(AsyncSocket *)sock didConnectToHost:(NSString *)host port:(UInt16)port
 {
+    isConnecting = NO;
     [sock readDataWithTimeout:-1 tag:tcpCommandId];
     NSLog(@"=====Soket 已经连接到服务器:%@ %hu",host,port);
     if (![SKIMStatus sharedStatus].isLogin) {
@@ -215,6 +225,7 @@ SKIMTcpHelper *TcpHelperSINGLE;
 
 - (void)onSocketDidDisconnect:(AsyncSocket *)sock{
     NSLog(@"======Socket DidDisconnected");
+    isConnecting = NO;
     [SKIMStatus sharedStatus].isLogin = NO;
     [[NSNotificationCenter defaultCenter] postNotificationName:kNotiSocketDidDisconnected object:nil];
 }

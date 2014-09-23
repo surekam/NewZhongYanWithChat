@@ -82,8 +82,6 @@
  */
 @property (nonatomic, strong) NSIndexPath *indexPath;
 
-@property (nonatomic, weak, readonly) UIActivityIndicatorView * deliveryIndicatorView;
-
 /**
  *  获取消息类型
  *

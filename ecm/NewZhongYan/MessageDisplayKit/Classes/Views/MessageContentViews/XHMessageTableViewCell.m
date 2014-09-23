@@ -32,8 +32,6 @@ static const CGFloat kXHBubbleMessageViewPadding = 8;
 
 @property (nonatomic, weak, readwrite) LKBadgeView *timestampLabel;
 
-@property (nonatomic, weak, readwrite) UIActivityIndicatorView * deliveryIndicatorView;
-
 @property (nonatomic, weak) id<XHMessageModel> weakMessage;
 
 /**
@@ -165,23 +163,12 @@ static const CGFloat kXHBubbleMessageViewPadding = 8;
     _weakMessage = message;
     // 配置消息发送状态
     if (message && message.bubbleMessageType == XHBubbleMessageTypeSending && message.deliveryState == MessageDeliveryState_Delivering) {
-        if (!_deliveryIndicatorView) {
-            UIActivityIndicatorView *indicatorView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
-            indicatorView.backgroundColor = [UIColor clearColor];
-            _deliveryIndicatorView = indicatorView;
-            _deliveryIndicatorView.center = CGPointZero;
-            [self.messageBubbleView addSubview:_deliveryIndicatorView];
-            //添加信息发送成功监听器
-            [[NSNotificationCenter defaultCenter] removeObserver:self name:kNotiSendMessageSuccess object:nil];
-            [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(messageSendSuccess:) name:kNotiSendMessageSuccess object:nil];
-        }
-        [_deliveryIndicatorView startAnimating];
+        [[NSNotificationCenter defaultCenter] removeObserver:self name:kNotiSendMessageSuccess object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(messageSendSuccess:) name:kNotiSendMessageSuccess object:nil];
+        [self.messageBubbleView.deliveryIndicatorView startAnimating];
     } else {
-        if (_deliveryIndicatorView) {
-            [_deliveryIndicatorView stopAnimating];
-            [_deliveryIndicatorView removeFromSuperview];
-            [[NSNotificationCenter defaultCenter] removeObserver:self name:kNotiSendMessageSuccess object:nil];
-        }
+        [[NSNotificationCenter defaultCenter] removeObserver:self name:kNotiSendMessageSuccess object:nil];
+        [self.messageBubbleView.deliveryIndicatorView stopAnimating];
     }
 }
 
@@ -368,10 +355,6 @@ static const CGFloat kXHBubbleMessageViewPadding = 8;
     
     UITapGestureRecognizer *tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapGestureRecognizerHandle:)];
     [self addGestureRecognizer:tapGestureRecognizer];
-    
-    UIActivityIndicatorView *indicatorView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
-    indicatorView.backgroundColor = [UIColor clearColor];
-    _deliveryIndicatorView = indicatorView;
 }
 
 - (instancetype)initWithMessage:(id <XHMessageModel>)message
@@ -488,24 +471,6 @@ static const CGFloat kXHBubbleMessageViewPadding = 8;
     self.userNameLabel.center = CGPointMake(CGRectGetMidX(avatorButtonFrame), CGRectGetMaxY(avatorButtonFrame) + CGRectGetMidY(self.userNameLabel.bounds));
     
     self.messageBubbleView.frame = bubbleMessageViewFrame;
-    //self.messageBubbleView.backgroundColor = [UIColor yellowColor];
-    if (_deliveryIndicatorView && _weakMessage) {
-        CGRect relateViewFrame = CGRectZero;
-        XHBubbleMessageMediaType msgType = ((XHMessage *)_weakMessage).messageMediaType;
-        if (msgType == XHBubbleMessageMediaTypeText || msgType == XHBubbleMessageMediaTypeMix) {
-            relateViewFrame = self.messageBubbleView.bubbleImageView.frame;
-        } else if (msgType == XHBubbleMessageMediaTypePhoto) {
-            relateViewFrame = self.messageBubbleView.bubblePhotoImageView.frame;
-        } else if (msgType == XHBubbleMessageMediaTypeEmotion) {
-            relateViewFrame = self.messageBubbleView.emotionImageView.frame;
-        }
-        //TODO:完善类型
-        self.messageBubbleView.bubbleImageView.backgroundColor = [UIColor yellowColor];
-        self.messageBubbleView.backgroundColor = [UIColor grayColor];
-        _deliveryIndicatorView.center = CGPointMake(relateViewFrame.origin.x - 15, relateViewFrame.origin.y + 15);
-
-        NSLog(@"center(%f,%f)", _deliveryIndicatorView.center.x, _deliveryIndicatorView.center.y);
-    }
 }
 
 - (void)dealloc {
@@ -552,8 +517,7 @@ static const CGFloat kXHBubbleMessageViewPadding = 8;
             msg.deliveryState = MessageDeliveryState_Delivered;
             msg.timestamp = [DateUtils stringToDate:sendDate DateFormat:displayDateTimeFormat];
             
-            [_deliveryIndicatorView stopAnimating];
-            [_deliveryIndicatorView removeFromSuperview];
+            [self.messageBubbleView.deliveryIndicatorView stopAnimating];
             
             //TODO:刷新cell
             [[NSNotificationCenter defaultCenter] removeObserver:self name:kNotiSendMessageSuccess object:nil];

@@ -42,6 +42,8 @@
 
 @property (nonatomic, strong, readwrite) id <XHMessageModel> message;
 
+@property (nonatomic, weak, readwrite) UIActivityIndicatorView * deliveryIndicatorView;
+
 @end
 
 @implementation XHMessageBubbleView
@@ -425,6 +427,14 @@
             [self addSubview:emotionImageView];
             _emotionImageView = emotionImageView;
         }
+        
+        // 初始化显示发送状态的控件
+        if (!_deliveryIndicatorView) {
+            UIActivityIndicatorView *indicatorView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+            indicatorView.backgroundColor = [UIColor clearColor];
+            [self addSubview:indicatorView];
+            _deliveryIndicatorView = indicatorView;
+        }
     }
     return self;
 }
@@ -449,6 +459,8 @@
     _geolocationsLabel = nil;
     
     _font = nil;
+    
+    _deliveryIndicatorView = nil;
 }
 
 - (void)layoutSubviews {
@@ -512,16 +524,17 @@
             self.displayTextView.frame = CGRectIntegral(mixFrame);
             //self.displayTextView.backgroundColor = [UIColor blueColor];
             
-            NSLog(@"-------------------------");
-            NSLog(@"bubbleFrame=%f,%f,%f,%f", bubbleFrame.origin.x, bubbleFrame.origin.y, bubbleFrame.size.width, bubbleFrame.size.height);
-            NSLog(@"mixFrame=%f,%f,%f,%f", mixFrame.origin.x, mixFrame.origin.y, mixFrame.size.width, mixFrame.size.height);
-            NSLog(@"-------------------------");
+//            NSLog(@"-------------------------");
+//            NSLog(@"bubbleFrame=%f,%f,%f,%f", bubbleFrame.origin.x, bubbleFrame.origin.y, bubbleFrame.size.width, bubbleFrame.size.height);
+//            NSLog(@"mixFrame=%f,%f,%f,%f", mixFrame.origin.x, mixFrame.origin.y, mixFrame.size.width, mixFrame.size.height);
+//            NSLog(@"-------------------------");
             
             break;
         }
         default:
             break;
     }
+    [self resetdeliveryIndicatorViewFrameWithBubbleFrame];
 }
 
 - (void)resetVoiceDurationLabelFrameWithBubbleFrame:(CGRect)bubbleFrame {
@@ -530,6 +543,34 @@
     _voiceDurationLabel.frame = voiceFrame;
     
     _voiceDurationLabel.textAlignment = (self.message.bubbleMessageType == XHBubbleMessageTypeSending ? NSTextAlignmentRight : NSTextAlignmentLeft);
+}
+
+- (void)resetdeliveryIndicatorViewFrameWithBubbleFrame {
+    CGPoint deliveryIndicatorCenter = CGPointZero;
+    CGRect bubbleFrame = CGRectZero;
+    XHBubbleMessageMediaType currentType = self.message.messageMediaType;
+    switch (currentType) {
+        case XHBubbleMessageMediaTypeText:
+        case XHBubbleMessageMediaTypeMix:
+            bubbleFrame = self.bubbleImageView.frame;
+            break;
+        case XHBubbleMessageMediaTypeVoice:
+            bubbleFrame = self.voiceDurationLabel.frame;
+            break;
+        case XHBubbleMessageMediaTypeEmotion:
+            bubbleFrame = self.emotionImageView.frame;
+            break;
+        case XHBubbleMessageMediaTypePhoto:
+        case XHBubbleMessageMediaTypeVideo:
+        case XHBubbleMessageMediaTypeLocalPosition:
+            bubbleFrame = self.bubblePhotoImageView.frame;
+            break;
+        default:
+            break;
+    }
+    deliveryIndicatorCenter.x = (self.message.bubbleMessageType == XHBubbleMessageTypeSending ? bubbleFrame.origin.x - _deliveryIndicatorView.frame.size.width : bubbleFrame.origin.x + bubbleFrame.size.width + _deliveryIndicatorView.frame.size.width);
+    deliveryIndicatorCenter.y = (bubbleFrame.origin.y + _deliveryIndicatorView.frame.size.height);
+    _deliveryIndicatorView.center = deliveryIndicatorCenter;
 }
 
 @end

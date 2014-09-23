@@ -87,6 +87,9 @@
  */
 @property (nonatomic, strong) UIFont *font UI_APPEARANCE_SELECTOR;
 
+
+@property (nonatomic, weak, readonly) UIActivityIndicatorView * deliveryIndicatorView;
+
 /**
  *  初始化消息内容显示控件的方法
  *
