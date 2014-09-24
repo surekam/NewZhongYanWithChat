@@ -167,7 +167,9 @@ NSUInteger DeviceSystemMajorVersion() {
 
 - (void) socketDidDisconnected
 {
-    [self imLogin];
+    if (![SKIMStatus sharedStatus].isReLoginByOther) {
+        [self imLogin];
+    }
 }
 
 -(void)createNetObserver

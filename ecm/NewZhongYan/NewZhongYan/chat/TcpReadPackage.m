@@ -52,6 +52,10 @@
             NSLog(@"%@\n,%@", headInfos, bodyDic);
             
         } else if ([businessCode isEqualToString:BUSINESS_SERVER_RELOGIN]) {
+            [SKIMStatus sharedStatus].isLogin = NO;
+            [SKIMStatus sharedStatus].isReLoginByOther = YES;
+            [SKIMStatus sharedStatus].sessionId = nil;
+            [[NSNotificationCenter defaultCenter] postNotificationName:kNotiReLoginByOther object:nil];
             NSLog(@"用户已在其它地方重新登录");
         }
     }

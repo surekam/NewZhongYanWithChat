@@ -28,6 +28,7 @@
     self = [super init];
     if (self) {
         _isLogin = NO;
+        _isReLoginByOther = NO;
         _sessionId = nil;
     }
     return self;

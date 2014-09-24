@@ -14,10 +14,14 @@
 #import "SKAddressController.h"
 #import "RegExCategories.h"
 #import "SKIMServiceDefs.h"
+#import "SKIMTcpHelper.h"
+#import "SKIMStatus.h"
+#import "UIImage+ImageWithColour.h"
 
 @interface SKIMConversationListViewController ()
 
 @property (nonatomic, weak) UIView *networkNotificationView;
+@property (nonatomic, weak) UIButton *reLoginBtn;
 
 @end
 
@@ -60,12 +64,14 @@
     
     [self.view addSubview:self.tableView];
     [self addNetworkNotificationView];
+    [self addReLoginButtonView];
     [self createToolBar];
     //[self loadDataSource];
     [self configuraTableViewNormalSeparatorInset];
     [self setExtraCellLineHidden:self.tableView];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(netWorkChanged:) name:kReachabilityChangedNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reLoginedByOther) name:kNotiReLoginByOther object:nil];
 }
 
 - (void)didReceiveMemoryWarning
@@ -75,7 +81,9 @@
 }
 
 - (void) dealloc {
+    _networkNotificationView = nil;
     [[NSNotificationCenter defaultCenter] removeObserver:self name:kReachabilityChangedNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:kNotiReLoginByOther object:nil];
 }
 
 -(void)back:(id)sender
@@ -106,20 +114,19 @@
 }
 
 - (void)addNetworkNotificationView {
-    
-    UIView *notificationView = [[UIView alloc] initWithFrame:CGRectMake(0, -40, self.tableView.bounds.size.width, 40)];
+    UIEdgeInsets tableInsets = self.tableView.contentInset;
+    UIView *notificationView = [[UIView alloc] initWithFrame:CGRectMake(0, self.tableView.frame.origin.y - 40, self.tableView.bounds.size.width, 40)];
     UIImageView *warningImageView = [[UIImageView alloc] initWithFrame:CGRectMake(10, 10, 24, 24)];
     warningImageView.image = [UIImage imageNamed:@"chat_warning"];
     UILabel *warningLabel = [[UILabel alloc] initWithFrame:CGRectMake(42, 10, 260, 24)];
-    warningLabel.font = [UIFont systemFontOfSize:14];
+    warningLabel.font = [UIFont fontWithName:@"Arial" size:14];
     warningLabel.backgroundColor = [UIColor clearColor];
     warningLabel.text = @"当前网络不可用，请检查你的网络设置。";
     [notificationView addSubview:warningImageView];
     [notificationView addSubview:warningLabel];
     notificationView.backgroundColor = COLOR(252, 235, 168);
-    UIEdgeInsets tableInsets = self.tableView.contentInset;
+    
     if ([APPUtils currentReachabilityStatus] != NotReachable) {
-        self.tableView.contentInset = tableInsets;
         notificationView.hidden = YES;
     } else {
         tableInsets.top = tableInsets.top + 40;
@@ -129,6 +136,38 @@
     _networkNotificationView = notificationView;
     
     [self.tableView addSubview:notificationView];
+}
+
+- (void)addReLoginButtonView {
+    UIEdgeInsets tableInsets = self.tableView.contentInset;
+    UIButton *reLoginBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    [reLoginBtn setFrame:CGRectMake(0, self.tableView.frame.origin.y - tableInsets.top - 40, self.tableView.bounds.size.width, 40)];
+    [reLoginBtn setBackgroundImage:[UIImage imageWithColor:[UIColor lightGrayColor]] forState:UIControlStateNormal];
+    [reLoginBtn setBackgroundImage:[UIImage imageWithColor:[UIColor grayColor]] forState:UIControlStateHighlighted];
+    [reLoginBtn.titleLabel setFont:[UIFont systemFontOfSize:16]];
+    [reLoginBtn setTitle:@"用户已在其它地方重新登录，点击重新登录" forState:UIControlStateNormal];
+    [reLoginBtn addTarget:self action:@selector(reLogin:) forControlEvents:UIControlEventTouchUpInside];
+    
+    if (![SKIMStatus sharedStatus].isReLoginByOther) {
+        reLoginBtn.hidden = NO;
+        tableInsets.top = tableInsets.top + 40;
+        self.tableView.contentInset = tableInsets;
+    } else {
+        reLoginBtn.hidden = YES;
+    }
+    [self.tableView addSubview:reLoginBtn];
+    _reLoginBtn = reLoginBtn;
+}
+
+- (void)reLogin:(id)sender {
+    if ([sender isKindOfClass:[UIButton class]]) {
+        UIEdgeInsets tableInsets = self.tableView.contentInset;
+        [SKIMStatus sharedStatus].isReLoginByOther = NO;
+        tableInsets.top = tableInsets.top - 40;
+        self.tableView.contentInset = tableInsets;
+        self.reLoginBtn.hidden = YES;
+        [[SKIMTcpHelper shareChatTcpHelper] connectToHost];
+    }
 }
 
 #pragma mark - DataSource
@@ -143,7 +182,7 @@
     });
 }
 
-#pragma mark - Reachability
+#pragma mark - Notification Eevents
 
 - (void)updateInterfaceWithReachability:(Reachability *)reachability
 {
@@ -166,6 +205,14 @@
 	Reachability* curReach = [note object];
 	NSParameterAssert([curReach isKindOfClass:[Reachability class]]);
 	[self updateInterfaceWithReachability:curReach];
+}
+
+- (void)reLoginedByOther {
+    UIEdgeInsets tableInsets = self.tableView.contentInset;
+    tableInsets.top = tableInsets.top + 40;
+    self.tableView.contentInset = tableInsets;
+    [_reLoginBtn setFrame:CGRectMake(0, self.tableView.frame.origin.y - tableInsets.top - 40, self.tableView.bounds.size.width, 40)];
+    _reLoginBtn.hidden = NO;
 }
 
 #pragma mark - UITableView DataSource

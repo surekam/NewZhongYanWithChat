@@ -14,6 +14,8 @@
 
 @property (nonatomic, assign)BOOL isLogin;
 
+@property (nonatomic, assign)BOOL isReLoginByOther;
+
 @property (nonatomic, copy)NSString *sessionId;
 
 @end
