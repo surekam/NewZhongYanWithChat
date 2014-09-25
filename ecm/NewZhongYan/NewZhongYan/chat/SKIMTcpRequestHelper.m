@@ -46,4 +46,9 @@ SKIMTcpRequestHelper *TcpRequestHelperSINGLE;
     
 }
 
+- (void)sendMessagePackageCommandId:(int)type andMessageData:(NSData *)msgData withTimeout:(NSTimeInterval)timeout
+{
+    [[SKIMTcpHelper shareChatTcpHelper] sendMessage:msgData withTimeout:timeout tag:type];
+}
+
 @end

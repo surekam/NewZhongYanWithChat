@@ -11,6 +11,7 @@
 
 #define kNotiSocketDidDisconnected      @"socketDidDisconnected"
 #define kNotiSendMessageSuccess         @"messageSendSuccess"
+#define kNotiSendMessageFailed          @"messageSendFailed"
 #define kNotiReLoginByOther             @"reLoginByOther"
 
 

@@ -98,6 +98,12 @@
 
 #define     RETURN_CODE_SUCCESS                             @"0"
 
+#define     RETURN_CODE_PARAM_ERROR                         @"-1"
+
+#define     RETURN_CODE_UID_NOT_FOUND                       @"-2"
+
+#define     RETURN_CODE_SESSIOND_ERROR                      @"-3"
+
 /******************************** 返回业务码 **********************************/
 
 #endif

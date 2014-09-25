@@ -25,4 +25,6 @@
 + (SKIMTcpRequestHelper *)shareTcpRequestHelper;
 
 - (void)sendLogingPackageCommandId:(int)type;
+
+- (void)sendMessagePackageCommandId:(int)type andMessageData:(NSData *)msgData withTimeout:(NSTimeInterval)timeout;
 @end

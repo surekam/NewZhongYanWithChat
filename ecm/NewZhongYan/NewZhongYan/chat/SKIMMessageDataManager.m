@@ -7,7 +7,7 @@
 //
 
 #import "SKIMMessageDataManager.h"
-#import "SKIMTcpHelper.h"
+#import "SKIMTcpRequestHelper.h"
 #import "TcpSendPackage.h"
 #import "SKIMSocketConfig.h"
 #import "SKIMXMLConstants.h"
@@ -31,7 +31,7 @@
     return sharedInstance;
 }
 
-- (void)sendMessageQueue:(void (^)())queue {
+- (void)messageWithDatabaseQueue:(void (^)())queue {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), queue);
 }
 
@@ -53,7 +53,7 @@
                 NSString *sendIndex = nil;
                 msgData = [TcpSendPackage createMessagePackageWithMsg:text toUser:message.receiver msgType:@"" bySendIndex:&sendIndex];
                 message.msgId = sendIndex;
-                [[SKIMTcpHelper shareChatTcpHelper] sendMessage:msgData withTimeout:-1 tag:TCP_SEND_COMMAND_ID];
+                [[SKIMTcpRequestHelper shareTcpRequestHelper] sendMessagePackageCommandId:TCP_SEND_COMMAND_ID andMessageData:msgData withTimeout:DEFAULT_TIMEOUT];
                 break;
             }
             default:
@@ -65,24 +65,29 @@
 
 //接收并更新发送个人消息后服务端返回的信息
 - (void)receiveSendMessageRet:(NSDictionary *)messageRetDic {
-    if (messageRetDic) {
-        NSString *resultCode = [messageRetDic objectForKey:IM_XML_BODY_RESULTCODE_ATTR];
-
-        if ([resultCode isEqualToString:RETURN_CODE_SUCCESS]) {
+    [self messageWithDatabaseQueue:^{
+        if (messageRetDic) {
+            NSString *resultCode = [messageRetDic objectForKey:IM_XML_BODY_RESULTCODE_ATTR];
             NSString *index = [messageRetDic objectForKey:IM_XML_HEAD_INDEX_ATTR];
-            NSString *msgId = [messageRetDic objectForKey:IM_XML_BODY_SENDMSG_MESSAGEID_ATTR];
-            NSString *sendDate = [messageRetDic objectForKey:IM_XML_BODY_SENDMSG_SENDDATE_ATTR];
+            NSString *rid = @"";
+            NSString *querySql = [[@"SELECT RID FROM IM_MESSAGE WHERE ISACKED = 0 AND MSGSENDTYPE = 0 AND MSGID = '" stringByAppendingString:index] stringByAppendingString:@"'"];
+            NSString *updateSql = nil;
             
             SKIMMessageDBModel *msgModel = [[SKIMMessageDBModel alloc] init];
-            NSString *querySql = [[@"SELECT RID FROM IM_MESSAGE WHERE ISACKED = 0 AND MSGSENDTYPE = 0 AND MSGID = '" stringByAppendingString:index] stringByAppendingString:@"'"];
             NSArray* result = [msgModel querSelectSql:querySql];
             if (result.count) {
-                NSString *rid = [result[0] objectForKey:@"RID"];
-                NSString *updateSql = [NSString stringWithFormat:@"UPDATE IM_MESSAGE SET ISACKED = 1, DELIVERYSTATE = 1, MSGID = '%@', SENDTIME = '%@' WHERE RID = %@", msgId, sendDate, rid];
+                rid = [result[0] objectForKey:@"RID"];
+                if ([resultCode isEqualToString:RETURN_CODE_SUCCESS]) {
+                    NSString *msgId = [messageRetDic objectForKey:IM_XML_BODY_SENDMSG_MESSAGEID_ATTR];
+                    NSString *sendDate = [messageRetDic objectForKey:IM_XML_BODY_SENDMSG_SENDDATE_ATTR];
+                    updateSql = [NSString stringWithFormat:@"UPDATE IM_MESSAGE SET ISACKED = 1, DELIVERYSTATE = 1, MSGID = '%@', SENDTIME = '%@' WHERE RID = %@", msgId, sendDate, rid];
+                } else {
+                    updateSql = [NSString stringWithFormat:@"UPDATE IM_MESSAGE SET ISACKED = 1, DELIVERYSTATE = 2 WHERE RID = %@", rid];
+                }
                 [msgModel queryUpdateSql:updateSql];
             }
         }
-    }
+    }];
 }
 
 //接收并保存服务端的个人消息
@@ -144,35 +149,36 @@
 
 
 - (void)saveMessageToDB:(XHMessage *)message {
-    if (message) {
-        //获取会话
-        NSString *chatterId = message.bubbleMessageType ? message.sender : message.receiver;
-        SKIMConversation *conversation = [SKIMConversation getConversationWithChatterId:chatterId isGroup:message.isGroup];
-        
-        SKIMMessageDBModel *msgModel = [[SKIMMessageDBModel alloc] init];
-        NSMutableDictionary *dataDic = [NSMutableDictionary dictionary];
-        NSNumber *msgType = [NSNumber numberWithInteger:message.messageMediaType];
-        NSNumber *msgSendType = [NSNumber numberWithInteger:message.bubbleMessageType];
-        NSNumber *isAcked = msgSendType;
-        NSNumber *deliveryState = msgSendType.intValue ? [NSNumber numberWithInteger:(NSInteger)MessageDeliveryState_Delivered] : [NSNumber numberWithInteger:(NSInteger)MessageDeliveryState_Delivering];
-        
-        [dataDic setObject:(message.msgId ? message.msgId : [NSNull null]) forKey:@"MSGID"];
-        [dataDic setObject:conversation.rid forKey:@"CONVERSATIONID"];
-        [dataDic setObject:message.sender forKey:@"SENDERID"];
-        [dataDic setObject:message.receiver forKey:@"RECEIVERID"];
-        [dataDic setObject:[NSNumber numberWithBool:message.isGroup] forKey:@"ISGROUP"];
-        [dataDic setObject:(message.isGroup ? message.groupId : [NSNull null]) forKey:@"GROUPID"];
-        [dataDic setObject:[NSNumber numberWithBool:message.isRead] forKey:@"ISREAD"];
-        [dataDic setObject:isAcked forKey:@"ISACKED"];
-        [dataDic setObject:deliveryState forKey:@"DELIVERYSTATE"];
-        [dataDic setObject:msgType forKey:@"MSGTYPE"];
-        [dataDic setObject:msgSendType forKey:@"MSGSENDTYPE"];
-        [dataDic setObject:message.text forKey:@"MSGBODY"];
-        [dataDic setObject:[DateUtils dateToString:message.timestamp DateFormat:displayDateTimeFormat] forKey:@"SENDTIME"];
-        
-        [msgModel insertDB:dataDic];
-    }
-    
+    [self messageWithDatabaseQueue:^{
+        if (message) {
+            //获取会话
+            NSString *chatterId = message.bubbleMessageType ? message.sender : message.receiver;
+            SKIMConversation *conversation = [SKIMConversation getConversationWithChatterId:chatterId isGroup:message.isGroup];
+            
+            SKIMMessageDBModel *msgModel = [[SKIMMessageDBModel alloc] init];
+            NSMutableDictionary *dataDic = [NSMutableDictionary dictionary];
+            NSNumber *msgType = [NSNumber numberWithInteger:message.messageMediaType];
+            NSNumber *msgSendType = [NSNumber numberWithInteger:message.bubbleMessageType];
+            NSNumber *isAcked = msgSendType;
+            NSNumber *deliveryState = msgSendType.intValue ? [NSNumber numberWithInteger:(NSInteger)MessageDeliveryState_Delivered] : [NSNumber numberWithInteger:(NSInteger)MessageDeliveryState_Delivering];
+            
+            [dataDic setObject:(message.msgId ? message.msgId : [NSNull null]) forKey:@"MSGID"];
+            [dataDic setObject:conversation.rid forKey:@"CONVERSATIONID"];
+            [dataDic setObject:message.sender forKey:@"SENDERID"];
+            [dataDic setObject:message.receiver forKey:@"RECEIVERID"];
+            [dataDic setObject:[NSNumber numberWithBool:message.isGroup] forKey:@"ISGROUP"];
+            [dataDic setObject:(message.isGroup ? message.groupId : [NSNull null]) forKey:@"GROUPID"];
+            [dataDic setObject:[NSNumber numberWithBool:message.isRead] forKey:@"ISREAD"];
+            [dataDic setObject:isAcked forKey:@"ISACKED"];
+            [dataDic setObject:deliveryState forKey:@"DELIVERYSTATE"];
+            [dataDic setObject:msgType forKey:@"MSGTYPE"];
+            [dataDic setObject:msgSendType forKey:@"MSGSENDTYPE"];
+            [dataDic setObject:message.text forKey:@"MSGBODY"];
+            [dataDic setObject:[DateUtils dateToString:message.timestamp DateFormat:displayDateTimeFormat] forKey:@"SENDTIME"];
+            
+            [msgModel insertDB:dataDic];
+        }
+    }];
 }
 
 @end

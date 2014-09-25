@@ -162,13 +162,23 @@ static const CGFloat kXHBubbleMessageViewPadding = 8;
     
     _weakMessage = message;
     // 配置消息发送状态
-    if (message && message.bubbleMessageType == XHBubbleMessageTypeSending && message.deliveryState == MessageDeliveryState_Delivering) {
-        [[NSNotificationCenter defaultCenter] removeObserver:self name:kNotiSendMessageSuccess object:nil];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(messageSendSuccess:) name:kNotiSendMessageSuccess object:nil];
-        [self.messageBubbleView.deliveryIndicatorView startAnimating];
-    } else {
-        [[NSNotificationCenter defaultCenter] removeObserver:self name:kNotiSendMessageSuccess object:nil];
-        [self.messageBubbleView.deliveryIndicatorView stopAnimating];
+    if (message && message.bubbleMessageType == XHBubbleMessageTypeSending) {
+        if (message.deliveryState == MessageDeliveryState_Delivering) {
+            [[NSNotificationCenter defaultCenter] removeObserver:self name:kNotiSendMessageSuccess object:nil];
+            [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(messageSendSuccess:) name:kNotiSendMessageSuccess object:nil];
+            
+            [[NSNotificationCenter defaultCenter] removeObserver:self name:kNotiSendMessageFailed object:nil];
+            [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(messageSendFailed:) name:kNotiSendMessageFailed object:nil];
+            [self.messageBubbleView.deliveryIndicatorView startAnimating];
+            self.messageBubbleView.deliveryFailedImageView.hidden = YES;
+            
+        } else if (message.deliveryState == MessageDeliveryState_Failure) {
+            [self.messageBubbleView.deliveryIndicatorView stopAnimating];
+            self.messageBubbleView.deliveryFailedImageView.hidden = NO;
+        } else {
+            [self.messageBubbleView.deliveryIndicatorView stopAnimating];
+            self.messageBubbleView.deliveryFailedImageView.hidden = YES;
+        }
     }
 }
 
@@ -478,6 +488,7 @@ static const CGFloat kXHBubbleMessageViewPadding = 8;
     _timestampLabel = nil;
     _messageBubbleView = nil;
     _indexPath = nil;
+    _weakMessage = nil;
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
@@ -514,13 +525,34 @@ static const CGFloat kXHBubbleMessageViewPadding = 8;
     if (msg) {
         if ([[msg msgId] isEqualToString:msgIndex] && [msg deliveryState] == MessageDeliveryState_Delivering && [msg bubbleMessageType] == XHBubbleMessageTypeSending) {
             msg.msgId = msgId;
-            msg.deliveryState = MessageDeliveryState_Delivered;
             msg.timestamp = [DateUtils stringToDate:sendDate DateFormat:displayDateTimeFormat];
-            
+            msg.deliveryState = MessageDeliveryState_Delivered;
+
             [self.messageBubbleView.deliveryIndicatorView stopAnimating];
+            self.messageBubbleView.deliveryFailedImageView.hidden = YES;
             
             //TODO:刷新cell
             [[NSNotificationCenter defaultCenter] removeObserver:self name:kNotiSendMessageSuccess object:nil];
+        }
+    }
+    
+}
+
+- (void) messageSendFailed:(NSNotification *)noti
+{
+    NSDictionary *msgRetDic = [noti object];
+    NSString *msgIndex = [msgRetDic objectForKey:IM_XML_HEAD_INDEX_ATTR];
+    
+    XHMessage *msg = (XHMessage *)_weakMessage;
+    
+    if (msg) {
+        if ([[msg msgId] isEqualToString:msgIndex] && [msg deliveryState] == MessageDeliveryState_Delivering && [msg bubbleMessageType] == XHBubbleMessageTypeSending) {
+            msg.deliveryState = MessageDeliveryState_Failure;
+            
+            [self.messageBubbleView.deliveryIndicatorView stopAnimating];
+            self.messageBubbleView.deliveryFailedImageView.hidden = NO;
+            
+            [[NSNotificationCenter defaultCenter] removeObserver:self name:kNotiSendMessageFailed object:nil];
         }
     }
     

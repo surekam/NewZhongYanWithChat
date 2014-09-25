@@ -226,7 +226,6 @@ static BOOL isConnecting;
 - (void)onSocketDidDisconnect:(AsyncSocket *)sock{
     NSLog(@"======Socket DidDisconnected");
     isConnecting = NO;
-//    [SKIMStatus sharedStatus].isLogin = NO;
     [[NSNotificationCenter defaultCenter] postNotificationName:kNotiSocketDidDisconnected object:nil];
 }
 

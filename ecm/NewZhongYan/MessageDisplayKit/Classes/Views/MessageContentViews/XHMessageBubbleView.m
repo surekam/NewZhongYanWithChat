@@ -44,6 +44,8 @@
 
 @property (nonatomic, weak, readwrite) UIActivityIndicatorView * deliveryIndicatorView;
 
+@property (nonatomic, weak, readwrite) UIImageView *deliveryFailedImageView;
+
 @end
 
 @implementation XHMessageBubbleView
@@ -434,6 +436,10 @@
             indicatorView.backgroundColor = [UIColor clearColor];
             [self addSubview:indicatorView];
             _deliveryIndicatorView = indicatorView;
+            
+            UIImageView *deliveryFailedImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"message_send_failed@2x"]];
+            [self addSubview:deliveryFailedImageView];
+            _deliveryFailedImageView = deliveryFailedImageView;
         }
     }
     return self;
@@ -461,6 +467,8 @@
     _font = nil;
     
     _deliveryIndicatorView = nil;
+    
+    _deliveryFailedImageView = nil;
 }
 
 - (void)layoutSubviews {
@@ -534,7 +542,7 @@
         default:
             break;
     }
-    [self resetdeliveryIndicatorViewFrameWithBubbleFrame];
+    [self resetdeliveryViewFrameWithBubbleFrame];
 }
 
 - (void)resetVoiceDurationLabelFrameWithBubbleFrame:(CGRect)bubbleFrame {
@@ -545,8 +553,9 @@
     _voiceDurationLabel.textAlignment = (self.message.bubbleMessageType == XHBubbleMessageTypeSending ? NSTextAlignmentRight : NSTextAlignmentLeft);
 }
 
-- (void)resetdeliveryIndicatorViewFrameWithBubbleFrame {
+- (void)resetdeliveryViewFrameWithBubbleFrame {
     CGPoint deliveryIndicatorCenter = CGPointZero;
+    CGRect deliveryFailedFrame = CGRectMake(0, 0, 20, 20);
     CGRect bubbleFrame = CGRectZero;
     XHBubbleMessageMediaType currentType = self.message.messageMediaType;
     switch (currentType) {
@@ -571,6 +580,10 @@
     deliveryIndicatorCenter.x = (self.message.bubbleMessageType == XHBubbleMessageTypeSending ? bubbleFrame.origin.x - _deliveryIndicatorView.frame.size.width : bubbleFrame.origin.x + bubbleFrame.size.width + _deliveryIndicatorView.frame.size.width);
     deliveryIndicatorCenter.y = (bubbleFrame.origin.y + _deliveryIndicatorView.frame.size.height);
     _deliveryIndicatorView.center = deliveryIndicatorCenter;
+    
+    deliveryFailedFrame.origin.x = (self.message.bubbleMessageType == XHBubbleMessageTypeSending ? bubbleFrame.origin.x - deliveryFailedFrame.size.width : bubbleFrame.origin.x + bubbleFrame.size.width + deliveryFailedFrame.size.width);
+    deliveryFailedFrame.origin.y = bubbleFrame.origin.y + deliveryFailedFrame.size.height/2;
+    _deliveryFailedImageView.frame = deliveryFailedFrame;
 }
 
 @end

@@ -38,7 +38,7 @@
 //重定向连接
 - (void)redirectConnectToHost:(NSString *)IPStr port:(int)portStr;
 
-//发送消息
+//发送消息数据
 - (void)sendMessage:(NSData *)data withTimeout:(NSTimeInterval)timeout tag:(long)tag;
 
 @end

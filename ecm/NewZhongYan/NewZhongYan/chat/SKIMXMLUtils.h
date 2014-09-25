@@ -59,4 +59,6 @@
 - (NSDictionary *)getLoginBody:(GDataXMLDocument *)xml;
 
 - (NSDictionary *)getServerSendMsgBody:(GDataXMLDocument *)xml;
+
+- (NSDictionary *)getBodySParam:(GDataXMLDocument *)xml;
 @end

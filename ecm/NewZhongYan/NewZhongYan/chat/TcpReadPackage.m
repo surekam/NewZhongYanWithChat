@@ -15,6 +15,7 @@
 #import "SKIMServiceDefs.h"
 #import "TcpSendPackage.h"
 #import "SKIMTcpHelper.h"
+#import "SKIMTcpRequestHelper.h"
 
 @implementation TcpReadPackage
 
@@ -30,7 +31,15 @@
     
     if (isServer) {
         NSDictionary *bodyDic = nil;
-        if ([businessCode isEqualToString:BUSINESS_SERVER_MLOGINRET]) {
+        if (businessCode == nil || [businessCode isEqualToString:@""]) {
+            NSDictionary *bodySparam = [[SKIMXMLUtils sharedXMLUtils] getBodySParam:xml];
+            NSString *resultCode = [bodySparam objectForKey:IM_XML_BODY_RESULTCODE_ATTR];
+            if ([resultCode isEqualToString:RETURN_CODE_SESSIOND_ERROR]) {
+                [[SKIMTcpRequestHelper shareTcpRequestHelper] sendLogingPackageCommandId:TCP_LOGIN_COMMAND_ID];
+                NSLog(@"SESSIONID不对");
+            }
+            
+        } else if ([businessCode isEqualToString:BUSINESS_SERVER_MLOGINRET]) {
             bodyDic = [[SKIMXMLUtils sharedXMLUtils] getLoginBody:xml];
             NSString *resultCode = [bodyDic objectForKey:IM_XML_BODY_RESULTCODE_ATTR];
             if ([resultCode isEqualToString:RETURN_CODE_SUCCESS]) {
@@ -46,9 +55,19 @@
             
         } else if ([businessCode isEqualToString:BUSINESS_SERVER_MSENDMSGRET]) {
             bodyDic = [[SKIMXMLUtils sharedXMLUtils] getServerSendMsgRetBody:xml];
+            NSString *resultCode = [bodyDic objectForKey:IM_XML_BODY_RESULTCODE_ATTR];
             [bodyDic setValue:[headInfos objectForKey:IM_XML_HEAD_INDEX_ATTR] forKey:IM_XML_HEAD_INDEX_ATTR];
+            
+            if ([resultCode isEqualToString:RETURN_CODE_SUCCESS]) {
+                [[NSNotificationCenter defaultCenter] postNotificationName:kNotiSendMessageSuccess object:bodyDic];
+            } else if ([resultCode isEqualToString:RETURN_CODE_SESSIOND_ERROR]) {
+                [[NSNotificationCenter defaultCenter] postNotificationName:kNotiSendMessageFailed object:bodyDic];
+                [SKIMStatus sharedStatus].isLogin = NO;
+                [[SKIMTcpRequestHelper shareTcpRequestHelper] sendLogingPackageCommandId:TCP_LOGIN_COMMAND_ID];
+                NSLog(@"发送消息时SESSIONID不对");
+            }
+            
             [[SKIMMessageDataManager sharedMessageDataManager] receiveSendMessageRet:bodyDic];
-            [[NSNotificationCenter defaultCenter] postNotificationName:kNotiSendMessageSuccess object:bodyDic];
             NSLog(@"%@\n,%@", headInfos, bodyDic);
             
         } else if ([businessCode isEqualToString:BUSINESS_SERVER_RELOGIN]) {

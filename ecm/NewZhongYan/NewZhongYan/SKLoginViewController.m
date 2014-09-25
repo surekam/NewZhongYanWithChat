@@ -10,6 +10,7 @@
 #import "SKPatternLockController.h"
 #import "SKAgentLogonManager.h"
 #import "SKViewController.h"
+#import "SKIMTcpHelper.h"
 @interface SKLoginViewController ()
 
 @end
@@ -39,6 +40,8 @@
             [controller presentViewController:nav animated:NO completion:^{
                 [self setLoginComponentStatus:YES];
             }];
+            //登录成功后连接IM服务器
+            [[SKIMTcpHelper shareChatTcpHelper] connectToHost];
         }];
     });
 }

@@ -229,6 +229,7 @@
 		3B05EACF196FD0FE00866FA5 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3B05EACE196FD0FE00866FA5 /* MapKit.framework */; };
 		3B05EAD1196FD10F00866FA5 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3B05EAD0196FD10F00866FA5 /* CoreLocation.framework */; };
 		3B05EAD3196FD11B00866FA5 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3B05EAD2196FD11B00866FA5 /* MediaPlayer.framework */; };
+		A393637319D423BF005FB039 /* message_send_failed@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A393637219D423BF005FB039 /* message_send_failed@2x.png */; };
 		A398294319A2DEA700787F71 /* SKIMConversationListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A398294219A2DEA700787F71 /* SKIMConversationListViewController.m */; };
 		A398C47C19B5A1D4007952A9 /* SKIMStatus.m in Sources */ = {isa = PBXBuildFile; fileRef = A398C47B19B5A1D4007952A9 /* SKIMStatus.m */; };
 		A398FAF519A6DF8200D081C1 /* SKIMDBOperate.m in Sources */ = {isa = PBXBuildFile; fileRef = A398FAF419A6DF8200D081C1 /* SKIMDBOperate.m */; };
@@ -1371,6 +1372,7 @@
 		3B05EACE196FD0FE00866FA5 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		3B05EAD0196FD10F00866FA5 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		3B05EAD2196FD11B00866FA5 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
+		A393637219D423BF005FB039 /* message_send_failed@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "message_send_failed@2x.png"; sourceTree = "<group>"; };
 		A398294119A2DEA700787F71 /* SKIMConversationListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SKIMConversationListViewController.h; sourceTree = "<group>"; };
 		A398294219A2DEA700787F71 /* SKIMConversationListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SKIMConversationListViewController.m; sourceTree = "<group>"; };
 		A398C47A19B5A1D4007952A9 /* SKIMStatus.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SKIMStatus.h; sourceTree = "<group>"; };
@@ -3433,6 +3435,7 @@
 			isa = PBXGroup;
 			children = (
 				A39C58C519CFFADA00174A3C /* chat_warning@2x.png */,
+				A393637219D423BF005FB039 /* message_send_failed@2x.png */,
 				A3A66AF719C683710059428F /* face_delete_pressed@2x.png */,
 				A3A66AF819C683710059428F /* face_delete@2x.png */,
 				A39DC0AA19C2CD8B00892F3D /* Face */,
@@ -5362,6 +5365,7 @@
 				A39DC26B19C2CD8C00892F3D /* 025@2x.gif in Resources */,
 				A39DC26F19C2CD8C00892F3D /* 029@2x.gif in Resources */,
 				BE8460A11923671A00E8BDDD /* btn_history_ecm@2x.png in Resources */,
+				A393637319D423BF005FB039 /* message_send_failed@2x.png in Resources */,
 				F2258F2618D2EA3500959601 /* segRight_press.png in Resources */,
 				F277032A18FB928200C12F47 /* help4_3.png in Resources */,
 				F2B5423618EC00BA00605D81 /* phrase_ecm1.png in Resources */,

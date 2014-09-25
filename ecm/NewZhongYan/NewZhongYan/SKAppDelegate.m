@@ -103,7 +103,7 @@ NSUInteger DeviceSystemMajorVersion() {
  */
 -(void)imLogin
 {
-    if (_networkstatus != NotReachable) {
+    if (_networkstatus != NotReachable && [APPUtils userUid]) {
         [[SKIMTcpHelper shareChatTcpHelper] connectToHost];
     }
 }

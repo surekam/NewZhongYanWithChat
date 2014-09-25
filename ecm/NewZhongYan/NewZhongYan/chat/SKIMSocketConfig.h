@@ -41,9 +41,13 @@
 #define ReservedField @"0000"
 /******************************** 消息包头 **********************************/
 
+//默认超时时间
+#define DEFAULT_TIMEOUT                     5
 
 //登录
 #define TCP_LOGIN_COMMAND_ID                300
 
 #define TCP_SEND_COMMAND_ID                 301
+
+
 #endif

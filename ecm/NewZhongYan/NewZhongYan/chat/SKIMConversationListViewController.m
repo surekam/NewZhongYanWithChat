@@ -148,7 +148,7 @@
     [reLoginBtn setTitle:@"用户已在其它地方重新登录，点击重新登录" forState:UIControlStateNormal];
     [reLoginBtn addTarget:self action:@selector(reLogin:) forControlEvents:UIControlEventTouchUpInside];
     
-    if (![SKIMStatus sharedStatus].isReLoginByOther) {
+    if ([SKIMStatus sharedStatus].isReLoginByOther) {
         reLoginBtn.hidden = NO;
         tableInsets.top = tableInsets.top + 40;
         self.tableView.contentInset = tableInsets;
