@@ -215,8 +215,33 @@
     [self.navigationController pushViewController:contactDetailTableViewController animated:YES];
 }
 
-- (void)menuDidSelectedAtBubbleMessageMenuSelecteType:(XHBubbleMessageMenuSelecteType)bubbleMessageMenuSelecteType {
-    NSLog(@"!!!!!!");
+- (void)menuDidSelectedAtBubbleMessageMenuSelecteType:(XHBubbleMessageMenuSelecteType)bubbleMessageMenuSelecteType onMessage:(id <XHMessageModel>)message atIndexPath:(NSIndexPath *)indexPath {
+    switch (bubbleMessageMenuSelecteType) {
+        case XHBubbleMessageMenuSelecteTypeDelete:{
+
+            [self.messages removeObjectAtIndex:indexPath.row];
+            [self.messageTableView beginUpdates];
+            [self.messageTableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:indexPath.row inSection:indexPath.section]] withRowAnimation:UITableViewRowAnimationFade];
+            NSLog(@"%d, %d", indexPath.row, self.messages.count);
+            if (indexPath.row < self.messages.count) {
+                [self.messageTableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:indexPath.row + 1 inSection:indexPath.section]] withRowAnimation:UITableViewRowAnimationNone];
+            }
+            [self.messageTableView endUpdates];
+            
+            [[SKIMMessageDataManager sharedMessageDataManager] deleteMessageFromDataBaseWithId:[message rid]];
+            break;
+        }
+        default:
+            break;
+    }
+}
+
+- (void)reloadCellAtIndexPath:(NSIndexPath *)indexPath {
+    if (indexPath.row >=0 && indexPath.row < self.messages.count) {
+        //[self.messageTableView beginUpdates];
+        [self.messageTableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:indexPath.row inSection:indexPath.section]] withRowAnimation:UITableViewRowAnimationNone];
+        //[self.messageTableView endUpdates];
+    }
 }
 
 #pragma mark - XHMessageInputView Delegate
@@ -300,6 +325,7 @@
             dispatch_async(dispatch_get_main_queue(), ^{
                 [weakSelf insertOldMessages:messages];
                 weakSelf.loadingMoreMessage = NO;
+                self.conversation.messages = weakSelf.messages;
             });
         });
     }

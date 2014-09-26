@@ -28,24 +28,12 @@ typedef NS_ENUM(NSInteger, XHBubbleMessageMediaType) {
 };
 
 typedef NS_ENUM(NSInteger, XHBubbleMessageMenuSelecteType) {
-    XHBubbleMessageMenuSelecteTypeTextCopy = 0,
-    XHBubbleMessageMenuSelecteTypeTextTranspond = 1,
-    XHBubbleMessageMenuSelecteTypeTextFavorites = 2,
-    XHBubbleMessageMenuSelecteTypeTextMore = 3,
-    
-    XHBubbleMessageMenuSelecteTypePhotoCopy = 4,
-    XHBubbleMessageMenuSelecteTypePhotoTranspond = 5,
-    XHBubbleMessageMenuSelecteTypePhotoFavorites = 6,
-    XHBubbleMessageMenuSelecteTypePhotoMore = 7,
-    
-    XHBubbleMessageMenuSelecteTypeVideoTranspond = 8,
-    XHBubbleMessageMenuSelecteTypeVideoFavorites = 9,
-    XHBubbleMessageMenuSelecteTypeVideoMore = 10,
-    
-    XHBubbleMessageMenuSelecteTypeVoicePlay = 11,
-    XHBubbleMessageMenuSelecteTypeVoiceFavorites = 12,
-    XHBubbleMessageMenuSelecteTypeVoiceTurnToText = 13,
-    XHBubbleMessageMenuSelecteTypeVoiceMore = 14,
+    XHBubbleMessageMenuSelecteTypeCopy = 0,
+    XHBubbleMessageMenuSelecteTypeTranspond = 1,
+    XHBubbleMessageMenuSelecteTypeFavorites = 2,
+    XHBubbleMessageMenuSelecteTypeMore = 3,
+    XHBubbleMessageMenuSelecteTypeResend = 4,
+    XHBubbleMessageMenuSelecteTypeDelete = 5,
 };
 
 /*!

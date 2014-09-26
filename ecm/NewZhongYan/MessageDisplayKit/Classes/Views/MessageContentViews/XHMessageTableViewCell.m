@@ -10,6 +10,7 @@
 #import "UIImageView+WebCache.h"
 #import "SKIMServiceDefs.h"
 #import "SKIMXMLConstants.h"
+#import "SKIMMessageDataManager.h"
 
 static const CGFloat kXHLabelPadding = 5.0f;
 static const CGFloat kXHTimeStampLabelHeight = 20.0f;
@@ -121,7 +122,7 @@ static const CGFloat kXHBubbleMessageViewPadding = 8;
 }
 
 - (BOOL)canPerformAction:(SEL)action withSender:(id)sender {
-    return (action == @selector(copyed:) || action == @selector(transpond:) || action == @selector(favorites:) || action == @selector(more:));
+    return (action == @selector(copyed:) || action == @selector(transpond:) || action == @selector(favorites:) || action == @selector(more:) || action == @selector(resendMessage:) || action == @selector(deleteMessage:));
 }
 
 #pragma mark - Menu Actions
@@ -142,6 +143,31 @@ static const CGFloat kXHBubbleMessageViewPadding = 8;
 
 - (void)more:(id)sender {
     DLog(@"Cell was more");
+}
+
+- (void)resendMessage:(id)sender {
+    if (_weakMessage) {
+        XHMessage *message = (XHMessage *)_weakMessage;
+        message.deliveryState = MessageDeliveryState_Delivering;
+        [[SKIMMessageDataManager sharedMessageDataManager] sendAndSaveMessage:message];
+        
+        [[NSNotificationCenter defaultCenter] removeObserver:self name:kNotiSendMessageSuccess object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(messageSendSuccess:) name:kNotiSendMessageSuccess object:nil];
+        
+        [[NSNotificationCenter defaultCenter] removeObserver:self name:kNotiSendMessageFailed object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(messageSendFailed:) name:kNotiSendMessageFailed object:nil];
+    }
+    if ([self.delegate respondsToSelector:@selector(menuDidSelectedAtBubbleMessageMenuSelecteType:onMessage:atIndexPath:)]) {
+        [self.delegate menuDidSelectedAtBubbleMessageMenuSelecteType:XHBubbleMessageMenuSelecteTypeResend onMessage:self.messageBubbleView.message atIndexPath:self.indexPath];
+    }
+    DLog(@"Cell was resended");
+}
+
+- (void)deleteMessage:(id)sender {
+    if ([self.delegate respondsToSelector:@selector(menuDidSelectedAtBubbleMessageMenuSelecteType:onMessage:atIndexPath:)]) {
+        [self.delegate menuDidSelectedAtBubbleMessageMenuSelecteType:XHBubbleMessageMenuSelecteTypeDelete onMessage:self.messageBubbleView.message atIndexPath:self.indexPath];
+    }
+    DLog(@"Cell was deleted");
 }
 
 #pragma mark - Setters
@@ -270,14 +296,26 @@ static const CGFloat kXHBubbleMessageViewPadding = 8;
 - (void)longPressGestureRecognizerHandle:(UILongPressGestureRecognizer *)longPressGestureRecognizer {
     if (longPressGestureRecognizer.state != UIGestureRecognizerStateBegan || ![self becomeFirstResponder])
         return;
+    NSMutableArray *items = [NSMutableArray array];
     
-    UIMenuItem *copy = [[UIMenuItem alloc] initWithTitle:NSLocalizedStringFromTable(@"copy", @"MessageDisplayKitString", @"复制文本消息") action:@selector(copyed:)];
+    UIMenuItem *copy = [[UIMenuItem alloc] initWithTitle:NSLocalizedStringFromTable(@"copy", @"MessageDisplayKitString", @"复制") action:@selector(copyed:)];
     UIMenuItem *transpond = [[UIMenuItem alloc] initWithTitle:NSLocalizedStringFromTable(@"transpond", @"MessageDisplayKitString", @"转发") action:@selector(transpond:)];
-    UIMenuItem *favorites = [[UIMenuItem alloc] initWithTitle:NSLocalizedStringFromTable(@"favorites", @"MessageDisplayKitString", @"收藏") action:@selector(favorites:)];
-    UIMenuItem *more = [[UIMenuItem alloc] initWithTitle:NSLocalizedStringFromTable(@"more", @"MessageDisplayKitString", @"更多") action:@selector(more:)];
+    //UIMenuItem *favorites = [[UIMenuItem alloc] initWithTitle:NSLocalizedStringFromTable(@"favorites", @"MessageDisplayKitString", @"收藏") action:@selector(favorites:)];
+    //UIMenuItem *more = [[UIMenuItem alloc] initWithTitle:NSLocalizedStringFromTable(@"more", @"MessageDisplayKitString", @"更多") action:@selector(more:)];
+    
+    [items addObject:copy];
+    [items addObject:transpond];
+    
+    if ([_weakMessage deliveryState] == MessageDeliveryState_Failure) {
+        UIMenuItem *resend = [[UIMenuItem alloc] initWithTitle:NSLocalizedStringFromTable(@"resend", @"MessageDisplayKitString", @"重发") action:@selector(resendMessage:)];
+        UIMenuItem *delete = [[UIMenuItem alloc] initWithTitle:NSLocalizedStringFromTable(@"delete", @"MessageDisplayKitString", @"删除") action:@selector(deleteMessage:)];
+        [items insertObject:resend atIndex:0];
+        [items addObject:delete];
+    }
     
     UIMenuController *menu = [UIMenuController sharedMenuController];
-    [menu setMenuItems:[NSArray arrayWithObjects:copy, transpond, favorites, more, nil]];
+    
+    [menu setMenuItems:items];
     
     
     CGRect targetRect = [self convertRect:[self.messageBubbleView bubbleFrame]
@@ -528,11 +566,15 @@ static const CGFloat kXHBubbleMessageViewPadding = 8;
             msg.timestamp = [DateUtils stringToDate:sendDate DateFormat:displayDateTimeFormat];
             msg.deliveryState = MessageDeliveryState_Delivered;
 
-            [self.messageBubbleView.deliveryIndicatorView stopAnimating];
-            self.messageBubbleView.deliveryFailedImageView.hidden = YES;
+//            [self.messageBubbleView.deliveryIndicatorView stopAnimating];
+//            self.messageBubbleView.deliveryFailedImageView.hidden = YES;
             
-            //TODO:刷新cell
+            if ([self.delegate respondsToSelector:@selector(reloadCellAtIndexPath:)]) {
+                [self.delegate reloadCellAtIndexPath:self.indexPath];
+            }
+            
             [[NSNotificationCenter defaultCenter] removeObserver:self name:kNotiSendMessageSuccess object:nil];
+            [[NSNotificationCenter defaultCenter] removeObserver:self name:kNotiSendMessageFailed object:nil];
         }
     }
     
@@ -549,9 +591,13 @@ static const CGFloat kXHBubbleMessageViewPadding = 8;
         if ([[msg msgId] isEqualToString:msgIndex] && [msg deliveryState] == MessageDeliveryState_Delivering && [msg bubbleMessageType] == XHBubbleMessageTypeSending) {
             msg.deliveryState = MessageDeliveryState_Failure;
             
-            [self.messageBubbleView.deliveryIndicatorView stopAnimating];
-            self.messageBubbleView.deliveryFailedImageView.hidden = NO;
+//            [self.messageBubbleView.deliveryIndicatorView stopAnimating];
+//            self.messageBubbleView.deliveryFailedImageView.hidden = NO;
+            if ([self.delegate respondsToSelector:@selector(reloadCellAtIndexPath:)]) {
+                [self.delegate reloadCellAtIndexPath:self.indexPath];
+            }
             
+            [[NSNotificationCenter defaultCenter] removeObserver:self name:kNotiSendMessageSuccess object:nil];
             [[NSNotificationCenter defaultCenter] removeObserver:self name:kNotiSendMessageFailed object:nil];
         }
     }

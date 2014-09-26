@@ -74,7 +74,7 @@
             NSArray *sortedArray = [msgArray sortedArrayUsingComparator:^NSComparisonResult(XHMessage *c1, XHMessage *c2) {
                 return [c1.timestamp compare:c2.timestamp];
             }];
-            _messages = [sortedArray copy];
+            _messages = [NSMutableArray arrayWithArray:sortedArray];
         }
     }
     return _messages;

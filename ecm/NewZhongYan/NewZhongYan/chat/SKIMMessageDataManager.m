@@ -53,13 +53,37 @@
                 NSString *sendIndex = nil;
                 msgData = [TcpSendPackage createMessagePackageWithMsg:text toUser:message.receiver msgType:@"" bySendIndex:&sendIndex];
                 message.msgId = sendIndex;
-                [[SKIMTcpRequestHelper shareTcpRequestHelper] sendMessagePackageCommandId:TCP_SEND_COMMAND_ID andMessageData:msgData withTimeout:DEFAULT_TIMEOUT];
+                if ([[SKIMTcpHelper shareChatTcpHelper] isConnected]) {
+                    [[SKIMTcpRequestHelper shareTcpRequestHelper] sendMessagePackageCommandId:TCP_SEND_COMMAND_ID andMessageData:msgData withTimeout:-1];
+                } else {
+                    [[NSNotificationCenter defaultCenter] postNotificationName:kNotiSendMessageFailed object:[NSDictionary dictionaryWithObject:sendIndex forKey:IM_XML_HEAD_INDEX_ATTR]];
+                    message.msgId = @"-1";
+                    message.deliveryState = MessageDeliveryState_Failure;
+                }
+                
                 break;
             }
             default:
                 break;
         }
         [self saveMessageToDB:message];
+        [self performSelector:@selector(messageSendTimeOut:) withObject:message afterDelay:DEFAULT_TIMEOUT];
+    }
+}
+
+//发送消息超时处理
+- (void)messageSendTimeOut:(XHMessage *)message {
+    if (message && message.deliveryState == MessageDeliveryState_Delivering) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:kNotiSendMessageFailed object:[NSDictionary dictionaryWithObject:message.msgId forKey:IM_XML_HEAD_INDEX_ATTR]];
+        
+        if (message.rid && ![message.rid isEqualToString:@""]) {
+            [self messageWithDatabaseQueue:^{
+                SKIMMessageDBModel *msgModel = [[SKIMMessageDBModel alloc] init];
+                NSString *updateSql = [NSString stringWithFormat:@"UPDATE IM_MESSAGE SET ISACKED = 0, DELIVERYSTATE = 2, MSGID = '-1' WHERE RID = %@", message.rid];
+                [msgModel queryUpdateSql:updateSql];
+            }];
+
+        }
     }
 }
 
@@ -82,7 +106,7 @@
                     NSString *sendDate = [messageRetDic objectForKey:IM_XML_BODY_SENDMSG_SENDDATE_ATTR];
                     updateSql = [NSString stringWithFormat:@"UPDATE IM_MESSAGE SET ISACKED = 1, DELIVERYSTATE = 1, MSGID = '%@', SENDTIME = '%@' WHERE RID = %@", msgId, sendDate, rid];
                 } else {
-                    updateSql = [NSString stringWithFormat:@"UPDATE IM_MESSAGE SET ISACKED = 1, DELIVERYSTATE = 2 WHERE RID = %@", rid];
+                    updateSql = [NSString stringWithFormat:@"UPDATE IM_MESSAGE SET ISACKED = 1, DELIVERYSTATE = 2, MSGID = '-1' WHERE RID = %@", rid];
                 }
                 [msgModel queryUpdateSql:updateSql];
             }
@@ -160,7 +184,7 @@
             NSNumber *msgType = [NSNumber numberWithInteger:message.messageMediaType];
             NSNumber *msgSendType = [NSNumber numberWithInteger:message.bubbleMessageType];
             NSNumber *isAcked = msgSendType;
-            NSNumber *deliveryState = msgSendType.intValue ? [NSNumber numberWithInteger:(NSInteger)MessageDeliveryState_Delivered] : [NSNumber numberWithInteger:(NSInteger)MessageDeliveryState_Delivering];
+            NSNumber *deliveryState = msgSendType.intValue ? [NSNumber numberWithInteger:(NSInteger)MessageDeliveryState_Delivered] : [NSNumber numberWithInteger:(NSInteger)message.deliveryState];
             
             [dataDic setObject:(message.msgId ? message.msgId : [NSNull null]) forKey:@"MSGID"];
             [dataDic setObject:conversation.rid forKey:@"CONVERSATIONID"];
@@ -176,7 +200,22 @@
             [dataDic setObject:message.text forKey:@"MSGBODY"];
             [dataDic setObject:[DateUtils dateToString:message.timestamp DateFormat:displayDateTimeFormat] forKey:@"SENDTIME"];
             
-            [msgModel insertDB:dataDic];
+            if (message.rid && ![message.rid isEqualToString:@""]) {
+                msgModel.where = [NSString stringWithFormat:@"RID = %@", message.rid];
+                [msgModel updateDB:dataDic];
+            } else {
+                message.rid = [NSString stringWithFormat:@"%d", [msgModel insertDB:dataDic]];
+            }
+        }
+    }];
+}
+
+- (void)deleteMessageFromDataBaseWithId:(NSString *)rid {
+    [self messageWithDatabaseQueue:^{
+        if (rid && ![rid isEqualToString:@""]) {
+            SKIMMessageDBModel *msgModel = [[SKIMMessageDBModel alloc] init];
+            msgModel.where = [NSString stringWithFormat:@"RID = %@", rid];
+            [msgModel deleteDBdata];
         }
     }];
 }

@@ -9,6 +9,8 @@
 "transpond" = "transpond";
 "favorites" = "favorites";
 "more" = "more";
+"resend" = "resend";
+"delete" = "delete";
 "Location" = "Location";
 "Photo" = "Photo";
 "TextDetail" = "TextDetail";

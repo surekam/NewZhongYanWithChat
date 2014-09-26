@@ -27,4 +27,5 @@
 
 - (void)receiveSendMessageRet:(NSDictionary *)messageRetDic;
 
+- (void)deleteMessageFromDataBaseWithId:(NSString *)rid;
 @end

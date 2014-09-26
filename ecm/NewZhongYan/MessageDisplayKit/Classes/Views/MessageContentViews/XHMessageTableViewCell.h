@@ -49,7 +49,9 @@
  *
  *  @param bubbleMessageMenuSelecteType 点击item后，确定点击类型
  */
-- (void)menuDidSelectedAtBubbleMessageMenuSelecteType:(XHBubbleMessageMenuSelecteType)bubbleMessageMenuSelecteType;
+- (void)menuDidSelectedAtBubbleMessageMenuSelecteType:(XHBubbleMessageMenuSelecteType)bubbleMessageMenuSelecteType onMessage:(id <XHMessageModel>)message atIndexPath:(NSIndexPath *)indexPath;
+
+- (void)reloadCellAtIndexPath:(NSIndexPath *)indexPath;
 
 @end
 

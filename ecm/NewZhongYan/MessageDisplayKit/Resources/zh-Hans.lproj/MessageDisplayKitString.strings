@@ -9,6 +9,8 @@
 "transpond" = "转发";
 "favorites" = "收藏";
 "more" = "更多";
+"resend" = "重发";
+"delete" = "删除";
 "Location" = "地理位置";
 "Photo" = "照片";
 "Photo" = "图片";
