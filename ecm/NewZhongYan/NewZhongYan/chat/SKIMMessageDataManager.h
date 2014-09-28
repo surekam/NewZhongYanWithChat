@@ -28,4 +28,6 @@
 - (void)receiveSendMessageRet:(NSDictionary *)messageRetDic;
 
 - (void)deleteMessageFromDataBaseWithId:(NSString *)rid;
+
+- (void)getHistoryMessageFromServer:(NSInteger)msgNumber;
 @end

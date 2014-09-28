@@ -11,6 +11,7 @@
 #import "SKIMSocketConfig.h"
 #import "SKIMXMLConstants.h"
 #import "SKIMStatus.h"
+#import "SKIMMessageDBModel.h"
 
 static unsigned long long sendIndex = 0;
 
@@ -65,6 +66,34 @@ static unsigned long long sendIndex = 0;
     return packageData;
 }
 
+
++ (NSData *)createMessageCountPackage {
+    NSString *maxMessageId = @"0";
+    NSString *maxClubMessageId = @"0";
+    SKIMMessageDBModel *msgModel = [[SKIMMessageDBModel alloc] init];
+    
+    NSString *querySql = @"SELECT MAX((CASE WHEN ISGROUP = 0 THEN MSGID ELSE 0 END)) MESSAGEID, MAX((CASE WHEN ISGROUP = 1 THEN MSGID ELSE 0 END)) CLUBMESSAGEID FROM IM_MESSAGE";
+    NSArray *resultArray = [msgModel querSelectSql:querySql];
+    if (resultArray.count) {
+        maxMessageId = [resultArray[0] objectForKey:IM_XML_BODY_GETMSGCOUNT_MESSAGEID_ATTR];
+        maxClubMessageId = [resultArray[0] objectForKey:IM_XML_BODY_GETMSGCOUNT_CLUBMESSAGEID_ATTR];
+    }
+    
+    NSMutableDictionary *params = [NSMutableDictionary dictionaryWithObjectsAndKeys:
+                                   IM_XML_HEAD_SOURCE_MOBILE_VALUE,         IM_XML_HEAD_SOURCE_ATTR,
+                                   IM_XML_HEAD_BUSINESS_GETMSGCOUNT_VALUE,  IM_XML_HEAD_BUSINESS_ATTR,
+                                   [SKIMStatus sharedStatus].sessionId,     IM_XML_HEAD_SESSIONID_ATTR,
+                                   [self sendIndex],                        IM_XML_HEAD_INDEX_ATTR,
+                                   [APPUtils loggedUser].uid,               IM_XML_BODY_LOGIN_USERID_ATTR,
+                                   
+                                   maxMessageId,                            IM_XML_BODY_GETMSGCOUNT_MESSAGEID_ATTR,
+                                   maxClubMessageId,                        IM_XML_BODY_GETMSGCOUNT_CLUBMESSAGEID_ATTR, nil];
+    
+    NSData *packageBody = [[[SKIMXMLUtils sharedXMLUtils] buildGetMsgCountXML:params] XMLData];
+    NSData *packageData = [self createPackageWithBody:packageBody];
+    return packageData;
+}
+
 // 创建注销包对象
 +(id) createLogoutPackage{
     return nil;
@@ -111,4 +140,5 @@ static unsigned long long sendIndex = 0;
     [pkgData appendData:packageBody];
     return pkgData;
 }
+
 @end

@@ -12,6 +12,8 @@
 #import "SKIMConversationDBModel.h"
 #import "SKIMMessageDBModel.h"
 #import "XHMessage.h"
+#import "SKIMServiceDefs.h"
+#import "SKIMSocketConfig.h"
 
 @interface SKIMConversation ()
 
@@ -61,20 +63,18 @@
 - (NSMutableArray *)messages
 {
     if (_messages.count == 0 && self.rid != nil) {
-        SKIMMessageDBModel *msgModel = [[SKIMMessageDBModel alloc] init];
-        msgModel.where = [NSString stringWithFormat:@"CONVERSATIONID = %@", self.rid];
-        msgModel.orderBy = @"SENDTIME";
-        msgModel.orderType = @"DESC";
-        msgModel.limit = 20;
-        NSArray *resultDics = [msgModel getList];
+        [self updateTimeoutDeliveringMessageWithConversationId:self.rid];
         
+        SKIMMessageDBModel *msgModel = [[SKIMMessageDBModel alloc] init];
+        NSString *selectSql = [NSString stringWithFormat:@"SELECT * FROM \
+                              (SELECT * FROM IM_MESSAGE WHERE CONVERSATIONID = %@ ORDER BY SENDTIME DESC, (CASE WHEN DELIVERYSTATE = 2 THEN RID ELSE MSGID END) DESC LIMIT 0, %d) \
+                              ORDER BY SENDTIME ASC, (CASE WHEN DELIVERYSTATE = 2 THEN RID ELSE MSGID END) ASC",
+                              self.rid, DEFAULT_LOAD_MSG_NUM];
+        NSArray *resultDics = [msgModel querSelectSql:selectSql];
         NSArray *msgArray = [SKIMMessageDBModel getMessagesFromModelArray:resultDics];
         
         if (msgArray.count) {
-            NSArray *sortedArray = [msgArray sortedArrayUsingComparator:^NSComparisonResult(XHMessage *c1, XHMessage *c2) {
-                return [c1.timestamp compare:c2.timestamp];
-            }];
-            _messages = [NSMutableArray arrayWithArray:sortedArray];
+            _messages = [NSMutableArray arrayWithArray:msgArray];
         }
     }
     return _messages;
@@ -139,25 +139,32 @@
     if (count <= 0 || self.rid == nil) {
         return nil;
     }
+    [self updateTimeoutDeliveringMessageWithConversationId:self.rid];
+    
     SKIMMessageDBModel *msgModel = [[SKIMMessageDBModel alloc] init];
-    NSString *msgRid = @"0";
+    NSString *firstMsgRid = @"0";
+    NSString *firstMsgMsgId = @"0";
+    NSString *firstMsgSendTime = @"1970-01-01 00:00:00";
     if (_messages) {
         XHMessage *firstMsg = [_messages firstObject];
-        msgRid = firstMsg.rid;
+        firstMsgRid = firstMsg.rid;
+        firstMsgMsgId = firstMsg.msgId;
+        firstMsgSendTime = [DateUtils dateToString:firstMsg.timestamp DateFormat:displayDateTimeFormat];
     }
-    msgModel.where = [NSString stringWithFormat:@"CONVERSATIONID = %@ AND RID < %@", self.rid, msgRid];
-    msgModel.orderBy = @"SENDTIME";
-    msgModel.orderType = @"DESC";
-    msgModel.limit = count;
-    NSArray *resultDics = [msgModel getList];
+    NSString *selectSql = [NSString stringWithFormat:@"SELECT * FROM \
+                           (SELECT * FROM IM_MESSAGE WHERE CONVERSATIONID = %@ AND SENDTIME <= '%@' \
+                           AND (CASE WHEN SENDTIME = '%@' AND DELIVERYSTATE <> 2 THEN (CASE WHEN MSGID < '%@' THEN 1 ELSE 0 END) \
+                           WHEN SENDTIME = '%@' AND DELIVERYSTATE = 2 THEN (CASE WHEN RID < %@ THEN 1 ELSE 0 END) \
+                           ELSE 1 END) = 1 ORDER BY SENDTIME DESC, (CASE WHEN DELIVERYSTATE = 2 THEN RID ELSE MSGID END) DESC LIMIT 0, %d) \
+                           ORDER BY SENDTIME ASC, (CASE WHEN DELIVERYSTATE = 2 THEN RID ELSE MSGID END) ASC",
+                           self.rid, firstMsgSendTime, firstMsgSendTime, firstMsgMsgId, firstMsgSendTime, firstMsgRid, DEFAULT_LOAD_MSG_NUM];
+    
+    NSArray *resultDics = [msgModel querSelectSql:selectSql];
     
     NSArray *msgArray = [SKIMMessageDBModel getMessagesFromModelArray:resultDics];
     
     if (msgArray.count) {
-        NSArray *sortedArray = [msgArray sortedArrayUsingComparator:^NSComparisonResult(XHMessage *c1, XHMessage *c2) {
-            return [c1.timestamp compare:c2.timestamp];
-        }];
-        return sortedArray;
+        return msgArray;
     }
     return nil;
 }
@@ -171,7 +178,18 @@
     NSArray *sortedArray = [[SKIMConversationDBModel getConversationsFromModelArray:resultDics] sortedArrayUsingComparator:^NSComparisonResult(SKIMConversation *c1, SKIMConversation *c2) {
         XHMessage *m1 = [c1 latestMessage];
         XHMessage *m2 = [c2 latestMessage];
-        return [m2.timestamp compare:m1.timestamp];
+        NSComparisonResult comparisonResult = [m2.timestamp compare:m1.timestamp];
+        if (comparisonResult != NSOrderedSame) {
+            return comparisonResult;
+        } else {
+            comparisonResult = [m2.msgId compare:m1.msgId];
+            if (comparisonResult != NSOrderedSame) {
+                return comparisonResult;
+            } else {
+                comparisonResult = [m2.rid compare:m1.rid];
+                return comparisonResult;
+            }
+        }
     }];
     return sortedArray;
 }
@@ -208,5 +226,14 @@
         return YES;
     }
     return NO;
+}
+
+//加载消息时，更新已经超过默认超时时间的正在发送的消息为发送失败
+- (void)updateTimeoutDeliveringMessageWithConversationId:(NSString *)rid {
+    if (rid) {
+        SKIMMessageDBModel *msgModel = [[SKIMMessageDBModel alloc] init];
+        NSString *updateSql = [NSString stringWithFormat:@"UPDATE IM_MESSAGE SET MSGID = '%@', DELIVERYSTATE = 2 WHERE MSGSENDTYPE = 0 AND DELIVERYSTATE = 0 AND CONVERSATIONID = %@ AND SENDTIME < datetime('now','Localtime', '-%d second')", SENDFAILED_MSGID, rid, DEFAULT_TIMEOUT];
+        [msgModel queryUpdateSql:updateSql];
+    }
 }
 @end

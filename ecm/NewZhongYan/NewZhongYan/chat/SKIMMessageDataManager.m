@@ -57,7 +57,7 @@
                     [[SKIMTcpRequestHelper shareTcpRequestHelper] sendMessagePackageCommandId:TCP_SEND_COMMAND_ID andMessageData:msgData withTimeout:-1];
                 } else {
                     [[NSNotificationCenter defaultCenter] postNotificationName:kNotiSendMessageFailed object:[NSDictionary dictionaryWithObject:sendIndex forKey:IM_XML_HEAD_INDEX_ATTR]];
-                    message.msgId = @"-1";
+                    message.msgId = SENDFAILED_MSGID;
                     message.deliveryState = MessageDeliveryState_Failure;
                 }
                 
@@ -79,7 +79,7 @@
         if (message.rid && ![message.rid isEqualToString:@""]) {
             [self messageWithDatabaseQueue:^{
                 SKIMMessageDBModel *msgModel = [[SKIMMessageDBModel alloc] init];
-                NSString *updateSql = [NSString stringWithFormat:@"UPDATE IM_MESSAGE SET ISACKED = 0, DELIVERYSTATE = 2, MSGID = '-1' WHERE RID = %@", message.rid];
+                NSString *updateSql = [NSString stringWithFormat:@"UPDATE IM_MESSAGE SET ISACKED = 0, DELIVERYSTATE = 2, MSGID = '%@' WHERE RID = %@", SENDFAILED_MSGID, message.rid];
                 [msgModel queryUpdateSql:updateSql];
             }];
 
@@ -106,7 +106,7 @@
                     NSString *sendDate = [messageRetDic objectForKey:IM_XML_BODY_SENDMSG_SENDDATE_ATTR];
                     updateSql = [NSString stringWithFormat:@"UPDATE IM_MESSAGE SET ISACKED = 1, DELIVERYSTATE = 1, MSGID = '%@', SENDTIME = '%@' WHERE RID = %@", msgId, sendDate, rid];
                 } else {
-                    updateSql = [NSString stringWithFormat:@"UPDATE IM_MESSAGE SET ISACKED = 1, DELIVERYSTATE = 2, MSGID = '-1' WHERE RID = %@", rid];
+                    updateSql = [NSString stringWithFormat:@"UPDATE IM_MESSAGE SET ISACKED = 1, DELIVERYSTATE = 2, MSGID = '%@' WHERE RID = %@", SENDFAILED_MSGID, rid];
                 }
                 [msgModel queryUpdateSql:updateSql];
             }
@@ -171,6 +171,12 @@
     }
 }
 
+- (void)getHistoryMessageFromServer:(NSInteger)msgNumber {
+}
+
+- (void)getMessageCountFromServer {
+    
+}
 
 - (void)saveMessageToDB:(XHMessage *)message {
     [self messageWithDatabaseQueue:^{
@@ -219,5 +225,4 @@
         }
     }];
 }
-
 @end

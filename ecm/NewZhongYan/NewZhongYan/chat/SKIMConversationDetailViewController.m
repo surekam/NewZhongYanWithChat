@@ -45,6 +45,7 @@
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
     [[XHAudioPlayerHelper shareInstance] stopAudio];
+    self.conversation.messages = self.messages;
     if (self.messages.count && !_conversation.isEnable) {
         _conversation.isEnable = YES;
     }
@@ -92,7 +93,7 @@
     XHEmotionManager *emotionManager = [[XHEmotionManager alloc] init];
     emotionManager.emotionName = @"经典";
     NSMutableArray *emotions = [NSMutableArray array];
-    for (NSInteger i = 0; i < 91; i ++) {
+    for (NSInteger i = 0; i < 91; i++) {
         XHEmotion *emotion = [[XHEmotion alloc] init];
         NSString *imageName = [NSString stringWithFormat:@"%03ld", (long)i];
         emotion.emotionPath = [[NSBundle mainBundle] pathForResource:[NSString stringWithFormat:@"%03ld@2x.gif", (long)i] ofType:@""];
@@ -317,15 +318,15 @@
 - (void)loadMoreMessagesScrollTotop {
     if (!self.loadingMoreMessage) {
         self.loadingMoreMessage = YES;
+        self.conversation.messages = self.messages;
         
         WEAKSELF
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-            NSArray *messages = [weakSelf.conversation loadNumbersOfMessages:20];
+            NSArray *messages = [weakSelf.conversation loadNumbersOfMessages:DEFAULT_LOAD_MSG_NUM];
             sleep(2);
             dispatch_async(dispatch_get_main_queue(), ^{
                 [weakSelf insertOldMessages:messages];
                 weakSelf.loadingMoreMessage = NO;
-                self.conversation.messages = weakSelf.messages;
             });
         });
     }

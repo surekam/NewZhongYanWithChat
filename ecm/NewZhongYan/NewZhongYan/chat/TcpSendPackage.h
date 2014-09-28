@@ -16,11 +16,12 @@
 //登录包
 + (NSData *)createLoginPackage;
 
+//构建消息包
 + (NSData *)createMessagePackageWithMsg:(NSString *)message toUser:(NSString*)toUser msgType:(NSString *)msgType bySendIndex:(NSString **)sendIndex;
+
+//获取用户消息条数包
++ (NSData *)createMessageCountPackage;
 
 //注销包
 + (id)createLogoutPackage;
-
-//消息包
-
 @end

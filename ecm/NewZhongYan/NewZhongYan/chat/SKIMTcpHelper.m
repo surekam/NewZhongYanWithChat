@@ -226,7 +226,10 @@ static BOOL isConnecting;
 - (void)onSocketDidDisconnect:(AsyncSocket *)sock{
     NSLog(@"======Socket DidDisconnected");
     isConnecting = NO;
-    [[NSNotificationCenter defaultCenter] postNotificationName:kNotiSocketDidDisconnected object:nil];
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        sleep(2);
+        [[NSNotificationCenter defaultCenter] postNotificationName:kNotiSocketDidDisconnected object:nil];
+    });
 }
 
 @end

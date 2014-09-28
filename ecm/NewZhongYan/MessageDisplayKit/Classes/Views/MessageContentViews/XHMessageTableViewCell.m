@@ -566,12 +566,12 @@ static const CGFloat kXHBubbleMessageViewPadding = 8;
             msg.timestamp = [DateUtils stringToDate:sendDate DateFormat:displayDateTimeFormat];
             msg.deliveryState = MessageDeliveryState_Delivered;
 
-//            [self.messageBubbleView.deliveryIndicatorView stopAnimating];
-//            self.messageBubbleView.deliveryFailedImageView.hidden = YES;
+            [self.messageBubbleView.deliveryIndicatorView stopAnimating];
+            self.messageBubbleView.deliveryFailedImageView.hidden = YES;
             
-            if ([self.delegate respondsToSelector:@selector(reloadCellAtIndexPath:)]) {
-                [self.delegate reloadCellAtIndexPath:self.indexPath];
-            }
+//            if ([self.delegate respondsToSelector:@selector(reloadCellAtIndexPath:)]) {
+//                [self.delegate reloadCellAtIndexPath:self.indexPath];
+//            }
             
             [[NSNotificationCenter defaultCenter] removeObserver:self name:kNotiSendMessageSuccess object:nil];
             [[NSNotificationCenter defaultCenter] removeObserver:self name:kNotiSendMessageFailed object:nil];
@@ -591,11 +591,12 @@ static const CGFloat kXHBubbleMessageViewPadding = 8;
         if ([[msg msgId] isEqualToString:msgIndex] && [msg deliveryState] == MessageDeliveryState_Delivering && [msg bubbleMessageType] == XHBubbleMessageTypeSending) {
             msg.deliveryState = MessageDeliveryState_Failure;
             
-//            [self.messageBubbleView.deliveryIndicatorView stopAnimating];
-//            self.messageBubbleView.deliveryFailedImageView.hidden = NO;
-            if ([self.delegate respondsToSelector:@selector(reloadCellAtIndexPath:)]) {
-                [self.delegate reloadCellAtIndexPath:self.indexPath];
-            }
+            [self.messageBubbleView.deliveryIndicatorView stopAnimating];
+            self.messageBubbleView.deliveryFailedImageView.hidden = NO;
+            
+//            if ([self.delegate respondsToSelector:@selector(reloadCellAtIndexPath:)]) {
+//                [self.delegate reloadCellAtIndexPath:self.indexPath];
+//            }
             
             [[NSNotificationCenter defaultCenter] removeObserver:self name:kNotiSendMessageSuccess object:nil];
             [[NSNotificationCenter defaultCenter] removeObserver:self name:kNotiSendMessageFailed object:nil];

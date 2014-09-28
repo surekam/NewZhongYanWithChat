@@ -69,13 +69,19 @@
 
 #define     IM_XML_BODY_SENDMSG_SENDDATE_ATTR               @"SENDDATE"
 
-
+//MSendGMsg
 #define     IM_XML_HEAD_BUSINESS_SENDGMSG_VALUE             @"MSendGMsg"
 
 #define     IM_XML_BODY_SENDGMSG_TOCLUB_ATTR                @"TOCLUE"
 
 #define     IM_XML_BODY_SENDGMSG_CONTENT_ATTR               @"CONTENT"
 
+//MGetMsgCount
+#define     IM_XML_HEAD_BUSINESS_GETMSGCOUNT_VALUE          @"MGetMsgCount"
+
+#define     IM_XML_BODY_GETMSGCOUNT_MESSAGEID_ATTR          @"MESSAGEID"
+
+#define     IM_XML_BODY_GETMSGCOUNT_CLUBMESSAGEID_ATTR      @"CLUBMESSAGEID"
 
 
 #define     IM_XML_BODY_RESULTCODE_ATTR                     @"RESULTCODE"

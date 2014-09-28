@@ -78,6 +78,9 @@
     }];
     [request setFailedBlock:^{
         if (errorinfo) {
+            if (!req.errorinfo) {
+                req.errorinfo = @"获取版本信息错误";
+            }
             errorinfo(@{@"reason": req.errorinfo});
         }
     }];

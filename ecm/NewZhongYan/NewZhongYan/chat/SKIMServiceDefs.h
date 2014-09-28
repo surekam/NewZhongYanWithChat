@@ -9,6 +9,11 @@
 #ifndef NewZhongYan_SKIMServiceDefs_h
 #define NewZhongYan_SKIMServiceDefs_h
 
+//默认加载消息条数
+#define DEFAULT_LOAD_MSG_NUM            20
+#define SENDFAILED_MSGID                @"-1"
+
+//通知
 #define kNotiSocketDidDisconnected      @"socketDidDisconnected"
 #define kNotiSendMessageSuccess         @"messageSendSuccess"
 #define kNotiSendMessageFailed          @"messageSendFailed"

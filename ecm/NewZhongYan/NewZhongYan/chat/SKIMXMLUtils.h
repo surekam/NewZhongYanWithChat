@@ -32,6 +32,7 @@
 //6.解析发送群消息之后返回的xml
 
 //7.构造获取用户消息条数的xml
+- (GDataXMLDocument *)buildGetMsgCountXML:(NSMutableDictionary *)params;
 
 //8.解析获取用户消息条数的返回的xml
 

@@ -149,6 +149,32 @@ SKIMXMLUtils *SharedInstance;
     return sendGMsgXml;
 }
 
+- (GDataXMLDocument *)buildGetMsgCountXML:(NSMutableDictionary *)params {
+    
+    GDataXMLElement *rootElement = [GDataXMLNode elementWithName:IM_XML_ROOT_NODE_NAME];
+    [rootElement addChild:[self buildHeaderElement:params]];
+    
+    GDataXMLElement *bodyElement = [GDataXMLNode elementWithName:IM_XML_BODY_NODE_NAME];
+    GDataXMLElement *sparamElement = [GDataXMLNode elementWithName:IM_XML_PARAM_SINGLE_NODE_NAME];
+    
+    GDataXMLElement *messageId = [GDataXMLNode elementWithName:IM_XML_BASE_NODE_NAME stringValue:params[IM_XML_BODY_GETMSGCOUNT_MESSAGEID_ATTR]];
+    GDataXMLElement *clubMessageid = [GDataXMLNode elementWithName:IM_XML_BASE_NODE_NAME stringValue:params[IM_XML_BODY_GETMSGCOUNT_CLUBMESSAGEID_ATTR]];
+    
+    [messageId addAttribute:[GDataXMLNode attributeWithName:IM_XML_BASE_ATTR_NAME stringValue:IM_XML_BODY_GETMSGCOUNT_MESSAGEID_ATTR]];
+    [clubMessageid addAttribute:[GDataXMLNode attributeWithName:IM_XML_BASE_ATTR_NAME stringValue:IM_XML_BODY_GETMSGCOUNT_CLUBMESSAGEID_ATTR]];
+    
+    [sparamElement addChild:messageId];
+    [sparamElement addChild:clubMessageid];
+    
+    [bodyElement addChild:sparamElement];
+    
+    [rootElement addChild:bodyElement];
+    
+    GDataXMLDocument *getMsgCountXml = [[GDataXMLDocument alloc] initWithRootElement:rootElement];
+    [getMsgCountXml setCharacterEncoding:XML_ENCODING];
+    
+    return getMsgCountXml;
+}
 
 -(GDataXMLDocument *)parseData:(NSData *)data
 {
