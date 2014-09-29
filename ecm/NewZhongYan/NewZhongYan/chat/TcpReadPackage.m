@@ -30,31 +30,33 @@
     BOOL isServer = [[headInfos objectForKey:IM_XML_HEAD_SOURCE_ATTR] isEqualToString:IM_XML_HEAD_SOURCE_SERVER_VALUE];
     
     if (isServer) {
-        NSDictionary *bodyDic = nil;
+        NSMutableDictionary *bodyDic = nil;
         if (businessCode == nil || [businessCode isEqualToString:@""]) {
             NSDictionary *bodySparam = [[SKIMXMLUtils sharedXMLUtils] getBodySParam:xml];
             NSString *resultCode = [bodySparam objectForKey:IM_XML_BODY_RESULTCODE_ATTR];
             if ([resultCode isEqualToString:RETURN_CODE_SESSIOND_ERROR]) {
-                [[SKIMTcpRequestHelper shareTcpRequestHelper] sendLogingPackageCommandId:TCP_LOGIN_COMMAND_ID];
+                [[SKIMTcpRequestHelper shareTcpRequestHelper] sendLogingPackageCommand];
                 NSLog(@"SESSIONID不对");
             }
             
         } else if ([businessCode isEqualToString:BUSINESS_SERVER_MLOGINRET]) {
-            bodyDic = [[SKIMXMLUtils sharedXMLUtils] getLoginBody:xml];
+            bodyDic = [NSMutableDictionary dictionaryWithDictionary:[[SKIMXMLUtils sharedXMLUtils] getLoginBody:xml]];
             NSString *resultCode = [bodyDic objectForKey:IM_XML_BODY_RESULTCODE_ATTR];
             if ([resultCode isEqualToString:RETURN_CODE_SUCCESS]) {
                 [SKIMStatus sharedStatus].isLogin = YES;
                 [SKIMStatus sharedStatus].sessionId = [bodyDic objectForKey:IM_XML_BODY_SESSIONID_ATTR];
+                //获取历史消息记录信息
+                [[SKIMMessageDataManager sharedMessageDataManager] sendGetMessageCountData];
             }
      
         } else if ([businessCode isEqualToString:BUSINESS_SERVER_SENDMSG]) {
-            bodyDic = [[SKIMXMLUtils sharedXMLUtils] getServerSendMsgBody:xml];
+            bodyDic = [NSMutableDictionary dictionaryWithDictionary:[[SKIMXMLUtils sharedXMLUtils] getLoginBody:xml]];
             [bodyDic setValue:[headInfos objectForKey:IM_XML_HEAD_USERID_ATTR] forKey:IM_XML_HEAD_USERID_ATTR];
             [[SKIMMessageDataManager sharedMessageDataManager] receiveAndSaveMessage:bodyDic];
             NSLog(@"%@\n,%@", headInfos, bodyDic);
             
         } else if ([businessCode isEqualToString:BUSINESS_SERVER_MSENDMSGRET]) {
-            bodyDic = [[SKIMXMLUtils sharedXMLUtils] getServerSendMsgRetBody:xml];
+            bodyDic = [NSMutableDictionary dictionaryWithDictionary:[[SKIMXMLUtils sharedXMLUtils] getLoginBody:xml]];
             NSString *resultCode = [bodyDic objectForKey:IM_XML_BODY_RESULTCODE_ATTR];
             [bodyDic setValue:[headInfos objectForKey:IM_XML_HEAD_INDEX_ATTR] forKey:IM_XML_HEAD_INDEX_ATTR];
             
@@ -63,12 +65,19 @@
             } else if ([resultCode isEqualToString:RETURN_CODE_SESSIOND_ERROR]) {
                 [[NSNotificationCenter defaultCenter] postNotificationName:kNotiSendMessageFailed object:bodyDic];
                 [SKIMStatus sharedStatus].isLogin = NO;
-                [[SKIMTcpRequestHelper shareTcpRequestHelper] sendLogingPackageCommandId:TCP_LOGIN_COMMAND_ID];
+                [[SKIMTcpRequestHelper shareTcpRequestHelper] sendLogingPackageCommand];
                 NSLog(@"发送消息时SESSIONID不对");
             }
             
             [[SKIMMessageDataManager sharedMessageDataManager] receiveSendMessageRet:bodyDic];
             NSLog(@"%@\n,%@", headInfos, bodyDic);
+            
+        } else if ([businessCode isEqualToString:BUSINESS_SERVER_MGETMSGCOUNTRET]) {
+            bodyDic = [NSMutableDictionary dictionaryWithDictionary:[[SKIMXMLUtils sharedXMLUtils] getLoginBody:xml]];
+            NSString *resultCode = [bodyDic objectForKey:IM_XML_BODY_RESULTCODE_ATTR];
+            if ([resultCode isEqualToString:RETURN_CODE_SUCCESS]) {
+                
+            }
             
         } else if ([businessCode isEqualToString:BUSINESS_SERVER_RELOGIN]) {
             [SKIMStatus sharedStatus].isLogin = NO;
@@ -77,6 +86,7 @@
             [[NSNotificationCenter defaultCenter] postNotificationName:kNotiReLoginByOther object:nil];
             NSLog(@"用户已在其它地方重新登录");
         }
+        
     }
     
 

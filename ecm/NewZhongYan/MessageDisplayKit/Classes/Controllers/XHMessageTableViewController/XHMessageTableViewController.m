@@ -467,6 +467,10 @@ static CGPoint  delayOffset = {0.0};
     return YES;
 }
 
+- (void)keyboardHide {
+    [self layoutOtherMenuViewHiden:YES];
+}
+
 #pragma mark - Life Cycle
 
 - (void)setup {
@@ -625,6 +629,13 @@ static CGPoint  delayOffset = {0.0};
     
     // 设置手势滑动，默认添加一个bar的高度值
     self.messageTableView.messageInputBarHeight = CGRectGetHeight(_messageInputView.bounds);
+    
+    
+    UITapGestureRecognizer *tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(keyboardHide)];
+    //设置成NO表示当前控件响应后会传播到其他控件上，默认为YES。
+    tapGestureRecognizer.cancelsTouchesInView = NO;
+    //将触摸事件添加到当前view
+    [self.view addGestureRecognizer:tapGestureRecognizer];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -716,6 +727,13 @@ static CGPoint  delayOffset = {0.0};
     } else {
         return textView.contentSize.height;
     }
+}
+
+
+#pragma mark - XHMessageTableViewCell delegate
+
+- (void)didTapAtCell {
+    [self layoutOtherMenuViewHiden:YES];
 }
 
 #pragma mark - Layout Message Input View Helper Method

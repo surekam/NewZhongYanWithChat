@@ -39,16 +39,20 @@ SKIMTcpRequestHelper *TcpRequestHelperSINGLE;
     return TcpRequestHelperSINGLE;
 }
 
-- (void)sendLogingPackageCommandId:(int)type {
-    
+- (void)sendLogingPackageCommand
+{
     NSData *data = [TcpSendPackage createLoginPackage];
-    [[SKIMTcpHelper shareChatTcpHelper] sendMessage:data withTimeout:-1 tag:type];
-    
+    [[SKIMTcpHelper shareChatTcpHelper] sendMessage:data withTimeout:-1 tag:TCP_LOGIN_COMMAND_ID];
 }
 
-- (void)sendMessagePackageCommandId:(int)type andMessageData:(NSData *)msgData withTimeout:(NSTimeInterval)timeout
+- (void)sendMessagePackageCommandWithMessageData:(NSData *)msgData withTimeout:(NSTimeInterval)timeout
 {
-    [[SKIMTcpHelper shareChatTcpHelper] sendMessage:msgData withTimeout:timeout tag:type];
+    [[SKIMTcpHelper shareChatTcpHelper] sendMessage:msgData withTimeout:timeout tag:TCP_SEND_COMMAND_ID];
+}
+
+- (void)sendGetMessageCountPackageCommandWithGetMessageCountData:(NSData *)msgData withTimeout:(NSTimeInterval)timeout
+{
+    [[SKIMTcpHelper shareChatTcpHelper] sendMessage:msgData withTimeout:timeout tag:TCP_GETMESSAGECOUNT_COMMAND_ID];
 }
 
 @end

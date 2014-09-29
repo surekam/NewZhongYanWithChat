@@ -438,6 +438,7 @@
             _deliveryIndicatorView = indicatorView;
             
             UIImageView *deliveryFailedImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"message_send_failed@2x"]];
+            deliveryFailedImageView.hidden = YES;
             [self addSubview:deliveryFailedImageView];
             _deliveryFailedImageView = deliveryFailedImageView;
         }
@@ -581,7 +582,7 @@
     deliveryIndicatorCenter.y = (bubbleFrame.origin.y + _deliveryIndicatorView.frame.size.height);
     _deliveryIndicatorView.center = deliveryIndicatorCenter;
     
-    deliveryFailedFrame.origin.x = (self.message.bubbleMessageType == XHBubbleMessageTypeSending ? bubbleFrame.origin.x - deliveryFailedFrame.size.width : bubbleFrame.origin.x + bubbleFrame.size.width + deliveryFailedFrame.size.width);
+    deliveryFailedFrame.origin.x = (self.message.bubbleMessageType == XHBubbleMessageTypeSending ? bubbleFrame.origin.x - deliveryFailedFrame.size.width : bubbleFrame.origin.x + bubbleFrame.size.width);
     deliveryFailedFrame.origin.y = bubbleFrame.origin.y + deliveryFailedFrame.size.height/2;
     _deliveryFailedImageView.frame = deliveryFailedFrame;
 }

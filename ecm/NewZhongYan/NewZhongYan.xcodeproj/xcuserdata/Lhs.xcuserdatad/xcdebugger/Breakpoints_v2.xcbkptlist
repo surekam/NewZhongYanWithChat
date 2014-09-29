@@ -26,11 +26,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "MessageDisplayKit/Classes/Views/MessageContentViews/XHMessageTableViewCell.m"
-            timestampString = "433425126.993946"
+            timestampString = "433676827.659952"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "491"
-            endingLineNumber = "491"
+            startingLineNumber = "494"
+            endingLineNumber = "494"
             landmarkName = "-initWithStyle:reuseIdentifier:"
             landmarkType = "5">
          </BreakpointContent>
@@ -42,11 +42,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "MessageDisplayKit/Classes/Views/MessageContentViews/XHMessageBubbleView.m"
-            timestampString = "433336057.760652"
+            timestampString = "433673104.069799"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "512"
-            endingLineNumber = "512"
+            startingLineNumber = "513"
+            endingLineNumber = "513"
             landmarkName = "-layoutSubviews"
             landmarkType = "5">
          </BreakpointContent>
@@ -90,11 +90,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "MessageDisplayKit/Classes/Views/MessageContentViews/XHMessageBubbleView.m"
-            timestampString = "433336057.760652"
+            timestampString = "433673104.069799"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "468"
-            endingLineNumber = "468"
+            startingLineNumber = "469"
+            endingLineNumber = "469"
             landmarkName = "-dealloc"
             landmarkType = "5">
          </BreakpointContent>
@@ -186,11 +186,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "MessageDisplayKit/Classes/Controllers/XHMessageTableViewController/XHMessageTableViewController.m"
-            timestampString = "432816457.751338"
+            timestampString = "433679358.661462"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "575"
-            endingLineNumber = "575"
+            startingLineNumber = "579"
+            endingLineNumber = "579"
             landmarkName = "-initilzer"
             landmarkType = "5">
          </BreakpointContent>
@@ -234,7 +234,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "NewZhongYan/chat/SKIMConversationDetailViewController.m"
-            timestampString = "433588630.566399"
+            timestampString = "433679358.661462"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "379"
@@ -250,7 +250,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "NewZhongYan/chat/SKIMConversationDetailViewController.m"
-            timestampString = "433588630.566399"
+            timestampString = "433679358.661462"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "358"
@@ -266,11 +266,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "NewZhongYan/chat/SKIMTcpHelper.m"
-            timestampString = "433392899.954449"
+            timestampString = "433650777.398467"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "92"
-            endingLineNumber = "92"
+            startingLineNumber = "93"
+            endingLineNumber = "93"
             landmarkName = "-redirectConnectToHost:port:"
             landmarkType = "5">
          </BreakpointContent>
@@ -298,11 +298,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "MessageDisplayKit/Classes/Views/MessageContentViews/XHMessageTableViewCell.m"
-            timestampString = "433564849.743706"
+            timestampString = "433676827.659952"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "631"
-            endingLineNumber = "631"
+            startingLineNumber = "634"
+            endingLineNumber = "634"
             landmarkName = "@implementation XHMessageTableViewCell"
             landmarkType = "3">
          </BreakpointContent>
@@ -314,11 +314,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "NewZhongYan/chat/SKIMTcpHelper.m"
-            timestampString = "433392197.124105"
+            timestampString = "433650777.398467"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "132"
-            endingLineNumber = "132"
+            startingLineNumber = "137"
+            endingLineNumber = "137"
             landmarkName = "-onSocket:didWriteDataWithTag:"
             landmarkType = "5">
          </BreakpointContent>
@@ -346,12 +346,60 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "NewZhongYan/chat/SKIMConversationDetailViewController.m"
-            timestampString = "433588630.566399"
+            timestampString = "433679358.661462"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "328"
             endingLineNumber = "328"
             landmarkName = "-loadMoreMessagesScrollTotop"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "NewZhongYan/chat/TcpReadPackage.m"
+            timestampString = "433652300.641532"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "78"
+            endingLineNumber = "78"
+            landmarkName = "+readPackgeData:"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "MessageDisplayKit/Classes/Views/MessageContentViews/XHMessageTableViewCell.m"
+            timestampString = "433676827.659952"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "338"
+            endingLineNumber = "338"
+            landmarkName = "-sigleTapGestureRecognizerHandle:"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "MessageDisplayKit/Classes/Views/MessageContentViews/XHMessageTableViewCell.m"
+            timestampString = "433676899.098061"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "291"
+            endingLineNumber = "291"
+            landmarkName = "-tapGestureRecognizerHandle:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

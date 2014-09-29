@@ -12,6 +12,7 @@
 #import "TcpReadPackage.h"
 #import "SKIMStatus.h"
 #import "SKIMServiceDefs.h"
+#import "SKIMMessageDataManager.h"
 
 SKIMTcpHelper *TcpHelperSINGLE;
 
@@ -110,8 +111,12 @@ static BOOL isConnecting;
     isConnecting = NO;
     [sock readDataWithTimeout:-1 tag:tcpCommandId];
     NSLog(@"=====Soket 已经连接到服务器:%@ %hu",host,port);
+    
+    //如果未登录, 则执行登录;反之则获取历史消息记录信息
     if (![SKIMStatus sharedStatus].isLogin) {
-        [[SKIMTcpRequestHelper shareTcpRequestHelper] sendLogingPackageCommandId:TCP_LOGIN_COMMAND_ID];
+        [[SKIMTcpRequestHelper shareTcpRequestHelper] sendLogingPackageCommand];
+    } else {
+        [[SKIMMessageDataManager sharedMessageDataManager] sendGetMessageCountData];
     }
 }
 

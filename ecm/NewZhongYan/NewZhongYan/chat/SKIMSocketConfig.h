@@ -49,5 +49,7 @@
 
 #define TCP_SEND_COMMAND_ID                 301
 
+#define TCP_GETMESSAGECOUNT_COMMAND_ID      302
+
 
 #endif

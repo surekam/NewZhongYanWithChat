@@ -126,6 +126,7 @@ SKIMXMLUtils *SharedInstance;
     
     GDataXMLElement *bodyElement = [GDataXMLNode elementWithName:IM_XML_BODY_NODE_NAME];
     GDataXMLElement *sparamElement = [GDataXMLNode elementWithName:IM_XML_PARAM_SINGLE_NODE_NAME];
+    GDataXMLElement *mparamElement = [GDataXMLNode elementWithName:IM_XML_PARAM_MULTI_NODE_NAME];
     
     GDataXMLElement *versionElement = [GDataXMLNode elementWithName:IM_XML_BASE_NODE_NAME stringValue:IM_XML_BODY_VERSION_VALUE];
     GDataXMLElement *toclubElement = [GDataXMLNode elementWithName:IM_XML_BASE_NODE_NAME stringValue:params[IM_XML_BODY_SENDGMSG_TOCLUB_ATTR]];
@@ -140,6 +141,7 @@ SKIMXMLUtils *SharedInstance;
     [sparamElement addChild:contentElement];
     
     [bodyElement addChild:sparamElement];
+    [bodyElement addChild:mparamElement];
     
     [rootElement addChild:bodyElement];
     
@@ -156,6 +158,7 @@ SKIMXMLUtils *SharedInstance;
     
     GDataXMLElement *bodyElement = [GDataXMLNode elementWithName:IM_XML_BODY_NODE_NAME];
     GDataXMLElement *sparamElement = [GDataXMLNode elementWithName:IM_XML_PARAM_SINGLE_NODE_NAME];
+    GDataXMLElement *mparamElement = [GDataXMLNode elementWithName:IM_XML_PARAM_MULTI_NODE_NAME];
     
     GDataXMLElement *messageId = [GDataXMLNode elementWithName:IM_XML_BASE_NODE_NAME stringValue:params[IM_XML_BODY_GETMSGCOUNT_MESSAGEID_ATTR]];
     GDataXMLElement *clubMessageid = [GDataXMLNode elementWithName:IM_XML_BASE_NODE_NAME stringValue:params[IM_XML_BODY_GETMSGCOUNT_CLUBMESSAGEID_ATTR]];
@@ -167,6 +170,7 @@ SKIMXMLUtils *SharedInstance;
     [sparamElement addChild:clubMessageid];
     
     [bodyElement addChild:sparamElement];
+    [bodyElement addChild:mparamElement];
     
     [rootElement addChild:bodyElement];
     
@@ -206,7 +210,7 @@ SKIMXMLUtils *SharedInstance;
     if (xml) {
         [bodyDic setDictionary:[self getBodySParam:xml]];
     }
-    return bodyDic;
+    return [bodyDic copy];
 }
 
 - (NSDictionary *)getServerSendMsgBody:(GDataXMLDocument *)xml
@@ -215,7 +219,7 @@ SKIMXMLUtils *SharedInstance;
     if (xml) {
         [bodyDic setDictionary:[self getBodySParam:xml]];
     }
-    return bodyDic;
+    return [bodyDic copy];
 }
 
 - (NSDictionary *)getServerSendMsgRetBody:(GDataXMLDocument *)xml
@@ -224,7 +228,18 @@ SKIMXMLUtils *SharedInstance;
     if (xml) {
         [bodyDic setDictionary:[self getBodySParam:xml]];
     }
-    return bodyDic;
+    return [bodyDic copy];
+}
+
+- (NSDictionary *)getServerGetMsgCountRetBody:(GDataXMLDocument *)xml
+{
+    NSMutableDictionary *bodyDic = [NSMutableDictionary dictionary];
+    if (xml) {
+        [bodyDic setDictionary:[self getBodySParam:xml]];
+        [bodyDic setObject:[self getBodyMParam:xml] forKey:BUSINESS_SERVER_MGETMSGCOUNTRET];
+    }
+    return [bodyDic copy];
+
 }
 
 - (NSDictionary *)getBodySParam:(GDataXMLDocument *)xml
@@ -239,6 +254,26 @@ SKIMXMLUtils *SharedInstance;
             [bodySParamDic setObject:[bodyInfo stringValue] forKey:[[bodyInfo attributeForName:IM_XML_BASE_ATTR_NAME] stringValue]];
         }
     }
-    return bodySParamDic;
+    return [bodySParamDic copy];
+}
+
+- (NSArray *)getBodyMParam:(GDataXMLDocument *)xml
+{
+    NSMutableArray *bodyMParams = [NSMutableArray array];
+    if (xml) {
+        GDataXMLElement *rootElement = [xml rootElement];
+        GDataXMLElement *bodyElement = [rootElement elementsForName:IM_XML_BODY_NODE_NAME][0];
+        GDataXMLElement *bodyMparamElement = [bodyElement elementsForName:IM_XML_PARAM_MULTI_NODE_NAME][0];
+        NSArray *multiLines = [bodyMparamElement elementsForName:IM_XML_PARAM_MULIT_LINE_NODE_NAME];
+        for (GDataXMLElement *line in multiLines) {
+            NSArray *lineInfos = [line elementsForName:IM_XML_BASE_NODE_NAME];
+            NSMutableDictionary *paramDic = [NSMutableDictionary dictionary];
+            for (GDataXMLElement *lineInfo in lineInfos) {
+                [paramDic setObject:[lineInfo stringValue] forKey:[[lineInfo attributeForName:IM_XML_BASE_ATTR_NAME] stringValue]];
+            }
+            [bodyMParams addObject:paramDic];
+        }
+    }
+    return [bodyMParams copy];
 }
 @end

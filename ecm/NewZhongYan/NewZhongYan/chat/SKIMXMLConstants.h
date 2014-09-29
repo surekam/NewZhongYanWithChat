@@ -101,6 +101,9 @@
 //手机发送个人消息后服务端返回
 #define     BUSINESS_SERVER_MSENDMSGRET                     @"MSendMsgRet"
 
+//IM移动客户端获取用户消息总条数返回
+#define     BUSINESS_SERVER_MGETMSGCOUNTRET                 @"MGetMsgCountRet"
+
 
 #define     RETURN_CODE_SUCCESS                             @"0"
 

@@ -35,6 +35,7 @@
 - (GDataXMLDocument *)buildGetMsgCountXML:(NSMutableDictionary *)params;
 
 //8.解析获取用户消息条数的返回的xml
+- (NSDictionary *)getServerGetMsgCountRetBody:(GDataXMLDocument *)xml;
 
 //9.构造获取某对象消息的xml
 

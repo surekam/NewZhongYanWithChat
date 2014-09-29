@@ -287,6 +287,9 @@ static const CGFloat kXHBubbleMessageViewPadding = 8;
 
 - (void)tapGestureRecognizerHandle:(UITapGestureRecognizer *)tapGestureRecognizer {
     [self updateMenuControllerVisiable];
+    if ([self.delegate respondsToSelector:@selector(didTapAtCell)]) {
+        [self.delegate didTapAtCell];
+    }
 }
 
 - (void)updateMenuControllerVisiable {

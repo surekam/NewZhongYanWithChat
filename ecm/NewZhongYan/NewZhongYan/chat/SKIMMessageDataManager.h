@@ -30,4 +30,8 @@
 - (void)deleteMessageFromDataBaseWithId:(NSString *)rid;
 
 - (void)getHistoryMessageFromServer:(NSInteger)msgNumber;
+
+- (void)sendGetMessageCountData;
+
+- (void)getUserInfoFromServer;
 @end

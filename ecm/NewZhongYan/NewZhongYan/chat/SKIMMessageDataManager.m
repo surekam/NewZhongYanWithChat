@@ -31,7 +31,7 @@
     return sharedInstance;
 }
 
-- (void)messageWithDatabaseQueue:(void (^)())queue {
+- (void)messageHandlerQueue:(void (^)())queue {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), queue);
 }
 
@@ -54,7 +54,7 @@
                 msgData = [TcpSendPackage createMessagePackageWithMsg:text toUser:message.receiver msgType:@"" bySendIndex:&sendIndex];
                 message.msgId = sendIndex;
                 if ([[SKIMTcpHelper shareChatTcpHelper] isConnected]) {
-                    [[SKIMTcpRequestHelper shareTcpRequestHelper] sendMessagePackageCommandId:TCP_SEND_COMMAND_ID andMessageData:msgData withTimeout:-1];
+                    [[SKIMTcpRequestHelper shareTcpRequestHelper] sendMessagePackageCommandWithMessageData:msgData withTimeout:-1];
                 } else {
                     [[NSNotificationCenter defaultCenter] postNotificationName:kNotiSendMessageFailed object:[NSDictionary dictionaryWithObject:sendIndex forKey:IM_XML_HEAD_INDEX_ATTR]];
                     message.msgId = SENDFAILED_MSGID;
@@ -77,7 +77,7 @@
         [[NSNotificationCenter defaultCenter] postNotificationName:kNotiSendMessageFailed object:[NSDictionary dictionaryWithObject:message.msgId forKey:IM_XML_HEAD_INDEX_ATTR]];
         
         if (message.rid && ![message.rid isEqualToString:@""]) {
-            [self messageWithDatabaseQueue:^{
+            [self messageHandlerQueue:^{
                 SKIMMessageDBModel *msgModel = [[SKIMMessageDBModel alloc] init];
                 NSString *updateSql = [NSString stringWithFormat:@"UPDATE IM_MESSAGE SET ISACKED = 0, DELIVERYSTATE = 2, MSGID = '%@' WHERE RID = %@", SENDFAILED_MSGID, message.rid];
                 [msgModel queryUpdateSql:updateSql];
@@ -89,7 +89,7 @@
 
 //接收并更新发送个人消息后服务端返回的信息
 - (void)receiveSendMessageRet:(NSDictionary *)messageRetDic {
-    [self messageWithDatabaseQueue:^{
+    [self messageHandlerQueue:^{
         if (messageRetDic) {
             NSString *resultCode = [messageRetDic objectForKey:IM_XML_BODY_RESULTCODE_ATTR];
             NSString *index = [messageRetDic objectForKey:IM_XML_HEAD_INDEX_ATTR];
@@ -174,12 +174,23 @@
 - (void)getHistoryMessageFromServer:(NSInteger)msgNumber {
 }
 
-- (void)getMessageCountFromServer {
+- (void)sendGetMessageCountData {
+    [self messageHandlerQueue:^{
+        NSData *getMsgCountData = [TcpSendPackage createGetMessageCountPackage];
+        if (getMsgCountData) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [[SKIMTcpRequestHelper shareTcpRequestHelper] sendGetMessageCountPackageCommandWithGetMessageCountData:getMsgCountData withTimeout:-1];
+            });
+        }
+    }];
+}
+
+- (void)getUserInfoFromServer {
     
 }
 
 - (void)saveMessageToDB:(XHMessage *)message {
-    [self messageWithDatabaseQueue:^{
+    [self messageHandlerQueue:^{
         if (message) {
             //获取会话
             NSString *chatterId = message.bubbleMessageType ? message.sender : message.receiver;
@@ -217,7 +228,7 @@
 }
 
 - (void)deleteMessageFromDataBaseWithId:(NSString *)rid {
-    [self messageWithDatabaseQueue:^{
+    [self messageHandlerQueue:^{
         if (rid && ![rid isEqualToString:@""]) {
             SKIMMessageDBModel *msgModel = [[SKIMMessageDBModel alloc] init];
             msgModel.where = [NSString stringWithFormat:@"RID = %@", rid];

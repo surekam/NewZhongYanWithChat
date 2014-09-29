@@ -67,7 +67,7 @@ static unsigned long long sendIndex = 0;
 }
 
 
-+ (NSData *)createMessageCountPackage {
++ (NSData *)createGetMessageCountPackage {
     NSString *maxMessageId = @"0";
     NSString *maxClubMessageId = @"0";
     SKIMMessageDBModel *msgModel = [[SKIMMessageDBModel alloc] init];
@@ -91,7 +91,15 @@ static unsigned long long sendIndex = 0;
     
     NSData *packageBody = [[[SKIMXMLUtils sharedXMLUtils] buildGetMsgCountXML:params] XMLData];
     NSData *packageData = [self createPackageWithBody:packageBody];
+    NSString *GetMsgCountXML = [NSString stringWithFormat:@"%@", [[[SKIMXMLUtils sharedXMLUtils] buildGetMsgCountXML:params] rootElement]];
+    NSLog(@"GetMsgCountXML=%@", GetMsgCountXML);
     return packageData;
+}
+
+//移动端获取用户信息
++ (NSData *)createGetUserInfoPackage {
+    
+    return nil;
 }
 
 // 创建注销包对象

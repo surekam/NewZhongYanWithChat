@@ -20,7 +20,7 @@
 + (NSData *)createMessagePackageWithMsg:(NSString *)message toUser:(NSString*)toUser msgType:(NSString *)msgType bySendIndex:(NSString **)sendIndex;
 
 //获取用户消息条数包
-+ (NSData *)createMessageCountPackage;
++ (NSData *)createGetMessageCountPackage;
 
 //注销包
 + (id)createLogoutPackage;

@@ -53,6 +53,7 @@
 
 - (void)reloadCellAtIndexPath:(NSIndexPath *)indexPath;
 
+- (void)didTapAtCell;
 @end
 
 @interface XHMessageTableViewCell : XHBaseTableViewCell
