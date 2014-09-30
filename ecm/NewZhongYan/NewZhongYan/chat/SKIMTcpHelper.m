@@ -118,6 +118,7 @@ static BOOL isConnecting;
     } else {
         [[SKIMMessageDataManager sharedMessageDataManager] sendGetMessageCountData];
     }
+    [SKIMStatus sharedStatus].isConnected = YES;
 }
 
 // 接收到了一个新的socket连接 自动回调
@@ -231,9 +232,12 @@ static BOOL isConnecting;
 - (void)onSocketDidDisconnect:(AsyncSocket *)sock{
     NSLog(@"======Socket DidDisconnected");
     isConnecting = NO;
+    [SKIMStatus sharedStatus].isConnected = NO;
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         sleep(2);
-        [[NSNotificationCenter defaultCenter] postNotificationName:kNotiSocketDidDisconnected object:nil];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [[NSNotificationCenter defaultCenter] postNotificationName:kNotiSocketDidDisconnected object:nil];
+        });
     });
 }
 

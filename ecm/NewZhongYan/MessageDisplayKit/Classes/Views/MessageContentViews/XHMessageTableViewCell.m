@@ -206,6 +206,10 @@ static const CGFloat kXHBubbleMessageViewPadding = 8;
             self.messageBubbleView.deliveryFailedImageView.hidden = YES;
         }
     }
+//    self.messageBubbleView.backgroundColor = [UIColor yellowColor];
+//    self.messageBubbleView.bubbleImageView.backgroundColor = [UIColor lightGrayColor];
+//    self.messageBubbleView.displayTextView.backgroundColor = [UIColor blueColor];
+    
 }
 
 - (void)configureTimestamp:(BOOL)displayTimestamp atMessage:(id <XHMessageModel>)message {

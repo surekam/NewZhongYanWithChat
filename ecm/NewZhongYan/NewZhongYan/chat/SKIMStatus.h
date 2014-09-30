@@ -11,6 +11,7 @@
 @interface SKIMStatus : NSObject
 
 + (SKIMStatus *)sharedStatus;
+@property (nonatomic, assign)BOOL isConnected;
 
 @property (nonatomic, assign)BOOL isLogin;
 

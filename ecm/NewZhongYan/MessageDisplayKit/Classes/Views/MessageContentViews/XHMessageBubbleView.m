@@ -16,6 +16,7 @@
 #import "SKIMServiceDefs.h"
 
 #define kMarginTop 8.0f
+#define kMarginRight 9.0f
 #define kMarginBottom 2.0f
 #define kPaddingTop 12.0f
 #define kBubblePaddingRight 14.0f
@@ -54,7 +55,7 @@
 
 + (CGFloat)neededWidthForText:(NSString *)text {
     CGSize stringSize;
-    stringSize = [text sizeWithFont:[[XHMessageBubbleView appearance] font] constrainedToSize:CGSizeMake(MAXFLOAT, 19)];
+    stringSize = [text sizeWithFont:[[XHMessageBubbleView appearance] font] constrainedToSize:CGSizeMake(MAXFLOAT, MAXFLOAT) lineBreakMode:NSLineBreakByWordWrapping];
     return roundf(stringSize.width);
     
 //    NSDictionary *dic = [[XHMessageBubbleView appearance] font].fontDescriptor.fontAttributes;
@@ -73,12 +74,12 @@
 }
 
 + (CGSize)neededSizeForText:(NSString *)text {
-    CGFloat maxWidth = CGRectGetWidth([[UIScreen mainScreen] bounds]) * (kIsiPad ? 0.8 : 0.50);
+    CGFloat maxWidth = CGRectGetWidth([[UIScreen mainScreen] bounds]) * (kIsiPad ? 0.8 : 0.6);
     
     CGFloat dyWidth = [XHMessageBubbleView neededWidthForText:text];
     
     CGSize textSize = [SETextView frameRectWithAttributtedString:[[XHMessageBubbleHelper sharedMessageBubbleHelper] bubbleAttributtedStringWithText:text] constraintSize:CGSizeMake(maxWidth, MAXFLOAT) lineSpacing:kXHTextLineSpacing font:[[XHMessageBubbleView appearance] font]].size;
-    return CGSizeMake((dyWidth > textSize.width ? textSize.width : dyWidth) + kBubblePaddingRight * 4 + kXHArrowMarginWidth, textSize.height + kMarginTop * 2);
+    return CGSizeMake((dyWidth > textSize.width ? textSize.width : dyWidth) + kBubblePaddingRight * 2 + kXHArrowMarginWidth, textSize.height + kMarginTop * 2);
 }
 
 + (CGSize)neededSizeForPhoto:(UIImage *)photo {
@@ -106,16 +107,23 @@
     
     //计算不包含图片的文本宽度
     NSString *textWithoutPic = [text replace:RX(pictureRegexStr) with:@"\n"];
-    textSize = [XHMessageBubbleView neededSizeForText:textWithoutPic];
+    textSize = [XHMessageBubbleView neededSizeForText:[textWithoutPic replace:RX(emoticonNameRegexStr) with:@"[情]"]];
     
     //计算表情高度
-    NSArray *splitText = [textWithoutPic split:RX(@"\\n")];
-    for (NSString *textPart in splitText) {
-        BOOL isEmoticonMatch = [RX(emoticonNameRegexStr) isMatch:textPart];
-        if (isEmoticonMatch) {
-            textSize.height += 10;
+    if ([RX(emoticonNameRegexStr) isMatch:textWithoutPic]) {
+        if (textSize.height < 28 + kPaddingTop + kMarginBottom * 2) {
+            textSize.height = 28 + kPaddingTop + kMarginBottom * 2;
+        } else {
+            NSUInteger lines = round(textSize.height / [[XHMessageBubbleView appearance] font].lineHeight) - 1;
+            CGFloat height = textSize.height + kPaddingTop * lines + kMarginBottom * 2;
+            if (height > (28 + kXHTextLineSpacing) * lines + kPaddingTop + kMarginBottom * 2) {
+                height = (28 + kXHTextLineSpacing) * lines + kPaddingTop + kMarginBottom * 2;
+            }
+            textSize.height = height;
+            NSLog(@"lines=%d", lines);
         }
     }
+    
     
     //计算图片宽度
     NSArray *pictureMatchs = [text matches:RX(pictureRegexStr)];
@@ -492,8 +500,8 @@
             
             CGRect textFrame = CGRectMake(textX,
                                           CGRectGetMinY(bubbleFrame) + kPaddingTop,
-                                          CGRectGetWidth(bubbleFrame) - kBubblePaddingRight * 2,
-                                          bubbleFrame.size.height - kMarginTop - kMarginBottom);
+                                          CGRectGetWidth(bubbleFrame) - kBubblePaddingRight * 2 - kMarginRight,
+                                          bubbleFrame.size.height - kMarginTop * 2);
             
             self.displayTextView.frame = CGRectIntegral(textFrame);
             

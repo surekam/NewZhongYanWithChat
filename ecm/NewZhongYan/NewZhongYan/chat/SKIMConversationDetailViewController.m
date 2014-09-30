@@ -17,11 +17,12 @@
 #import "SKIMServiceDefs.h"
 #import "RegExCategories.h"
 
-@interface SKIMConversationDetailViewController () <XHAudioPlayerHelperDelegate, SKIMMessageDataManagerDelegate>
+@interface SKIMConversationDetailViewController () <XHAudioPlayerHelperDelegate>
 
 @property (nonatomic, strong) NSArray *emotionManagers;
 @property (nonatomic, strong) XHMessageTableViewCell *currentSelectedCell;
 @property (nonatomic, strong) SKIMMessageDataManager *messageDataManager;
+//@property (nonatomic, weak) UIView *MessageDetailView;
 
 @end
 
@@ -114,7 +115,8 @@
     [self.shareMenuView reloadData];
     
     [self loadDataSource];
-    [SKIMMessageDataManager sharedMessageDataManager].delegate = self;
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(messageReceived:) name:kNotiMessageReceived object:nil];
 }
 
 - (void)didReceiveMemoryWarning
@@ -126,7 +128,7 @@
 - (void)dealloc {
     self.emotionManagers = nil;
     [[XHAudioPlayerHelper shareInstance] setDelegate:nil];
-    [SKIMMessageDataManager sharedMessageDataManager].delegate = nil;
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:kNotiMessageReceived object:nil];
 }
 
 
@@ -205,7 +207,22 @@
     XHDisplayTextViewController *displayTextViewController = [[XHDisplayTextViewController alloc] init];
     displayTextViewController.message = message;
     [self.navigationController pushViewController:displayTextViewController animated:YES];
+//    UIView *newView = [[UIView alloc] initWithFrame:[UIScreen mainScreen].bounds];
+//    newView.backgroundColor = [UIColor lightGrayColor];
+//    UITapGestureRecognizer *tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(hideMessageDetail)];
+//    //设置成NO表示当前控件响应后会传播到其他控件上，默认为YES。
+//    tapGestureRecognizer.cancelsTouchesInView = NO;
+//    //将触摸事件添加到当前view
+//    [newView addGestureRecognizer:tapGestureRecognizer];
+//    [self.navigationController.view addSubview:newView];
+//    _MessageDetailView = newView;
 }
+
+//- (void)hideMessageDetail {
+//    if (_MessageDetailView) {
+//        [_MessageDetailView removeFromSuperview];
+//    }
+//}
 
 - (void)didSelectedAvatorOnMessage:(id<XHMessageModel>)message atIndexPath:(NSIndexPath *)indexPath {
     DLog(@"indexPath : %@", indexPath);
@@ -481,10 +498,11 @@
     return YES;
 }
 
-#pragma mark - SKIMMessageDataManagerDelegate Delegate
-- (void)addServerMessage:(XHMessage *)message
-{
-    if (message) {
+#pragma mark - SKIMMessageDataManagerNotification
+
+- (void)messageReceived:(NSNotification *)noti {
+    XHMessage *message = [noti object];
+    if (message && [message.sender isEqualToString:self.conversation.chatterId]) {
         [self addMessage:message];
     }
 }

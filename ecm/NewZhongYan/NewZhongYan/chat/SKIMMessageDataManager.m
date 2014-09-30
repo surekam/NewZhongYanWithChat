@@ -15,6 +15,7 @@
 #import "SKIMServiceDefs.h"
 #import "SKIMMessageDBModel.h"
 #import "SKIMConversation.h"
+#import "SKIMStatus.h"
 
 @implementation SKIMMessageDataManager
 
@@ -53,7 +54,7 @@
                 NSString *sendIndex = nil;
                 msgData = [TcpSendPackage createMessagePackageWithMsg:text toUser:message.receiver msgType:@"" bySendIndex:&sendIndex];
                 message.msgId = sendIndex;
-                if ([[SKIMTcpHelper shareChatTcpHelper] isConnected]) {
+                if ([SKIMStatus sharedStatus].isConnected) {
                     [[SKIMTcpRequestHelper shareTcpRequestHelper] sendMessagePackageCommandWithMessageData:msgData withTimeout:-1];
                 } else {
                     [[NSNotificationCenter defaultCenter] postNotificationName:kNotiSendMessageFailed object:[NSDictionary dictionaryWithObject:sendIndex forKey:IM_XML_HEAD_INDEX_ATTR]];
@@ -163,9 +164,7 @@
         message.sender = [messageDic objectForKey:IM_XML_HEAD_USERID_ATTR];
         message.receiver = [APPUtils userUid];
         
-        if ([_delegate respondsToSelector:@selector(addServerMessage:)]) {
-            [_delegate addServerMessage:message];
-        }
+        [[NSNotificationCenter defaultCenter] postNotificationName:kNotiMessageReceived object:message];
         
         [self saveMessageToDB:message];
     }

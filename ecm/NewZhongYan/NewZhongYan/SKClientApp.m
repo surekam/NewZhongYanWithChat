@@ -47,39 +47,40 @@
 
 +(void)getClientAppWithCompleteBlock:(clientCompleteBlock)completeblock  faliureBlock:(clientfaliureBlock)faliureblock
 {
-    int localClientAppVersion = [[FileUtils valueFromPlistWithKey:@"CLIENTAPPVERSION"] intValue];
-    SKHTTPRequest* request = [SKHTTPRequest requestWithURL:
-                              [SKECMURLManager getClientAppVMetaInfoWithVersion:localClientAppVersion]];
-    [request startSynchronous];
-    //NSLog(@"%@",request.responseString);
-    if (!request.error) {
-        SKMessageEntity* entity = [[SKMessageEntity alloc] initWithData:[request responseData]];
-        NSDictionary* dict = [entity dataItem:0];
-        if ([[entity MessageCode] isEqualToString: @"DCI"] && [@"CLIENTAPP" isEqualToString:[dict objectForKey:@"c"]]){
-            int sv = [[dict objectForKey:@"v"] intValue] <= 0 ? 1 :[[dict objectForKey:@"v"] intValue];
-            int sc  = [[dict objectForKey:@"t"] intValue];//t 表示版本之间更新的数据有多少多少
-            if (localClientAppVersion) {
-                if (localClientAppVersion == sv) {
-                    if (faliureblock) {
-                        faliureblock([NSError errorWithDomain:@"ECMCLIENTAPPRequestError" code:1004 userInfo:@{@"reason": @"服务器数据和本地数据相同"}]);
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        int localClientAppVersion = [[FileUtils valueFromPlistWithKey:@"CLIENTAPPVERSION"] intValue];
+        SKHTTPRequest* request = [SKHTTPRequest requestWithURL:[SKECMURLManager getClientAppVMetaInfoWithVersion:localClientAppVersion]];
+        [request startSynchronous];
+        //NSLog(@"%@",request.responseString);
+        if (!request.error) {
+            SKMessageEntity* entity = [[SKMessageEntity alloc] initWithData:[request responseData]];
+            NSDictionary* dict = [entity dataItem:0];
+            if ([[entity MessageCode] isEqualToString: @"DCI"] && [@"CLIENTAPP" isEqualToString:[dict objectForKey:@"c"]]){
+                int sv = [[dict objectForKey:@"v"] intValue] <= 0 ? 1 :[[dict objectForKey:@"v"] intValue];
+                int sc  = [[dict objectForKey:@"t"] intValue];//t 表示版本之间更新的数据有多少多少
+                if (localClientAppVersion) {
+                    if (localClientAppVersion == sv) {
+                        if (faliureblock) {
+                            faliureblock([NSError errorWithDomain:@"ECMCLIENTAPPRequestError" code:1004 userInfo:@{@"reason": @"服务器数据和本地数据相同"}]);
+                        }
+                    }else{
+                        [self getClientAppWithCompleteBlock:completeblock];
                     }
                 }else{
-                    [self getClientAppWithCompleteBlock:completeblock];
-                }
-            }else{
-                if (sc){
-                    [self getClientAppWithCompleteBlock:completeblock];
+                    if (sc){
+                        [self getClientAppWithCompleteBlock:completeblock];
+                    }
                 }
             }
-        }
-    }else{
-        if (request.errorcode == DataNoneCode) {
-            faliureblock([NSError errorWithDomain:@"ECMRequestError" code:DataNoneCode userInfo:@{@"reason": @"获取数据元信息错误"}]);
         }else{
-            faliureblock([NSError errorWithDomain:@"ECMRequestError" code:1003 userInfo:@{@"reason": @"获取数据元信息错误"}]);
-            
+            if (request.errorcode == DataNoneCode) {
+                faliureblock([NSError errorWithDomain:@"ECMRequestError" code:DataNoneCode userInfo:@{@"reason": @"获取数据元信息错误"}]);
+            }else{
+                faliureblock([NSError errorWithDomain:@"ECMRequestError" code:1003 userInfo:@{@"reason": @"获取数据元信息错误"}]);
+                
+            }
         }
-    }
+    });
 }
 
 +(void)getClientAppWithCompleteBlock:(clientCompleteBlock)block

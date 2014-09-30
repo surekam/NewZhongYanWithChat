@@ -635,7 +635,7 @@ static CGPoint  delayOffset = {0.0};
     //设置成NO表示当前控件响应后会传播到其他控件上，默认为YES。
     tapGestureRecognizer.cancelsTouchesInView = NO;
     //将触摸事件添加到当前view
-    [self.view addGestureRecognizer:tapGestureRecognizer];
+    [self.messageTableView addGestureRecognizer:tapGestureRecognizer];
 }
 
 - (void)viewWillAppear:(BOOL)animated {

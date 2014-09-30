@@ -10,9 +10,7 @@
 #define NewZhongYan_SKIMSocketConfig_h
 
 // iM 服务器地址
-#define SOCKETIP    @"10.159.30.220"
-//#define SOCKETIP    @"127.0.0.1"
-//#define SOCKETIP    @"192.168.1.198"
+#define SOCKETIP    @"10.159.30.228"
 
 // iM 服务器端口
 #define SOCKETPORT  8100

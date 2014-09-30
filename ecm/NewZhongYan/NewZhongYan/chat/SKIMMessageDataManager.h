@@ -9,15 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "XHMessage.h"
 
-@protocol SKIMMessageDataManagerDelegate <NSObject>
-
-- (void)addServerMessage:(XHMessage *)message;
-
-@end
-
 @interface SKIMMessageDataManager : NSObject
-
-@property (nonatomic, assign) id <SKIMMessageDataManagerDelegate> delegate;
 
 + (SKIMMessageDataManager *)sharedMessageDataManager;
 
