@@ -79,7 +79,9 @@
     CGFloat dyWidth = [XHMessageBubbleView neededWidthForText:text];
     
     CGSize textSize = [SETextView frameRectWithAttributtedString:[[XHMessageBubbleHelper sharedMessageBubbleHelper] bubbleAttributtedStringWithText:text] constraintSize:CGSizeMake(maxWidth, MAXFLOAT) lineSpacing:kXHTextLineSpacing font:[[XHMessageBubbleView appearance] font]].size;
-    return CGSizeMake((dyWidth > textSize.width ? textSize.width : dyWidth) + kBubblePaddingRight * 2 + kXHArrowMarginWidth, textSize.height + kMarginTop * 2);
+    textSize.width = dyWidth > textSize.width ? textSize.width : dyWidth;
+    
+    return CGSizeMake(textSize.width + kBubblePaddingRight * 2 + kXHArrowMarginWidth, textSize.height + kMarginTop * 2);
 }
 
 + (CGSize)neededSizeForPhoto:(UIImage *)photo {
@@ -110,20 +112,43 @@
     textSize = [XHMessageBubbleView neededSizeForText:[textWithoutPic replace:RX(emoticonNameRegexStr) with:@"[情]"]];
     
     //计算表情高度
+    NSString *textWithoutPicAndEmo = [[text replace:RX(pictureRegexStr) with:@""] replace:RX(emoticonNameRegexStr) with:@""];
     if ([RX(emoticonNameRegexStr) isMatch:textWithoutPic]) {
         if (textSize.height < 28 + kPaddingTop + kMarginBottom * 2) {
-            textSize.height = 28 + kPaddingTop + kMarginBottom * 2;
-        } else {
-            NSUInteger lines = round(textSize.height / [[XHMessageBubbleView appearance] font].lineHeight) - 1;
-            CGFloat height = textSize.height + kPaddingTop * lines + kMarginBottom * 2;
-            if (height > (28 + kXHTextLineSpacing) * lines + kPaddingTop + kMarginBottom * 2) {
-                height = (28 + kXHTextLineSpacing) * lines + kPaddingTop + kMarginBottom * 2;
+            textSize.height = 28 + kPaddingTop + kMarginBottom * 2 + (textWithoutPicAndEmo.length ? kMarginBottom : 0);
+            if (!textWithoutPicAndEmo.length) {
+                NSUInteger allMatchs = [textWithoutPic matches:RX(emoticonNameRegexStr)].count;
+                CGFloat width = kBubblePaddingRight * 2 + kXHArrowMarginWidth + 28 * allMatchs;
+                textSize.width = textSize.width < width ? width : textSize.width;
             }
+        } else {
+            //匹配表情的行数
+            NSUInteger lineMatchs = 0;
+            //所有行中匹配的表情数，不包含折行时的匹配。
+            NSUInteger matchsInLines = 0;
+            //所有的表情数
+            NSUInteger allMatchs = [textWithoutPic matches:RX(emoticonNameRegexStr)].count;
+            
+            NSUInteger lines = round((textSize.height - kMarginTop * 2) / ([[XHMessageBubbleView appearance] font].lineHeight + kXHTextLineSpacing));
+            for (int i = 0; i < lines; i++) {
+                NSUInteger lineLength = textWithoutPic.length / lines;
+                NSString *lineText = [textWithoutPic substringWithRange:NSMakeRange(i * lineLength, i < lines - 1 ? lineLength : textWithoutPic.length - i * lineLength)];
+                NSArray *emoticonMatchsInLine = [lineText matches:RX(emoticonNameRegexStr)];
+                lineMatchs += emoticonMatchsInLine.count ? 1 : 0;
+                matchsInLines += emoticonMatchsInLine.count;
+            }
+            lineMatchs += allMatchs - matchsInLines;
+            
+            CGFloat height = 0;
+            if (textWithoutPicAndEmo.length) {
+                height = textSize.height + (29 - [[XHMessageBubbleView appearance] font].lineHeight) * lineMatchs;
+            } else {
+                height = textSize.height + 13 * lines;
+            }
+            
             textSize.height = height;
-            NSLog(@"lines=%d", lines);
         }
     }
-    
     
     //计算图片宽度
     NSArray *pictureMatchs = [text matches:RX(pictureRegexStr)];
