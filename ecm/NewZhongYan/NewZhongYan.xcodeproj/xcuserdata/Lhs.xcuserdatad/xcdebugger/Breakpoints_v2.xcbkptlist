@@ -26,60 +26,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "MessageDisplayKit/Classes/Views/MessageContentViews/XHMessageTableViewCell.m"
-            timestampString = "433761583.144163"
+            timestampString = "434625064.707717"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "498"
-            endingLineNumber = "498"
+            startingLineNumber = "500"
+            endingLineNumber = "500"
             landmarkName = "-initWithStyle:reuseIdentifier:"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "MessageDisplayKit/Classes/Views/MessageContentViews/XHMessageBubbleView.m"
-            timestampString = "434432485.790233"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "546"
-            endingLineNumber = "546"
-            landmarkName = "-layoutSubviews"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "MessageDisplayKit/Classes/Views/MessageContentViews/XHMessageBubbleView.m"
-            timestampString = "434432485.790233"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "502"
-            endingLineNumber = "502"
-            landmarkName = "-dealloc"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "MessageDisplayKit/Classes/Views/MessageContentViews/XHMessageBubbleView.m"
-            timestampString = "434432485.790233"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "369"
-            endingLineNumber = "369"
-            landmarkName = "-configureMessageDisplayMediaWithMessage:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -234,11 +186,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "MessageDisplayKit/Classes/Views/MessageContentViews/XHMessageTableViewCell.m"
-            timestampString = "433761583.144163"
+            timestampString = "434625209.112239"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "638"
-            endingLineNumber = "638"
+            startingLineNumber = "640"
+            endingLineNumber = "640"
             landmarkName = "@implementation XHMessageTableViewCell"
             landmarkType = "3">
          </BreakpointContent>
@@ -294,16 +246,16 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "No"
+            shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "NewZhongYan/chat/TcpReadPackage.m"
-            timestampString = "433652300.641532"
+            filePath = "MessageDisplayKit/Classes/Controllers/XHMessageTableViewController/XHMessageTableViewController.m"
+            timestampString = "434459100.827502"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "78"
-            endingLineNumber = "78"
-            landmarkName = "+readPackgeData:"
+            startingLineNumber = "736"
+            endingLineNumber = "736"
+            landmarkName = "-didTapAtCell"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -313,13 +265,13 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "MessageDisplayKit/Classes/Views/MessageContentViews/XHMessageTableViewCell.m"
-            timestampString = "433761583.144163"
+            filePath = "MessageDisplayKit/Classes/Views/MessageInputView/XHMessageInputView.m"
+            timestampString = "434690262.162516"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "342"
-            endingLineNumber = "342"
-            landmarkName = "-sigleTapGestureRecognizerHandle:"
+            startingLineNumber = "469"
+            endingLineNumber = "469"
+            landmarkName = "-textView:shouldChangeTextInRange:replacementText:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

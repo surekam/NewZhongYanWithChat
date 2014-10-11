@@ -188,7 +188,7 @@ static const CGFloat kXHBubbleMessageViewPadding = 8;
     
     _weakMessage = message;
     // 配置消息发送状态
-    if (message && message.bubbleMessageType == XHBubbleMessageTypeSending) {
+    if (message) {
         if (message.deliveryState == MessageDeliveryState_Delivering) {
             [[NSNotificationCenter defaultCenter] removeObserver:self name:kNotiSendMessageSuccess object:nil];
             [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(messageSendSuccess:) name:kNotiSendMessageSuccess object:nil];
@@ -258,6 +258,7 @@ static const CGFloat kXHBubbleMessageViewPadding = 8;
             [self.messageBubbleView.bubblePhotoImageView addGestureRecognizer:tapGestureRecognizer];
             break;
         }
+        case XHBubbleMessageMediaTypeMix:
         case XHBubbleMessageMediaTypeText:
         case XHBubbleMessageMediaTypeVoice: {
             self.messageBubbleView.voiceDurationLabel.text = [NSString stringWithFormat:@"%@\'\'", message.voiceDuration];
@@ -265,12 +266,12 @@ static const CGFloat kXHBubbleMessageViewPadding = 8;
         }
         case XHBubbleMessageMediaTypeEmotion: {
             UITapGestureRecognizer *tapGestureRecognizer;
-            if (currentMediaType == XHBubbleMessageMediaTypeText) {
+            if (currentMediaType == XHBubbleMessageMediaTypeText || currentMediaType == XHBubbleMessageMediaTypeMix) {
                 tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(doubleTapGestureRecognizerHandle:)];
             } else {
                 tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(sigleTapGestureRecognizerHandle:)];
             }
-            tapGestureRecognizer.numberOfTapsRequired = (currentMediaType == XHBubbleMessageMediaTypeText ? 2 : 1);
+            tapGestureRecognizer.numberOfTapsRequired = (currentMediaType == XHBubbleMessageMediaTypeText || currentMediaType == XHBubbleMessageMediaTypeMix ? 2 : 1);
             [self.messageBubbleView.bubbleImageView addGestureRecognizer:tapGestureRecognizer];
             break;
         }
@@ -409,6 +410,7 @@ static const CGFloat kXHBubbleMessageViewPadding = 8;
     
     
     UITapGestureRecognizer *tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapGestureRecognizerHandle:)];
+    [tapGestureRecognizer setNumberOfTapsRequired:1];
     [self addGestureRecognizer:tapGestureRecognizer];
 }
 

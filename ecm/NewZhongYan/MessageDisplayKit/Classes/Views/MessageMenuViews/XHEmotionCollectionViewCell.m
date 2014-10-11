@@ -39,8 +39,10 @@
         UIImageView *emotionImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, kXHEmotionImageViewSize, kXHEmotionImageViewSize)];
         emotionImageView.backgroundColor = [UIColor clearColor];
         [self.contentView addSubview:emotionImageView];
+        emotionImageView.center = self.contentView.center;
         self.emotionImageView = emotionImageView;
     }
+    //self.backgroundColor = [UIColor lightGrayColor];
 }
 
 - (void)awakeFromNib {

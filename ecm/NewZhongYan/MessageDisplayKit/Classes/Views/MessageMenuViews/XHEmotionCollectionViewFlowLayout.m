@@ -14,9 +14,10 @@
     self = [super init];
     if (self) {
         self.scrollDirection = UICollectionViewScrollDirectionHorizontal;
-        self.itemSize = CGSizeMake(kXHEmotionImageViewSize, kXHEmotionImageViewSize);
-        self.minimumLineSpacing = kXHEmotionMinimumLineSpacing;
-        self.sectionInset = UIEdgeInsetsMake(kXHEmotionMinimumLineSpacing - 4, kXHEmotionMinimumLineSpacing, 0, kXHEmotionMinimumLineSpacing);
+        self.itemSize = CGSizeMake(kXHEmotionImageViewSize+14, kXHEmotionImageViewSize+14);
+        self.minimumLineSpacing = kXHEmotionMinimumLineSpacing-15;
+        self.minimumInteritemSpacing = kXHEmotionMinimumLineSpacing-15;
+        self.sectionInset = UIEdgeInsetsMake(kXHEmotionMinimumLineSpacing - 4, kXHEmotionMinimumLineSpacing - 4, kXHEmotionMinimumLineSpacing - 12, kXHEmotionMinimumLineSpacing - 4);
         self.collectionView.alwaysBounceVertical = YES;
     }
     return self;

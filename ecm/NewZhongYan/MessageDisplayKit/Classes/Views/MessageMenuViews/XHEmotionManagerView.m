@@ -112,6 +112,7 @@
         [self addSubview:emotionSectionBar];
         self.emotionSectionBar = emotionSectionBar;
     }
+    //self.emotionCollectionView.backgroundColor = [UIColor yellowColor];
 }
 
 - (void)awakeFromNib {
@@ -168,8 +169,8 @@
     if (pageWidth * self.emotionPageControl.numberOfPages - contentWidth > pageWidth/2) {
         self.emotionCollectionView.contentInset = UIEdgeInsetsMake(0, 0, 0, pageWidth * self.emotionPageControl.numberOfPages - contentWidth);
     }
-    NSLog(@"contentSize=%f,%f", self.emotionCollectionView.contentSize.width, self.emotionCollectionView.contentSize.height);
-    NSLog(@"contentInset=%f,%f,%f,%f", self.emotionCollectionView.contentInset.top, self.emotionCollectionView.contentInset.left, self.emotionCollectionView.contentInset.bottom, self.emotionCollectionView.contentInset.right);
+//    NSLog(@"contentSize=%f,%f", self.emotionCollectionView.contentSize.width, self.emotionCollectionView.contentSize.height);
+//    NSLog(@"contentInset=%f,%f,%f,%f", self.emotionCollectionView.contentInset.top, self.emotionCollectionView.contentInset.left, self.emotionCollectionView.contentInset.bottom, self.emotionCollectionView.contentInset.right);
 }
 
 #pragma UICollectionView DataSource
@@ -196,9 +197,12 @@
     
     if (indexPath.row == kXHEmotionPerRowItemCount * 3 - 1) {
         UIButton *deleteButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        [deleteButton setFrame:CGRectMake(0, 0, kXHEmotionImageViewSize, kXHEmotionImageViewSize)];
-        [deleteButton setBackgroundImage:Image(@"face_delete") forState:UIControlStateNormal];
-        [deleteButton setBackgroundImage:Image(@"face_delete_pressed") forState:UIControlStateSelected];
+        [deleteButton setFrame:CGRectMake(0, 0, cell.frame.size.width, cell.frame.size.height)];
+        [deleteButton setImage:Image(@"face_delete") forState:UIControlStateNormal];
+        [deleteButton setImage:Image(@"face_delete_pressed") forState:UIControlStateSelected];
+        deleteButton.contentMode = UIViewContentModeCenter;
+        deleteButton.backgroundColor = [UIColor clearColor];
+
         [deleteButton addTarget:self action:@selector(deleteEmotionButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
         cell.emotion = nil;
         [cell.contentView addSubview:deleteButton];

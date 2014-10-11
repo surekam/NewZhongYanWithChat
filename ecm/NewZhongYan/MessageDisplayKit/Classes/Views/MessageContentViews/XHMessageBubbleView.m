@@ -469,7 +469,8 @@
             indicatorView.backgroundColor = [UIColor clearColor];
             [self addSubview:indicatorView];
             _deliveryIndicatorView = indicatorView;
-            
+        }
+        if (!_deliveryFailedImageView) {
             UIImageView *deliveryFailedImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"message_send_failed@2x"]];
             deliveryFailedImageView.hidden = YES;
             [self addSubview:deliveryFailedImageView];

@@ -733,7 +733,9 @@ static CGPoint  delayOffset = {0.0};
 #pragma mark - XHMessageTableViewCell delegate
 
 - (void)didTapAtCell {
-    [self layoutOtherMenuViewHiden:YES];
+    if (self.textViewInputViewType != XHInputViewTypeNormal) {
+        [self layoutOtherMenuViewHiden:YES];
+    }
 }
 
 #pragma mark - Layout Message Input View Helper Method

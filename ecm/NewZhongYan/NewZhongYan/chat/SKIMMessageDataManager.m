@@ -213,7 +213,7 @@
             [dataDic setObject:deliveryState forKey:@"DELIVERYSTATE"];
             [dataDic setObject:msgType forKey:@"MSGTYPE"];
             [dataDic setObject:msgSendType forKey:@"MSGSENDTYPE"];
-            [dataDic setObject:message.text forKey:@"MSGBODY"];
+            [dataDic setObject:(message.text ? message.text : [NSNull null]) forKey:@"MSGBODY"];
             [dataDic setObject:[DateUtils dateToString:message.timestamp DateFormat:displayDateTimeFormat] forKey:@"SENDTIME"];
             
             if (message.rid && ![message.rid isEqualToString:@""]) {
