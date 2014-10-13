@@ -23,6 +23,7 @@
     NSMutableArray              *_dataTitles;       //存储标题
     NSMutableArray              *_dataSITems;       //存储本部门的员工
     NSMutableArray              *selectedEmployees; //选择的员工
+    NSMutableArray              *_dataGItems;       //群组
     __weak IBOutlet UIView *orgazationBar;
     __weak IBOutlet UIView *toolView;
     PullingRefreshTableView *dataTable;

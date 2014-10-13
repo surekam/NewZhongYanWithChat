@@ -17,6 +17,7 @@
 #import "SKIMUser.h"
 #import "UIImage+ImageWithColour.h"
 #import "SKIMConversationListViewController.h"
+#import "XHPopMenu.h"
 #define USE_ACTIVITY    1	// use a xib file defining the cell
 #define USE_REMENU      0
 
@@ -48,6 +49,9 @@
     __weak IBOutlet UIButton *titltButton;
     
     UIActionSheet* actionSheet;
+    
+    __weak UIButton *_groupLeftButton;
+    __weak UIButton *_groupRightButton;
 }
 @property (nonatomic, strong) SKToolBarMultiSelectPanel *selectedPanel;
 @end
@@ -110,6 +114,7 @@
     _dataUShowed   =  [[NSMutableArray alloc] init];
     _dataEShowed   =  [[NSMutableArray alloc] init];
     _dataTitles    =  [[NSMutableArray alloc] init];
+    _dataGItems    =  [[NSMutableArray alloc] init];
     isHome = YES;
     isInsearch = NO;
     _currentItem = ROOTITEMS;
@@ -151,8 +156,15 @@
 {
     _currentPDPID = @"";
     isHome = YES;
-    [_dataUItems setArray:[_dataUShowed objectAtIndex:0]];
-    [_dataEItems setArray:[_dataEShowed objectAtIndex:0]];
+    [_dataUItems removeAllObjects];
+    [_dataEItems removeAllObjects];
+    if (_dataUShowed.count > 0) {
+        [_dataUItems setArray:[_dataUShowed objectAtIndex:0]];
+    }
+    if (_dataEShowed.count > 0) {
+        [_dataEItems setArray:[_dataEShowed objectAtIndex:0]];
+    }
+    [_dataGItems removeAllObjects];
     [_dataUShowed removeAllObjects];
     [_dataEShowed removeAllObjects];
     [_dataTitles  removeAllObjects];
@@ -293,7 +305,7 @@
                                               delegate:self
                                      cancelButtonTitle:@"取消"
                                 destructiveButtonTitle:nil
-                                     otherButtonTitles:@"组织",@"本部门",@"收藏",nil];
+                                     otherButtonTitles:@"组织",@"本部门",@"收藏",@"群组",nil];
     actionSheet.tag = 10001;
     [actionSheet showInView:[UIApplication sharedApplication].keyWindow];
 #endif
@@ -311,13 +323,16 @@
 - (void)actionSheet:(UIActionSheet *)as clickedButtonAtIndex:(NSInteger)anIndex
 {
     if (as.tag  == 10001) {
-        if (anIndex == currentindex) {
+        if (anIndex == currentindex || anIndex == as.cancelButtonIndex) {
             return;
         }
         
         if (anIndex) {
             [dataTable setFrame:CGRectMake(0, TopY, 320, OHKHHeight)];
         }
+        currentindex = anIndex;
+        [self rootButtonPressed:nil];
+        NSLog(@"____index = %i",anIndex);
         switch (anIndex) {
             case 0:
             {
@@ -337,10 +352,12 @@
                 [self getStoredEmployeeFromTable];
                 break;
             }
-            default:
+            case 3:
+            {
+                [titltButton setTitle:@"群组" forState:UIControlStateNormal];
                 break;
+            }
         }
-        currentindex = anIndex;
         [as setDelegate:nil];
         
     }else{
@@ -458,6 +475,7 @@
 //获取部门名称
 -(void)getDNameFromDbWithPOID:(NSString*)poid
 {
+    NSLog(@"name poid = %@",poid);
     //取本部门下的子部门
     NSString* querySql = [NSString stringWithFormat:
                           @"SELECT u.DPID,u.CNAME,u.PDPID\
@@ -479,6 +497,7 @@
                      AND U.DPID = '%@'\
                      ORDER BY CASE WHEN E.sortno is null THEN 1 ELSE 0 END,E.SORTNO,E.FNAME",poid];
     [_dataEItems setArray:[[DBQueue sharedbQueue] recordFromTableBySQL:sql]];
+    NSLog(@"u count = %i,e count = %i",_dataUItems.count,_dataEItems.count);
 }
 
 -(void)dataFromDBForRootItems
@@ -523,12 +542,12 @@
 -(void)viewMsg:(id)sender
 {
     if ([sender isKindOfClass:[UIButton class]]) {
-//        UIButton *msgBtn = (UIButton*)sender;
-//        if ([msgBtn.titleLabel.text isEqualToString:@"消息"]) {
-//            [msgBtn setTitle:@"消息(99+)" forState:UIControlStateNormal];
-//        } else {
-//            [msgBtn setTitle:@"消息" forState:UIControlStateNormal];
-//        }
+        //        UIButton *msgBtn = (UIButton*)sender;
+        //        if ([msgBtn.titleLabel.text isEqualToString:@"消息"]) {
+        //            [msgBtn setTitle:@"消息(99+)" forState:UIControlStateNormal];
+        //        } else {
+        //            [msgBtn setTitle:@"消息" forState:UIControlStateNormal];
+        //        }
         SKIMConversationListViewController *convListVC = [[SKIMConversationListViewController alloc] init];
         [self.navigationController pushViewController:convListVC animated:YES];
     }
@@ -591,7 +610,7 @@
             [backbtn addTarget:self action:@selector(dismissForChat) forControlEvents:UIControlEventTouchUpInside];
             UIBarButtonItem* backItem = [[UIBarButtonItem alloc] initWithCustomView:backbtn];
             self.navigationItem.leftBarButtonItem = backItem;
-
+            
         }else{
             [self.navigationController.navigationBar setTranslucent:YES];   //解决tableview下移（出现空白）的问题
             [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
@@ -640,89 +659,92 @@
 #pragma mark - SKCKeyBoards delegate
 -(void)textDidChanged:(NSString *)text
 {
-    if (currentindex == 0) {
-        if (text != nil && [text length] != 0){
-            NSString* sql;
-            NSString* PDPIDCondition;
-            if (_currentPDPID && _currentPDPID.length > 0)
-                PDPIDCondition = [NSString stringWithFormat:@"and U.PDPID LIKE '%%/%@/%%'",_currentPDPID];
-            else
-                PDPIDCondition = @"";
-            if ([text characterAtIndex:0] == '0' || [text characterAtIndex:0] == '1') {
-                sql = [NSString stringWithFormat:
-                       @"SELECT E.id,E.UID,E.CNAME,E.MOBILE,E.EMAIL,E.STORED,E.MOBILE,E.SHORTPHONE,E.TELEPHONE,E.TNAME,E.OFFICEADDRESS,U.CNAME UCNAME,U.PNAME,U.PDPID\
-                       FROM T_EMPLOYEE E left join T_UNIT U \
-                       on E.DPID = U.DPID \
-                       where E.ENABLED = 1\
-                       and (E.MOBILE like '%@%%' or E.SHORTPHONE like '%@%%') %@\
-                       order by E.SORTNO limit 30;",text,text,PDPIDCondition];
+    switch (currentindex) {
+        case 0:
+        {
+            if (text != nil && [text length] != 0){
+                NSString* sql;
+                NSString* PDPIDCondition;
+                if (_currentPDPID && _currentPDPID.length > 0)
+                    PDPIDCondition = [NSString stringWithFormat:@"and U.PDPID LIKE '%%/%@/%%'",_currentPDPID];
+                else
+                    PDPIDCondition = @"";
+                if ([text characterAtIndex:0] == '0' || [text characterAtIndex:0] == '1') {
+                    sql = [NSString stringWithFormat:
+                           @"SELECT E.id,E.UID,E.CNAME,E.MOBILE,E.EMAIL,E.STORED,E.MOBILE,E.SHORTPHONE,E.TELEPHONE,E.TNAME,E.OFFICEADDRESS,U.CNAME UCNAME,U.PNAME,U.PDPID\
+                           FROM T_EMPLOYEE E left join T_UNIT U \
+                           on E.DPID = U.DPID \
+                           where E.ENABLED = 1\
+                           and (E.MOBILE like '%@%%' or E.SHORTPHONE like '%@%%') %@\
+                           order by E.SORTNO limit 30;",text,text,PDPIDCondition];
+                }else{
+                    sql = [NSString stringWithFormat:
+                           @"SELECT  E.id,E.UID,E.CNAME,E.MOBILE,E.EMAIL,E.STORED,E.MOBILE,E.SHORTPHONE,E.TELEPHONE,E.TNAME,E.OFFICEADDRESS,U.CNAME UCNAME,U.PNAME,U.PDPID\
+                           FROM T_EMPLOYEE E,T_UNIT U ,T_ORGANIZATIONAL O\
+                           where E.UID = O.OID\
+                           AND U.DPID = O.POID \
+                           AND E.dpid = U.DPID\
+                           and E.ENABLED = 1\
+                           and U.ENABLED = 1\
+                           and (E.SNUM like '%@%%' or E.FNUM like '%@%%') %@\
+                           order by E.SORTNO limit 30;",text,text,PDPIDCondition];
+                }
+                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                    [_dataUItems removeAllObjects];
+                    [_dataEItems setArray:[[DBQueue sharedbQueue] recordFromTableBySQL:sql]];
+                    if ([text characterAtIndex:0] == '6') {
+                        NSString* snumsql = [NSString stringWithFormat:
+                                             @"SELECT E.id,E.UID,E.CNAME,E.MOBILE,E.EMAIL,E.STORED,E.MOBILE,E.SHORTPHONE,E.TELEPHONE,E.TNAME,E.OFFICEADDRESS,U.CNAME UCNAME,U.PNAME,U.PDPID\
+                                             FROM T_EMPLOYEE E left join T_UNIT U \
+                                             on E.DPID = U.DPID \
+                                             where E.ENABLED = 1\
+                                             and E.SHORTPHONE like '%@%%' %@\
+                                             order by E.SORTNO limit 30;",text,PDPIDCondition];
+                        [_dataEItems addObjectsFromArray:[[DBQueue sharedbQueue] recordFromTableBySQL:snumsql]];
+                    }
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [dataTable reloadData];
+                    });
+                });
             }else{
-                sql = [NSString stringWithFormat:
-                       @"SELECT  E.id,E.UID,E.CNAME,E.MOBILE,E.EMAIL,E.STORED,E.MOBILE,E.SHORTPHONE,E.TELEPHONE,E.TNAME,E.OFFICEADDRESS,U.CNAME UCNAME,U.PNAME,U.PDPID\
-                       FROM T_EMPLOYEE E,T_UNIT U ,T_ORGANIZATIONAL O\
-                       where E.UID = O.OID\
-                       AND U.DPID = O.POID \
-                       AND E.dpid = U.DPID\
-                       and E.ENABLED = 1\
-                       and U.ENABLED = 1\
-                       and (E.SNUM like '%@%%' or E.FNUM like '%@%%') %@\
-                       order by E.SORTNO limit 30;",text,text,PDPIDCondition];
+                if (isHome) {
+                    [self dataFromDBForRootItems];
+                }else{
+                    [self getDNameFromDbWithPOID:_currentPDPID];
+                    [dataTable reloadData];
+                }
             }
-            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        }
+            break;
+        case 1:
+        {
+            if (text != nil && [text length] != 0) {
+                NSString* sql;
+                if ([text characterAtIndex:0] == '0' || [text characterAtIndex:0] == '1') {
+                    sql =[NSString stringWithFormat:
+                          @"SELECT E.*,U.CNAME UCNAME,U.PNAME,U.PDPID\
+                          FROM T_EMPLOYEE E LEFT JOIN T_UNIT U\
+                          ON E.DPID = U.DPID\
+                          WHERE (U.DPID = %@\
+                          AND E.ENABLED = 1\
+                          and E.MOBILE like '%%%@%%');",[APPUtils userDepartmentID],text];
+                }else{
+                    sql =[NSString stringWithFormat:
+                          @"SELECT E.*,U.CNAME UCNAME,U.PNAME,U.PDPID\
+                          FROM T_EMPLOYEE E,T_UNIT U ,T_ORGANIZATIONAL O\
+                          where E.UID = O.OID AND U.DPID = O.POID \
+                          AND U.DPID = %@\
+                          AND E.ENABLED = 1\
+                          and (E.SNUM like '%@%%' or E.FNUM like '%@%%');",[APPUtils userDepartmentID],text,text];
+                }
                 [_dataUItems removeAllObjects];
                 [_dataEItems setArray:[[DBQueue sharedbQueue] recordFromTableBySQL:sql]];
-                if ([text characterAtIndex:0] == '6') {
-                    NSString* snumsql = [NSString stringWithFormat:
-                                         @"SELECT E.id,E.UID,E.CNAME,E.MOBILE,E.EMAIL,E.STORED,E.MOBILE,E.SHORTPHONE,E.TELEPHONE,E.TNAME,E.OFFICEADDRESS,U.CNAME UCNAME,U.PNAME,U.PDPID\
-                                         FROM T_EMPLOYEE E left join T_UNIT U \
-                                         on E.DPID = U.DPID \
-                                         where E.ENABLED = 1\
-                                         and E.SHORTPHONE like '%@%%' %@\
-                                         order by E.SORTNO limit 30;",text,PDPIDCondition];
-                    [_dataEItems addObjectsFromArray:[[DBQueue sharedbQueue] recordFromTableBySQL:snumsql]];
-                }
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [dataTable reloadData];
-                });
-            });
-        }else{
-            if (isHome) {
-                [self dataFromDBForRootItems];
-            }else{
-                [self getDNameFromDbWithPOID:_currentPDPID];
                 [dataTable reloadData];
-            }
+            }else
+                [self loadDataFromTable];
         }
-    }else if(currentindex == 1){
-        if (text != nil && [text length] != 0) {
-            NSString* sql;
-            if ([text characterAtIndex:0] == '0' || [text characterAtIndex:0] == '1') {
-                sql =[NSString stringWithFormat:
-                      @"SELECT E.*,U.CNAME UCNAME,U.PNAME,U.PDPID\
-                      FROM T_EMPLOYEE E LEFT JOIN T_UNIT U\
-                      ON E.DPID = U.DPID\
-                      WHERE (U.DPID = %@\
-                      AND E.ENABLED = 1\
-                      and E.MOBILE like '%%%@%%');",[APPUtils userDepartmentID],text];
-            }else{
-                sql =[NSString stringWithFormat:
-                      @"SELECT E.*,U.CNAME UCNAME,U.PNAME,U.PDPID\
-                      FROM T_EMPLOYEE E,T_UNIT U ,T_ORGANIZATIONAL O\
-                      where E.UID = O.OID AND U.DPID = O.POID \
-                      AND U.DPID = %@\
-                      AND E.ENABLED = 1\
-                      and (E.SNUM like '%@%%' or E.FNUM like '%@%%');",[APPUtils userDepartmentID],text,text];
-            }
-            [_dataUItems removeAllObjects];
-            [_dataEItems setArray:[[DBQueue sharedbQueue] recordFromTableBySQL:sql]];
-            [dataTable reloadData];
-        }else{
-            [self loadDataFromTable];
-        }
-    } else{
-        
+            break;
     }
-    
 }
 
 -(void)textDidHided
@@ -760,212 +782,375 @@
 #pragma mark - Table view data source
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 2;
+    return 3;
 }
 
 - (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    if (section == 0){
-        if ([_dataUItems count] == 0 ) return .0f;
-        else return 20;
-    }else{
-        if ([_dataEItems count] == 0 ) return .0f;
-        else return 20;
+    CGFloat height = 0;
+    switch (section) {
+        case 0:height = (currentindex == 0? (_dataUItems.count>0? 20:0):0);break;
+        case 1:height = (currentindex == 1? (_dataEItems.count>0? 20:0):0);break;
+        case 2:height = (currentindex == 3? 44:0);break;
     }
+    return height;
 }
 
 -(UIView*)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
-    UILabel* label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 320, 16)];
-    label.backgroundColor = COLOR(245, 245, 245);
-    label.textColor = [UIColor grayColor];
-    label.font = [UIFont systemFontOfSize:15];
-    if (section == 0){
-        //if ([_dataUItems count] > 0 ) label.text =  @"  下属部门";
-        if ([_dataUItems count] > 0 ) label.text =  @"  所属部门";
-        else return nil;
-    }else{
-        //if ([_dataEItems count] > 0 ) label.text =  @"  下属员工";
-        if ([_dataEItems count] > 0 ) label.text =  @"  所属人员";
-        else  return nil;
+    UIView *tableHeader = nil;
+    switch (currentindex) {
+        case 0:
+        case 1:
+        {
+            UILabel* label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 320, 16)];
+            label.backgroundColor = COLOR(245, 245, 245);
+            label.textColor = [UIColor grayColor];
+            label.font = [UIFont systemFontOfSize:15];
+            label.text = section == 0? @"所属部门":(section == 1? @"所属人员":nil);
+            tableHeader = label;
+        }
+            break;
+        case 3:
+        {
+            CGFloat totalWidth = [[UIScreen mainScreen] bounds].size.width;
+            CGFloat buttonWidth = 74;
+            CGFloat buttonHeight = 32;
+            CGFloat originY = (44 - buttonHeight)/2;
+            CGFloat originX = (totalWidth - 2*buttonWidth)/2;
+            UIView *th = [[UIView alloc] initWithFrame:(CGRect){0,0,totalWidth,44}];
+            th.backgroundColor = [UIColor lightGrayColor];
+            
+            UIButton * lb = [UIButton buttonWithType:UIButtonTypeCustom];
+            [lb setFrame:CGRectMake(originX,originY,buttonWidth,buttonHeight)];
+            [lb setTitleColor:COLOR(5, 73, 165) forState:UIControlStateNormal];
+            [lb setBackgroundImage:[UIImage imageNamed:@"segLeft_press.png"] forState:UIControlStateNormal];
+            [lb setBackgroundImage:[UIImage imageNamed:@"segLeft_press.png"] forState:UIControlStateHighlighted];
+            [lb setTitle:@"群" forState:UIControlStateNormal];
+            [lb.titleLabel setFont:[UIFont boldSystemFontOfSize:15]];
+            [lb setTag:0];
+            [lb addTarget:self action:@selector(groupButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+            _groupLeftButton = lb;
+            
+            UIButton *rb = [UIButton buttonWithType:UIButtonTypeCustom];
+            [rb setFrame:CGRectMake(lb.frame.origin.x + lb.frame.size.width,originY,buttonWidth,buttonHeight)];
+            [rb setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+            [rb setBackgroundImage:[UIImage imageNamed:@"segRight.png"] forState:UIControlStateNormal];
+            [rb setBackgroundImage:[UIImage imageNamed:@"segRight.png"] forState:UIControlStateHighlighted];
+            [rb setTitle:@"讨论组" forState:UIControlStateNormal];
+            [rb.titleLabel setFont:[UIFont boldSystemFontOfSize:15]];
+            [rb setTag:1];
+            [rb addTarget:self action:@selector(groupButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+            _groupRightButton = rb;
+            
+            UIButton *ab = [UIButton buttonWithType:UIButtonTypeCustom];
+            [ab setTitle:@"+" forState:UIControlStateNormal];
+            [ab.titleLabel setFont:[UIFont systemFontOfSize:30]];
+            [ab setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
+            [ab setFrame:(CGRect){totalWidth - 45,2,40,40}];
+            [ab addTarget:self action:@selector(groupButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+            ab.tag = 2;
+            [th addSubview:lb];
+            [th addSubview:rb];
+            [th addSubview:ab];
+            tableHeader = th;
+        }
+            break;
     }
-    return label;
+    return tableHeader;
 }
 
+- (void)newGroup
+{
+    
+}
+
+- (void)groupButtonAction:(UIButton *)sender
+{
+    switch (sender.tag) {
+        case 0:
+        {
+            //群
+            [_groupLeftButton setBackgroundImage:[UIImage imageNamed:@"segLeft_press.png"] forState:UIControlStateNormal];
+            [_groupLeftButton setBackgroundImage:[UIImage imageNamed:@"segLeft_press.png"] forState:UIControlStateHighlighted];
+            [_groupLeftButton setTitleColor:COLOR(5, 73, 165) forState:UIControlStateNormal];
+            [_groupRightButton setBackgroundImage:[UIImage imageNamed:@"segRight.png"] forState:UIControlStateNormal];
+            [_groupRightButton setBackgroundImage:[UIImage imageNamed:@"segRight.png"] forState:UIControlStateHighlighted];
+            [_groupRightButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+            
+        }
+            break;
+        case 1:
+        {
+            //讨论组
+            [_groupLeftButton setBackgroundImage:[UIImage imageNamed:@"segLeft.png"] forState:UIControlStateNormal];
+            [_groupLeftButton setBackgroundImage:[UIImage imageNamed:@"segLeft.png"] forState:UIControlStateHighlighted];
+            [_groupLeftButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+            [_groupRightButton setBackgroundImage:[UIImage imageNamed:@"segRight_press.png"] forState:UIControlStateNormal];
+            [_groupRightButton setBackgroundImage:[UIImage imageNamed:@"segRight_press.png"] forState:UIControlStateHighlighted];
+            [_groupRightButton setTitleColor:COLOR(5, 73, 165) forState:UIControlStateNormal];
+            
+        }
+            break;
+        case 2:
+        {
+            //新建群、讨论组
+            WEAKSELF
+            XHPopMenuItem *fi = [[XHPopMenuItem alloc] initWithImage:nil title:@"创建群"];
+            XHPopMenuItem *si = [[XHPopMenuItem alloc] initWithImage:nil title:@"创建讨论组"];
+            XHPopMenu *menu = [[XHPopMenu alloc] initWithMenus:@[fi,si]];
+            [menu showMenuOnView:self.view atPoint:(CGPoint){0,sender.frame.size.height}];
+            [menu setPopMenuDidSlectedCompled:^(NSInteger index, XHPopMenuItem *menuItem)
+             {
+                 [weakSelf popMenuSelectAt:index];
+             }];
+        }
+            break;
+    }
+}
+
+- (void)popMenuSelectAt:(NSInteger)index
+{
+    switch (index) {
+        case 0:
+        {
+            //创建群
+        }
+            break;
+        case 1:
+        {
+            //创建讨论组
+        }
+            break;
+        default:
+            break;
+    }
+}
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    if (section == 0) {
-        return _dataUItems.count;
-    }else{
-        return _dataEItems.count;
+    NSInteger rows = 0;
+    switch (section) {
+        case 0:rows = currentindex == 0? _dataUItems.count:0;break;
+        case 1:rows = (currentindex < 3)? _dataEItems.count:0;break;
+        case 2:rows = currentindex == 3? 2:0;break;
     }
+    NSLog(@"section = %i,rows = %i",section,rows);
+    return rows;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.section == 0) {
-        static NSString *CellIdentifier = @"UnitCell";
-        SKUnitCell* cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-        if (!cell) {
-            cell = [[SKUnitCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
-        }
-        cell.titleLabel.text = [[_dataUItems objectAtIndex:indexPath.row] objectForKey:@"CNAME"];
-        if (_dataEItems
-            && [_dataEItems count] - 1 < indexPath.row
-            && [selectedEmployees containsObject:[_dataEItems objectAtIndex:indexPath.row]]) {
-            [cell setSelected:YES animated:NO];
-        }
-        return cell;
-    }else{
-        if (_isMail)
+    UITableViewCell *tableCell = nil;
+    switch (indexPath.section) {
+        case 0:
         {
-            static NSString *EIdentifier = @"mailEmployeeCell";
-            SKMailEmployeeCell *cell = (SKMailEmployeeCell *)[tableView dequeueReusableCellWithIdentifier:EIdentifier];
+            static NSString *CellIdentifier = @"UnitCell";
+            SKUnitCell* cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
             if (!cell) {
-                [mailCellNib instantiateWithOwner:self options:nil];
-                cell = tmpMailCell;tmpMailCell = nil;
-                [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
+                cell = [[SKUnitCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
             }
-            [cell setEmployee:_dataEItems[indexPath.row]];
-            
-            return cell;
-        } else if (_isChat)
-        {
-            static NSString *EIdentifier = @"chatEmployeeCell";
-            SKMailEmployeeCell *cell = (SKMailEmployeeCell *)[tableView dequeueReusableCellWithIdentifier:EIdentifier];
-            
-            if (!cell) {
-                [mailCellNib instantiateWithOwner:self options:nil];
-                cell = tmpMailCell;tmpMailCell = nil;
-                [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
-            }
-            if (selectedEmployees
-                && [_dataEItems count] - 1 >= indexPath.row
+            cell.titleLabel.text = [[_dataUItems objectAtIndex:indexPath.row] objectForKey:@"CNAME"];
+            if (_dataEItems
+                && [_dataEItems count] - 1 < indexPath.row
                 && [selectedEmployees containsObject:[_dataEItems objectAtIndex:indexPath.row]]) {
-                cell.hasBeenSelected = YES;
-            }else{
-                cell.hasBeenSelected = NO;
+                [cell setSelected:YES animated:NO];
             }
-            if ([[APPUtils userUid] isEqualToString:[[_dataEItems objectAtIndex:indexPath.row] objectForKey:@"UID"]]) {
-                [cell.statusImageView setHidden:YES];
-            }
-            [cell setEmployee:_dataEItems[indexPath.row]];
-            
-            return cell;
+            tableCell = cell;
         }
-        else
+            break;
+        case 1:
         {
-            static NSString *EIdentifier = @"employeeCell";
-            SKEmployeeCell *cell = (SKEmployeeCell *)[tableView dequeueReusableCellWithIdentifier:EIdentifier];
-            if (!cell) {
-                [cellNib instantiateWithOwner:self options:nil];
-                cell = tmpCell;tmpCell = nil;
+            if (_isMail)
+            {
+                static NSString *EIdentifier = @"mailEmployeeCell";
+                SKMailEmployeeCell *cell = (SKMailEmployeeCell *)[tableView dequeueReusableCellWithIdentifier:EIdentifier];
+                if (!cell) {
+                    [mailCellNib instantiateWithOwner:self options:nil];
+                    cell = tmpMailCell;tmpMailCell = nil;
+                    [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
+                }
+                [cell setEmployee:_dataEItems[indexPath.row]];
+                tableCell = cell;
+            } else if (_isChat)
+            {
+                static NSString *EIdentifier = @"chatEmployeeCell";
+                SKMailEmployeeCell *cell = (SKMailEmployeeCell *)[tableView dequeueReusableCellWithIdentifier:EIdentifier];
+                
+                if (!cell) {
+                    [mailCellNib instantiateWithOwner:self options:nil];
+                    cell = tmpMailCell;tmpMailCell = nil;
+                    [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
+                }
+                if (selectedEmployees
+                    && [_dataEItems count] - 1 >= indexPath.row
+                    && [selectedEmployees containsObject:[_dataEItems objectAtIndex:indexPath.row]]) {
+                    cell.hasBeenSelected = YES;
+                }else{
+                    cell.hasBeenSelected = NO;
+                }
+                if ([[APPUtils userUid] isEqualToString:[[_dataEItems objectAtIndex:indexPath.row] objectForKey:@"UID"]]) {
+                    [cell.statusImageView setHidden:YES];
+                }
+                [cell setEmployee:_dataEItems[indexPath.row]];
+                tableCell = cell;
             }
-            [cell setEmployee:_dataEItems[indexPath.row]];
-            if (currentindex == 2) {
-                UILongPressGestureRecognizer *longPressReger = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleLongPress:)];
-                longPressReger.minimumPressDuration = 0.3;
-                [cell addGestureRecognizer:longPressReger];
+            else
+            {
+                static NSString *EIdentifier = @"employeeCell";
+                SKEmployeeCell *cell = (SKEmployeeCell *)[tableView dequeueReusableCellWithIdentifier:EIdentifier];
+                if (!cell) {
+                    [cellNib instantiateWithOwner:self options:nil];
+                    cell = tmpCell;tmpCell = nil;
+                }
+                [cell setEmployee:_dataEItems[indexPath.row]];
+                if (currentindex == 2) {
+                    UILongPressGestureRecognizer *longPressReger = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleLongPress:)];
+                    longPressReger.minimumPressDuration = 0.3;
+                    [cell addGestureRecognizer:longPressReger];
+                }
+                tableCell = cell;
             }
-            return cell;
         }
+            break;
+        case 2:
+        {
+            static NSString *GIdentifier = @"groupCell";
+            UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:GIdentifier];
+            if (nil == cell) {
+                cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault
+                                              reuseIdentifier:GIdentifier];
+                cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+            }
+            cell.imageView.image = [UIImage imageNamed:@"usercenter_hd_avatar_default.png"];
+            cell.textLabel.text = indexPath.row == 0? @"嘉沙办公室":@"卓信智恒";
+            tableCell = cell;
+        }
+            break;
     }
+    return tableCell;
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.section == 0) {
-        return 44.;
-    }else{
-        return 75.;
+    CGFloat height = 0;
+    switch (indexPath.section) {
+        case 0:height = 44;break;
+        case 1:height = 75;break;
+        case 2:height = 44;break;
     }
+    return height;
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    
-    if (indexPath.section == 0) {//部门
-        isHome = NO;
-        [dataTable setFrame:CGRectMake(0,(46 + TopY), 320,keyboard.showed ? OSKSHeight : OSKHHeight)];
-        [_dataUShowed addObject:[NSArray arrayWithArray:_dataUItems]];
-        [_dataEShowed addObject:[NSArray arrayWithArray:_dataEItems]];
-        if (_dataUShowed.count >= 2)
-        {
-            [self rescaleOrganizationBar];
-        }
-        [_dataDPIDs  addObject:[[_dataUItems objectAtIndex:indexPath.row] objectForKey:@"DPID"]];
-        [_dataTitles addObject:[[_dataUItems objectAtIndex:indexPath.row] objectForKey:@"CNAME"]];
-        
-        [self.showButton setTitle:[[_dataUItems objectAtIndex:indexPath.row] objectForKey:@"CNAME"] forState:UIControlStateNormal];
-        _currentPDPID = [[_dataUItems objectAtIndex:indexPath.row] objectForKey:@"DPID"];
-        [self getDNameFromDbWithPOID:_currentPDPID];
-        [dataTable reloadData];
-    }else{
-        if (_isMail){
-            [selectedEmployees addObject:[_dataEItems objectAtIndex:indexPath.row]];
-        }else if (_isChat) {
-            if ([[APPUtils loggedUser].uid isEqualToString:[[_dataEItems objectAtIndex:indexPath.row] objectForKey:@"UID"]]) {
-                return;
+    NSLog(@"select at index = %i",indexPath.section);
+    switch (indexPath.section) {
+        case 0:
+        {//部门
+            isHome = NO;
+            [dataTable setFrame:CGRectMake(0,(46 + TopY), 320,keyboard.showed ? OSKSHeight : OSKHHeight)];
+            [_dataUShowed addObject:[NSArray arrayWithArray:_dataUItems]];
+            [_dataEShowed addObject:[NSArray arrayWithArray:_dataEItems]];
+            if (_dataUShowed.count >= 2)
+            {
+                [self rescaleOrganizationBar];
             }
-            SKMailEmployeeCell *cell = (SKMailEmployeeCell *)[tableView cellForRowAtIndexPath:indexPath];
-            if (!cell.hasBeenSelected) {
-                [selectedEmployees addObject:[_dataEItems objectAtIndex:indexPath.row]];
-                SKMultiSelectItem *item = [[SKMultiSelectItem alloc] init];
-                item.uid = [[_dataEItems objectAtIndex:indexPath.row] objectForKey:@"UID"];
-                item.cname = [[_dataEItems objectAtIndex:indexPath.row] objectForKey:@"CNAME"];
-                item.pdpid = [[_dataEItems objectAtIndex:indexPath.row] objectForKey:@"PDPID"];
-                item.pname = [[_dataEItems objectAtIndex:indexPath.row] objectForKey:@"PNAME"];
-                item.selected = !item.selected;
-                [self.selectedPanel.selectedItems addObject:item];
-                [self.selectedPanel didAddSelectedIndex:[self.selectedPanel.selectedItems count] - 1];
-            } else {
-                NSUInteger index = [selectedEmployees indexOfObject:[_dataEItems objectAtIndex:indexPath.row]];
-                if (index != NSNotFound) {
-                    [self.selectedPanel.selectedItems removeObjectAtIndex:index];
-                    [self.selectedPanel didDeleteSelectedIndex:index];
-                }
-                [selectedEmployees removeObject:[_dataEItems objectAtIndex:indexPath.row]];
-            }
+            [_dataDPIDs  addObject:[[_dataUItems objectAtIndex:indexPath.row] objectForKey:@"DPID"]];
+            [_dataTitles addObject:[[_dataUItems objectAtIndex:indexPath.row] objectForKey:@"CNAME"]];
             
-        }else{
-            [self performSegueWithIdentifier:@"EDetail" sender:self];
+            [self.showButton setTitle:[[_dataUItems objectAtIndex:indexPath.row] objectForKey:@"CNAME"] forState:UIControlStateNormal];
+            _currentPDPID = [[_dataUItems objectAtIndex:indexPath.row] objectForKey:@"DPID"];
+            [self getDNameFromDbWithPOID:_currentPDPID];
+            [dataTable reloadData];
         }
+            break;
+        case 1:
+        {
+            if (_isMail){
+                [selectedEmployees addObject:[_dataEItems objectAtIndex:indexPath.row]];
+            }else if (_isChat) {
+                if ([[APPUtils loggedUser].uid isEqualToString:[[_dataEItems objectAtIndex:indexPath.row] objectForKey:@"UID"]]) {
+                    return;
+                }
+                SKMailEmployeeCell *cell = (SKMailEmployeeCell *)[tableView cellForRowAtIndexPath:indexPath];
+                if (!cell.hasBeenSelected) {
+                    [selectedEmployees addObject:[_dataEItems objectAtIndex:indexPath.row]];
+                    SKMultiSelectItem *item = [[SKMultiSelectItem alloc] init];
+                    item.uid = [[_dataEItems objectAtIndex:indexPath.row] objectForKey:@"UID"];
+                    item.cname = [[_dataEItems objectAtIndex:indexPath.row] objectForKey:@"CNAME"];
+                    item.pdpid = [[_dataEItems objectAtIndex:indexPath.row] objectForKey:@"PDPID"];
+                    item.pname = [[_dataEItems objectAtIndex:indexPath.row] objectForKey:@"PNAME"];
+                    item.selected = !item.selected;
+                    [self.selectedPanel.selectedItems addObject:item];
+                    [self.selectedPanel didAddSelectedIndex:[self.selectedPanel.selectedItems count] - 1];
+                } else {
+                    NSUInteger index = [selectedEmployees indexOfObject:[_dataEItems objectAtIndex:indexPath.row]];
+                    if (index != NSNotFound) {
+                        [self.selectedPanel.selectedItems removeObjectAtIndex:index];
+                        [self.selectedPanel didDeleteSelectedIndex:index];
+                    }
+                    [selectedEmployees removeObject:[_dataEItems objectAtIndex:indexPath.row]];
+                }
+                
+            }else{
+                [self performSegueWithIdentifier:@"EDetail" sender:self];
+            }
+        }
+            break;
+        case 2:
+        {
+            //群组
+            [tableView deselectRowAtIndexPath:indexPath animated:YES];
+            UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+            SKIMConversationListViewController *convListVC = [[SKIMConversationListViewController alloc] init];
+            convListVC.title = cell.textLabel.text;
+            [self.navigationController pushViewController:convListVC animated:YES];
+        }
+            break;
+        default:
+            break;
     }
 }
 
 -(void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.section) {
-        if (_isMail) {
-            [selectedEmployees removeObject:[_dataEItems objectAtIndex:indexPath.row]];
-        }
-        if (_isChat) {
-            if ([[APPUtils loggedUser].uid isEqualToString:[[_dataEItems objectAtIndex:indexPath.row] objectForKey:@"UID"]]) {
-                return;
-            }
-            SKMailEmployeeCell *cell = (SKMailEmployeeCell *)[tableView cellForRowAtIndexPath:indexPath];
-            if (!cell.hasBeenSelected) {
-                [selectedEmployees addObject:[_dataEItems objectAtIndex:indexPath.row]];
-                SKMultiSelectItem *item = [[SKMultiSelectItem alloc] init];
-                item.uid = [[_dataEItems objectAtIndex:indexPath.row] objectForKey:@"UID"];
-                item.cname = [[_dataEItems objectAtIndex:indexPath.row] objectForKey:@"CNAME"];
-                item.pdpid = [[_dataEItems objectAtIndex:indexPath.row] objectForKey:@"PDPID"];
-                item.pname = [[_dataEItems objectAtIndex:indexPath.row] objectForKey:@"PNAME"];
-                item.selected = !item.selected;
-                [self.selectedPanel.selectedItems addObject:item];
-                [self.selectedPanel didAddSelectedIndex:[self.selectedPanel.selectedItems count] - 1];
-            } else {
-                NSUInteger index = [selectedEmployees indexOfObject:[_dataEItems objectAtIndex:indexPath.row]];
-                if (index != NSNotFound) {
-                    [self.selectedPanel.selectedItems removeObjectAtIndex:index];
-                    [self.selectedPanel didDeleteSelectedIndex:index];
-                }
+    switch (indexPath.section) {
+        case 1:
+            if (_isMail) {
                 [selectedEmployees removeObject:[_dataEItems objectAtIndex:indexPath.row]];
             }
+            if (_isChat) {
+                if ([[APPUtils loggedUser].uid isEqualToString:[[_dataEItems objectAtIndex:indexPath.row] objectForKey:@"UID"]]) {
+                    return;
+                }
+                SKMailEmployeeCell *cell = (SKMailEmployeeCell *)[tableView cellForRowAtIndexPath:indexPath];
+                if (!cell.hasBeenSelected) {
+                    [selectedEmployees addObject:[_dataEItems objectAtIndex:indexPath.row]];
+                    SKMultiSelectItem *item = [[SKMultiSelectItem alloc] init];
+                    item.uid = [[_dataEItems objectAtIndex:indexPath.row] objectForKey:@"UID"];
+                    item.cname = [[_dataEItems objectAtIndex:indexPath.row] objectForKey:@"CNAME"];
+                    item.pdpid = [[_dataEItems objectAtIndex:indexPath.row] objectForKey:@"PDPID"];
+                    item.pname = [[_dataEItems objectAtIndex:indexPath.row] objectForKey:@"PNAME"];
+                    item.selected = !item.selected;
+                    [self.selectedPanel.selectedItems addObject:item];
+                    [self.selectedPanel didAddSelectedIndex:[self.selectedPanel.selectedItems count] - 1];
+                } else {
+                    NSUInteger index = [selectedEmployees indexOfObject:[_dataEItems objectAtIndex:indexPath.row]];
+                    if (index != NSNotFound) {
+                        [self.selectedPanel.selectedItems removeObjectAtIndex:index];
+                        [self.selectedPanel didDeleteSelectedIndex:index];
+                    }
+                    [selectedEmployees removeObject:[_dataEItems objectAtIndex:indexPath.row]];
+                }
+                
+            }
+            break;
             
-        }
+        default:
+            break;
     }
 }
+
 #pragma mark - 数据代理函数
 -(void)didBeginSynData:(LocalDataMeta *)metaData
 {
@@ -1027,7 +1212,7 @@
 }
 
 - (void)didConfirmWithMultiSelectedPanel:(SKToolBarMultiSelectPanel*)multiSelectedPanel {
-
+    
     [self dismissViewControllerAnimated:YES completion:nil];
     
     NSMutableArray *chaters = [NSMutableArray array];
@@ -1045,7 +1230,7 @@
             newChater.cname = item.cname;
             newChater.pdpid = item.pdpid;
             newChater.pname = item.pname;
-
+            
             [chaters addObject:newChater];
         }
     }
